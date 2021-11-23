@@ -379,7 +379,7 @@ pub fn add_south_facing_wall_geometry(
 ) {
     let x0 = x * GEOMETRY_SIZE;
     let x1 = (x + w) * GEOMETRY_SIZE;
-    let y0 = (y * GEOMETRY_SIZE);
+    let y0 = y * GEOMETRY_SIZE;
     //let y1 = (y + h) * GEOMETRY_SIZE;
     let z0 = z * GEOMETRY_SIZE;
     let z1 = (z + 1.0) * GEOMETRY_SIZE;
