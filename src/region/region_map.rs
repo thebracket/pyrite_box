@@ -42,7 +42,7 @@ pub enum RegionBoundaryType {
 impl RegionMap {
     pub fn default() -> Self {
         const SIZE: (u32, u32) = (32, 32);
-        let map = RegionMap {
+        let mut map = RegionMap {
             name: String::from("Test Map"),
             size: (SIZE.0, SIZE.1),
             tiles: vec![
@@ -64,6 +64,15 @@ impl RegionMap {
                 GEOMETRY_SIZE * 0.5,
             ),
         };
+
+        for x in 0..SIZE.0 {
+            map.tiles[((0 * SIZE.0) + x) as usize].boundaries[NORTH] = RegionBoundaryType::WALL;
+            map.tiles[(((SIZE.1-1) * SIZE.0) + x) as usize].boundaries[SOUTH] = RegionBoundaryType::WALL;
+        }
+        for y in 0..SIZE.1 {
+            map.tiles[((y * SIZE.0) + 0) as usize].boundaries[EAST] = RegionBoundaryType::WALL;
+            map.tiles[((y * SIZE.0) + (SIZE.0-1)) as usize].boundaries[WEST] = RegionBoundaryType::WALL;
+        }
 
         map
     }

@@ -1,5 +1,5 @@
 use crate::region::{region_assets::RegionAssets, region_map::RegionMap, GEOMETRY_SIZE};
-use bevy::prelude::*;
+use bevy::{prelude::*, render::camera::PerspectiveProjection};
 use bevy_egui::{
     egui::{Pos2, Window},
     EguiContext,
@@ -34,16 +34,16 @@ pub fn map_wander(
 ) {
     player_query.iter_mut().for_each(|mut wp| {
         let mut moved = false;
-        if keyboard_input.just_pressed(KeyCode::Left) {
+        if keyboard_input.just_pressed(KeyCode::Right) {
             wp.facing = match wp.facing {
                 Direction::NORTH => Direction::WEST,
-                Direction::EAST => Direction::NORTH,
-                Direction::SOUTH => Direction::EAST,
                 Direction::WEST => Direction::SOUTH,
+                Direction::SOUTH => Direction::EAST,
+                Direction::EAST => Direction::NORTH,
             };
             moved = true;
         }
-        if keyboard_input.just_pressed(KeyCode::Right) {
+        if keyboard_input.just_pressed(KeyCode::Left) {
             wp.facing = match wp.facing {
                 Direction::NORTH => Direction::EAST,
                 Direction::EAST => Direction::SOUTH,
@@ -63,22 +63,33 @@ pub fn map_wander(
             wp.y += dy;
             moved = true;
         }
+        if keyboard_input.just_pressed(KeyCode::Down) {
+            let (dx,dy) = match wp.facing {
+                Direction::NORTH => (0, 1),
+                Direction::EAST => (-1, 0),
+                Direction::SOUTH => (0, -1),
+                Direction::WEST => (1, 0),
+            };
+            wp.x += dx;
+            wp.y += dy;
+            moved = true;
+        }
 
         if moved {
             move_set.q0_mut().iter_mut().for_each(|(_, mut trans)| {
-                trans.translation.x = wp.x as f32 * GEOMETRY_SIZE;
-                trans.translation.y = wp.y as f32 * GEOMETRY_SIZE;
+                trans.translation.x = (wp.x as f32 * GEOMETRY_SIZE) + (GEOMETRY_SIZE/2.0);
+                trans.translation.y = (wp.y as f32 * GEOMETRY_SIZE) + (GEOMETRY_SIZE/2.0);
             });
             move_set.q1_mut().iter_mut().for_each(|(_, mut trans)| {
-                trans.translation.x = wp.x as f32 * GEOMETRY_SIZE;
-                trans.translation.y = wp.y as f32 * GEOMETRY_SIZE;
+                trans.translation.x = (wp.x as f32 * GEOMETRY_SIZE) + (GEOMETRY_SIZE/2.0);
+                trans.translation.y = (wp.y as f32 * GEOMETRY_SIZE) + (GEOMETRY_SIZE/2.0);
                 let target = match wp.facing {
                     Direction::NORTH => Vec3::new(trans.translation.x, trans.translation.y - 50.0, trans.translation.z),
                     Direction::SOUTH => Vec3::new(trans.translation.x, trans.translation.y + 50.0, trans.translation.z),
                     Direction::EAST => Vec3::new(trans.translation.x + 50.0, trans.translation.y, trans.translation.z),
                     Direction::WEST => Vec3::new(trans.translation.x - 50.0, trans.translation.y, trans.translation.z),
                 };
-                trans.look_at(target, Vec3::Z)
+                trans.look_at(target, Vec3::new(0.0, 0.0, 1.0));
             });
         }
 
@@ -116,6 +127,13 @@ pub fn resume_map_wander(
     // light
     commands
         .spawn_bundle(LightBundle {
+            light: Light{
+                color: Color::rgb(1.0, 1.0, 1.0),
+                depth: 0.1..100.0,
+                fov: f32::to_radians(60.0),
+                intensity: 200.0,
+                range: 100.0,
+            },
             transform: Transform::from_xyz(start_x, start_y, start_z),
             ..Default::default()
         })
@@ -123,10 +141,18 @@ pub fn resume_map_wander(
         .insert(WanderLight{});
 
     // camera
+    let  perpsective = PerspectiveProjection{
+        fov: 1.5708,
+        aspect_ratio: 1280.0 / 1024.0,
+        near: 0.1,
+        far: 1000.0,
+    };
+
     commands
         .spawn_bundle(PerspectiveCameraBundle {
+            perspective_projection: perpsective,
             transform: Transform::from_xyz(start_x, start_y, start_z)
-                .looking_at(Vec3::new(start_x, start_y - 50.0, start_z), Vec3::Z),
+                .looking_at(Vec3::new(start_x, start_y - 50.0, start_z), Vec3::new(0.0, 0.0, 1.0)),
             ..Default::default()
         })
         .insert(MapWander {})
