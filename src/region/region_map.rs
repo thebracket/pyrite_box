@@ -1,7 +1,11 @@
 use bevy::{prelude::*, render::mesh::VertexAttributeValues};
 use bracket_random::prelude::RandomNumberGenerator;
 
-use super::geometry::{GEOMETRY_SIZE, add_ceiling_geometry, add_cube_geometry, add_east_facing_wall_geometry, add_floor_geometry, add_north_facing_wall_geometry, add_south_facing_wall_geometry, add_west_facing_wall_geometry};
+use super::geometry::{
+    add_ceiling_geometry, add_cube_geometry, add_east_facing_wall_geometry, add_floor_geometry,
+    add_north_facing_wall_geometry, add_south_facing_wall_geometry, add_west_facing_wall_geometry,
+    GEOMETRY_SIZE,
+};
 
 pub struct RegionMap {
     pub name: String,
@@ -55,8 +59,8 @@ impl RegionMap {
                 (SIZE.0 as usize) * (SIZE.1 as usize)
             ],
             starting_location: (
-                ((SIZE.0 / 2) as f32 * GEOMETRY_SIZE) + GEOMETRY_SIZE/2.0,
-                ((SIZE.1 / 2) as f32 * GEOMETRY_SIZE) + GEOMETRY_SIZE/2.0,
+                ((SIZE.0 / 2) as f32 * GEOMETRY_SIZE) + GEOMETRY_SIZE / 2.0,
+                ((SIZE.1 / 2) as f32 * GEOMETRY_SIZE) + GEOMETRY_SIZE / 2.0,
                 GEOMETRY_SIZE * 0.5,
             ),
         };
