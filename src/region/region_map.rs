@@ -1,5 +1,4 @@
 use bevy::{prelude::*, render::mesh::VertexAttributeValues};
-use bracket_random::prelude::RandomNumberGenerator;
 
 use super::geometry::{
     add_ceiling_geometry, add_cube_geometry, add_east_facing_wall_geometry, add_floor_geometry,
@@ -26,6 +25,7 @@ pub struct RegionTile {
     pub boundaries: [RegionBoundaryType; 4],
 }
 
+#[allow(dead_code)]
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum RegionTileType {
     EMPTY,

@@ -1,9 +1,7 @@
 use crate::{
     region::{region_assets::RegionAssets, region_map::RegionMap},
-    AppState,
 };
 use bevy::prelude::*;
-use bevy_egui::{egui, egui::Pos2, EguiContext};
 
 pub struct MapWander {}
 

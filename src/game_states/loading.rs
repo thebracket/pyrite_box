@@ -7,7 +7,6 @@ pub struct LoadingResource {}
 pub fn loading_screen(
     egui_context: ResMut<EguiContext>,
     mut state: ResMut<State<AppState>>,
-    mut res: ResMut<LoadingResource>,
 ) {
     egui::Window::new("Loading - Please Wait")
         .auto_sized()

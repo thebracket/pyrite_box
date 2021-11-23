@@ -1,6 +1,5 @@
 use bevy::{diagnostic::FrameTimeDiagnosticsPlugin, prelude::*};
-use bevy_egui::{egui, EguiContext, EguiPlugin};
-use region::{region_assets::RegionAssets, region_map::RegionMap};
+use bevy_egui::EguiPlugin;
 mod game_states;
 mod region;
 use game_states::*;
