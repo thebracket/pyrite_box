@@ -6,3 +6,5 @@ mod main_menu;
 pub use main_menu::*;
 mod ui_assets;
 pub use ui_assets::*;
+mod map_wander;
+pub use map_wander::*;

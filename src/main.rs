@@ -9,6 +9,7 @@ use game_states::*;
 pub enum AppState {
     Loading,
     MainMenu,
+    MapWander, // Test mode for the map
 }
 
 fn main() {
@@ -25,7 +26,6 @@ fn main() {
         .add_plugins(DefaultPlugins)
         .add_plugin(EguiPlugin)
         .add_plugin(FrameTimeDiagnosticsPlugin::default())
-        .add_startup_system(setup.system())
         .add_startup_system(setup_fps.system())
         .add_startup_system(setup_ui.system())
         .add_system(fps_update_system.system())
@@ -45,39 +45,13 @@ fn main() {
             SystemSet::on_enter(AppState::MainMenu).with_system(resume_main_menu.system()),
         )
         .add_system_set(SystemSet::on_exit(AppState::MainMenu).with_system(exit_main_menu.system()))
+        // Map Wander
+        .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(map_wander.system()))
+        .add_system_set(
+            SystemSet::on_enter(AppState::MapWander).with_system(resume_map_wander.system()),
+        )
+        .add_system_set(
+            SystemSet::on_exit(AppState::MapWander).with_system(exit_map_wander.system()),
+        )
         .run();
-}
-
-/// set up a simple 3D scene
-fn setup(
-    mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<StandardMaterial>>,
-) {
-    /*
-    let map = RegionMap::default();
-    let (start_x, start_y, start_z) = map.starting_location;
-    let assets = RegionAssets::new(&mut materials, &mut meshes, &map);
-    //commands.insert_resource(assets);
-    for m in assets.meshes.iter() {
-        commands.spawn_bundle(PbrBundle {
-            mesh: m.clone(),
-            material: assets.green.clone(),
-            transform: Transform::from_xyz(0.0, 0.0, 0.0),
-            ..Default::default()
-        });
-    }
-
-    // light
-    commands.spawn_bundle(LightBundle {
-        transform: Transform::from_xyz(start_x, start_y, start_z),
-        ..Default::default()
-    });
-    // camera
-    commands.spawn_bundle(PerspectiveCameraBundle {
-        transform: Transform::from_xyz(start_x, start_y, start_z + 20.0)
-            .looking_at(Vec3::new(start_x, start_y + 50.0, start_z), Vec3::Z),
-        ..Default::default()
-    });
-    */
 }

@@ -1,8 +1,8 @@
 use bevy::prelude::*;
 
 pub struct UiAssets {
-    pub title : Handle<Texture>,
-    pub title_mat : Handle<ColorMaterial>,
+    pub title: Handle<Texture>,
+    pub title_mat: Handle<ColorMaterial>,
 }
 
 pub fn setup_ui(
@@ -12,8 +12,8 @@ pub fn setup_ui(
 ) {
     let title = asset_server.load("images/pyrite.png");
     let title_mat = materials.add(title.clone().into());
-    commands.insert_resource(UiAssets{
-        title : title.clone(),
-        title_mat : title_mat.clone(),
+    commands.insert_resource(UiAssets {
+        title: title.clone(),
+        title_mat: title_mat.clone(),
     });
 }
