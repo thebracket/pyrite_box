@@ -4,10 +4,7 @@ use bevy_egui::{egui, egui::Pos2, EguiContext};
 
 pub struct LoadingResource {}
 
-pub fn loading_screen(
-    egui_context: ResMut<EguiContext>,
-    mut state: ResMut<State<AppState>>,
-) {
+pub fn loading_screen(egui_context: ResMut<EguiContext>, mut state: ResMut<State<AppState>>) {
     egui::Window::new("Loading - Please Wait")
         .auto_sized()
         .resizable(false)

@@ -1,4 +1,4 @@
-pub(crate) const GEOMETRY_SIZE: f32 = 10.0;
+pub const GEOMETRY_SIZE: f32 = 10.0;
 
 pub(crate) const CUBE_NORMALS: [[f32; 3]; 10] = [
     [0.0, 0.0, -1.0],
