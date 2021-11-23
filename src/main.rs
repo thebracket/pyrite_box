@@ -13,12 +13,21 @@ pub enum AppState {
 
 fn main() {
     App::build()
+        .insert_resource(WindowDescriptor {
+            title: "Nox Futura".to_string(),
+            width: 1280.0,
+            height: 1024.0,
+            vsync: false,
+            resizable: false,
+            ..Default::default()
+        })
         .add_state(AppState::Loading)
         .add_plugins(DefaultPlugins)
         .add_plugin(EguiPlugin)
         .add_plugin(FrameTimeDiagnosticsPlugin::default())
         .add_startup_system(setup.system())
         .add_startup_system(setup_fps.system())
+        .add_startup_system(setup_ui.system())
         .add_system(fps_update_system.system())
         // Loading State
         .add_system_set(
