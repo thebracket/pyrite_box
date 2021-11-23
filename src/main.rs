@@ -1,11 +1,13 @@
 use bevy::prelude::*;
+use bevy_egui::{egui, EguiContext, EguiPlugin};
 use region::{region_assets::RegionAssets, region_map::RegionMap};
 mod region;
 
 fn main() {
-    App::new()
+    App::build()
         .add_plugins(DefaultPlugins)
-        .add_startup_system(setup)
+        .add_plugin(EguiPlugin)
+        .add_startup_system(setup.system())
         .run();
 }
 
@@ -29,7 +31,7 @@ fn setup(
     }
 
     // light
-    commands.spawn_bundle(PointLightBundle {
+    commands.spawn_bundle(LightBundle {
         transform: Transform::from_xyz(start_x, start_y, start_z),
         ..Default::default()
     });

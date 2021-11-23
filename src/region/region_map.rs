@@ -183,16 +183,16 @@ impl RegionMap {
         let mut mesh = Mesh::new(bevy::render::pipeline::PrimitiveTopology::TriangleList);
         mesh.set_attribute(
             Mesh::ATTRIBUTE_POSITION,
-            VertexAttributeValues::Float32x3(vertices),
+            VertexAttributeValues::Float3(vertices),
         );
         mesh.set_attribute(
             Mesh::ATTRIBUTE_NORMAL,
-            VertexAttributeValues::Float32x3(normals),
+            VertexAttributeValues::Float3(normals),
         );
-        mesh.set_attribute(Mesh::ATTRIBUTE_UV_0, VertexAttributeValues::Float32x2(uv));
+        mesh.set_attribute(Mesh::ATTRIBUTE_UV_0, VertexAttributeValues::Float2(uv));
         mesh.set_attribute(
             Mesh::ATTRIBUTE_TANGENT,
-            VertexAttributeValues::Float32x3(tangents),
+            VertexAttributeValues::Float3(tangents),
         );
 
         result.push(meshes.add(mesh));
