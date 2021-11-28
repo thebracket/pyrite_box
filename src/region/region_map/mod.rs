@@ -84,7 +84,7 @@ impl RegionMap {
     }
 
     fn tile_location(&self, x: f32, y: f32) -> (f32, f32) {
-        (x, y)
+        (x, 0.0-y)
     }
 
     pub fn create_geometry(&self, meshes: &mut Assets<Mesh>) -> Vec<(u32, Handle<Mesh>)> {
@@ -141,18 +141,18 @@ impl RegionMap {
                         sy,
                     );
                 }
-                if self.tiles[tile_idx].boundaries[WEST].0 == RegionBoundaryType::WALL {
+                if self.tiles[tile_idx].boundaries[EAST].0 == RegionBoundaryType::WALL {
                     bucket.add_feature(
                         FeatureType::Wall(Direction::East),
-                        self.tiles[tile_idx].boundaries[WEST].1,
+                        self.tiles[tile_idx].boundaries[EAST].1,
                         sx,
                         sy,
                     );
                 }
-                if self.tiles[tile_idx].boundaries[EAST].0 == RegionBoundaryType::WALL {
+                if self.tiles[tile_idx].boundaries[WEST].0 == RegionBoundaryType::WALL {
                     bucket.add_feature(
                         FeatureType::Wall(Direction::West),
-                        self.tiles[tile_idx].boundaries[EAST].1,
+                        self.tiles[tile_idx].boundaries[WEST].1,
                         sx,
                         sy,
                     );
