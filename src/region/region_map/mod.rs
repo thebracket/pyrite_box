@@ -63,7 +63,7 @@ impl RegionMap {
                 (SIZE.0 as usize) * (SIZE.1 as usize)
             ],
             starting_location: (
-                ((SIZE.0 / 2) as f32 * GEOMETRY_SIZE) + GEOMETRY_SIZE / 2.0,
+                0.0 - (((SIZE.0 / 2) as f32 * GEOMETRY_SIZE) + GEOMETRY_SIZE / 2.0),
                 ((SIZE.1 / 2) as f32 * GEOMETRY_SIZE) + GEOMETRY_SIZE / 2.0,
                 GEOMETRY_SIZE * 0.5,
             ),
@@ -75,8 +75,8 @@ impl RegionMap {
                 RegionBoundaryType::WALL;
         }
         for y in 0..SIZE.1 {
-            map.tiles[((y * SIZE.0) + 0) as usize].boundaries[EAST].0 = RegionBoundaryType::WALL;
-            map.tiles[((y * SIZE.0) + (SIZE.0 - 1)) as usize].boundaries[WEST].0 =
+            map.tiles[((y * SIZE.0) + 0) as usize].boundaries[WEST].0 = RegionBoundaryType::WALL;
+            map.tiles[((y * SIZE.0) + (SIZE.0 - 1)) as usize].boundaries[EAST].0 =
                 RegionBoundaryType::WALL;
         }
 
@@ -84,7 +84,7 @@ impl RegionMap {
     }
 
     fn tile_location(&self, x: f32, y: f32) -> (f32, f32) {
-        (x, 0.0-y)
+        (0.0-x, y)
     }
 
     pub fn create_geometry(&self, meshes: &mut Assets<Mesh>) -> Vec<(u32, Handle<Mesh>)> {
@@ -143,7 +143,7 @@ impl RegionMap {
                 }
                 if self.tiles[tile_idx].boundaries[EAST].0 == RegionBoundaryType::WALL {
                     bucket.add_feature(
-                        FeatureType::Wall(Direction::East),
+                        FeatureType::Wall(Direction::West),
                         self.tiles[tile_idx].boundaries[EAST].1,
                         sx,
                         sy,
@@ -151,7 +151,7 @@ impl RegionMap {
                 }
                 if self.tiles[tile_idx].boundaries[WEST].0 == RegionBoundaryType::WALL {
                     bucket.add_feature(
-                        FeatureType::Wall(Direction::West),
+                        FeatureType::Wall(Direction::East),
                         self.tiles[tile_idx].boundaries[WEST].1,
                         sx,
                         sy,
