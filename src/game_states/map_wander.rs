@@ -13,6 +13,7 @@ use bevy_egui::{
 };
 
 pub struct MapWander {}
+pub struct WanderGeometry {}
 pub struct WanderCamera {}
 pub struct WanderLight {}
 
@@ -32,9 +33,14 @@ pub fn map_wander(
     mut move_set: QuerySet<(
         Query<(&WanderLight, &mut Transform)>,
         Query<(&WanderCamera, &mut Transform)>,
+        Query<(Entity, &WanderGeometry)>,
     )>,
     egui_context: ResMut<EguiContext>,
     mut wander: ResMut<WanderResource>,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<StandardMaterial>>,
+    mut commands: Commands,
+    mut assets: ResMut<RegionAssets>,
 ) {
     player_query.iter_mut().for_each(|mut wp| {
         let mut moved = false;
@@ -130,6 +136,30 @@ pub fn map_wander(
             .scroll(false)
             .show(egui_context.ctx(), |ui| {
                 ui.text_edit_singleline(&mut wander.map.name);
+                if ui.button("Rebuild Geometry").clicked() {
+                    move_set.q2().iter().for_each(|(e, ..)| {
+                        commands.entity(e).despawn();
+                    });
+                    for m in assets.materials.iter() {
+                        materials.remove(m.clone());
+                    }
+                    for m in assets.meshes.iter() {
+                        meshes.remove(m.1.clone());
+                    }
+                    *assets = RegionAssets::new(&mut materials, &mut meshes, &wander.map);
+                    for m in assets.meshes.iter() {
+                        // TODO: m.0 tells you what material to use
+                        commands
+                            .spawn_bundle(PbrBundle {
+                                mesh: m.1.clone(),
+                                material: assets.materials[m.0 as usize].clone(),
+                                transform: Transform::from_xyz(0.0, 0.0, 0.0),
+                                ..Default::default()
+                            })
+                            .insert(MapWander {})
+                            .insert(WanderGeometry{});
+                    }
+                }
                 Frame::dark_canvas(ui.style()).show(ui, |ui| {
                     let mut ed = MapEditor {
                         map: &mut wander.map,
@@ -148,7 +178,6 @@ pub fn resume_map_wander(
     let map = RegionMap::default();
     let (start_x, start_y, start_z) = map.starting_location;
     let assets = RegionAssets::new(&mut materials, &mut meshes, &map);
-    //commands.insert_resource(assets);
     for m in assets.meshes.iter() {
         // TODO: m.0 tells you what material to use
         commands
@@ -158,8 +187,10 @@ pub fn resume_map_wander(
                 transform: Transform::from_xyz(0.0, 0.0, 0.0),
                 ..Default::default()
             })
-            .insert(MapWander {});
+            .insert(MapWander {})
+            .insert(WanderGeometry{});
     }
+    commands.insert_resource(assets);
 
     // light
     commands
