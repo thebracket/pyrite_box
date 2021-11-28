@@ -4,6 +4,7 @@ mod material_bucket;
 use self::material_bucket::{FeatureType, MaterialBucket};
 use super::Direction;
 use bevy::{prelude::*, render::mesh::VertexAttributeValues};
+pub mod map_editor;
 
 pub struct RegionMap {
     pub name: String,
@@ -42,7 +43,7 @@ pub enum RegionBoundaryType {
 
 impl RegionMap {
     pub fn default() -> Self {
-        const SIZE: (u32, u32) = (32, 32);
+        const SIZE: (u32, u32) = (16, 16);
         let mut map = RegionMap {
             name: String::from("Test Map"),
             size: (SIZE.0, SIZE.1),

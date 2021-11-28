@@ -1,9 +1,12 @@
+use crate::region::region_map::map_editor::MapEditor;
+use crate::region::region_map::{RegionBoundaryType, EAST, NORTH, SOUTH, WEST};
 use crate::region::Direction;
 use crate::region::{
     region_assets::RegionAssets,
     region_map::{geometry::GEOMETRY_SIZE, RegionMap},
 };
 use bevy::{prelude::*, render::camera::PerspectiveProjection};
+use bevy_egui::egui::{emath, Color32, Frame, Painter, Stroke};
 use bevy_egui::{
     egui::{Pos2, Window},
     EguiContext,
@@ -19,6 +22,10 @@ pub struct WanderingPlayer {
     pub facing: Direction,
 }
 
+pub struct WanderResource {
+    map: RegionMap,
+}
+
 pub fn map_wander(
     keyboard_input: Res<Input<KeyCode>>,
     mut player_query: Query<&mut WanderingPlayer>,
@@ -27,6 +34,7 @@ pub fn map_wander(
         Query<(&WanderCamera, &mut Transform)>,
     )>,
     egui_context: ResMut<EguiContext>,
+    mut wander: ResMut<WanderResource>,
 ) {
     player_query.iter_mut().for_each(|mut wp| {
         let mut moved = false;
@@ -111,7 +119,23 @@ pub fn map_wander(
             .title_bar(false)
             .fixed_pos(Pos2::new(500.0, 100.0))
             .show(egui_context.ctx(), |ui| {
-                ui.label(format!("X: {}, Y: {}, Facing: {:?}", wp.x, wp.y, wp.facing));
+                ui.label(format!(
+                    "{}. X: {}, Y: {}, Facing: {:?}",
+                    wander.map.name, wp.x, wp.y, wp.facing
+                ));
+            });
+
+        Window::new("Map")
+            .default_size(bevy_egui::egui::vec2(512.0, 512.0))
+            .scroll(false)
+            .show(egui_context.ctx(), |ui| {
+                ui.text_edit_singleline(&mut wander.map.name);
+                Frame::dark_canvas(ui.style()).show(ui, |ui| {
+                    let mut ed = MapEditor {
+                        map: &mut wander.map,
+                    };
+                    ed.ui_content(ui)
+                });
             });
     });
 }
@@ -182,6 +206,9 @@ pub fn resume_map_wander(
             facing: Direction::North,
         })
         .insert(MapWander {});
+
+    // Resource
+    commands.insert_resource(WanderResource { map });
 }
 
 pub fn exit_map_wander(mut commands: Commands, cleanup: Query<(Entity, &MapWander)>) {
