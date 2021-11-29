@@ -11,6 +11,7 @@ pub struct RegionMap {
     pub size: (u32, u32),
     pub tiles: Vec<RegionTile>,
     pub starting_location: (f32, f32, f32),
+    pub needs_rebuild: bool,
 }
 
 pub const NORTH: usize = 0;
@@ -67,6 +68,7 @@ impl RegionMap {
                 ((SIZE.1 / 2) as f32 * GEOMETRY_SIZE) + GEOMETRY_SIZE / 2.0,
                 GEOMETRY_SIZE * 0.5,
             ),
+            needs_rebuild: false,
         };
 
         for x in 0..SIZE.0 {

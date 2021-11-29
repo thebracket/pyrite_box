@@ -1,7 +1,5 @@
 use bevy_egui::egui::{emath, Color32, PointerButton, Pos2, Rect, Sense, Stroke, Ui};
-
 use crate::region::region_map::{RegionBoundaryType, EAST, NORTH, SOUTH, WEST};
-
 use super::RegionMap;
 
 pub struct MapEditor<'a> {
@@ -207,10 +205,12 @@ impl<'a> MapEditor<'a> {
                 if response.clicked_by(PointerButton::Primary) {
                     let tile_idx = ((tile_y as u32 * self.map.size.0) + tile_x as u32) as usize;
                     self.map.tiles[tile_idx].boundaries[WEST].0 = RegionBoundaryType::WALL;
+                    self.map.needs_rebuild = true;
                 }
                 if response.clicked_by(PointerButton::Secondary) {
                     let tile_idx = ((tile_y as u32 * self.map.size.0) + tile_x as u32) as usize;
                     self.map.tiles[tile_idx].boundaries[WEST].0 = RegionBoundaryType::NONE;
+                    self.map.needs_rebuild = true;
                 }
             } else if canvas_pos.x > ((tile_x + 1.0) * box_x) - (10.0 * x10) {
                 // Right side
@@ -232,10 +232,12 @@ impl<'a> MapEditor<'a> {
                 if response.clicked_by(PointerButton::Primary) {
                     let tile_idx = ((tile_y as u32 * self.map.size.0) + tile_x as u32) as usize;
                     self.map.tiles[tile_idx].boundaries[EAST].0 = RegionBoundaryType::WALL;
+                    self.map.needs_rebuild = true;
                 }
                 if response.clicked_by(PointerButton::Secondary) {
                     let tile_idx = ((tile_y as u32 * self.map.size.0) + tile_x as u32) as usize;
                     self.map.tiles[tile_idx].boundaries[EAST].0 = RegionBoundaryType::NONE;
+                    self.map.needs_rebuild = true;
                 }
             } else if canvas_pos.y < (tile_y * box_y) + (10.0 * y10) {
                 // Top side
@@ -257,10 +259,12 @@ impl<'a> MapEditor<'a> {
                 if response.clicked_by(PointerButton::Primary) {
                     let tile_idx = ((tile_y as u32 * self.map.size.0) + tile_x as u32) as usize;
                     self.map.tiles[tile_idx].boundaries[NORTH].0 = RegionBoundaryType::WALL;
+                    self.map.needs_rebuild = true;
                 }
                 if response.clicked_by(PointerButton::Secondary) {
                     let tile_idx = ((tile_y as u32 * self.map.size.0) + tile_x as u32) as usize;
                     self.map.tiles[tile_idx].boundaries[NORTH].0 = RegionBoundaryType::NONE;
+                    self.map.needs_rebuild = true;
                 }
             } else if canvas_pos.y > ((tile_y + 1.0) * box_y) - (10.0 * y10) {
                 // Bottom side
@@ -282,17 +286,14 @@ impl<'a> MapEditor<'a> {
                 if response.clicked_by(PointerButton::Primary) {
                     let tile_idx = ((tile_y as u32 * self.map.size.0) + tile_x as u32) as usize;
                     self.map.tiles[tile_idx].boundaries[SOUTH].0 = RegionBoundaryType::WALL;
+                    self.map.needs_rebuild = true;
                 }
                 if response.clicked_by(PointerButton::Secondary) {
                     let tile_idx = ((tile_y as u32 * self.map.size.0) + tile_x as u32) as usize;
                     self.map.tiles[tile_idx].boundaries[SOUTH].0 = RegionBoundaryType::NONE;
+                    self.map.needs_rebuild = true;
                 }
             }
-
-            /*painter.line_segment(
-                [ to_screen * Pos2{ x: tile_x * box_x, y: tile_y * box_y}, to_screen * Pos2{ x: (tile_x+1.0)*box_x, y: (tile_y+1.0)*box_y } ],
-                highlight
-            )*/
         }
 
         response
