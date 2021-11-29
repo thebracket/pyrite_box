@@ -86,7 +86,7 @@ impl RegionMap {
     }
 
     fn tile_location(&self, x: f32, y: f32) -> (f32, f32) {
-        (0.0-x, y)
+        (0.0 - x, y)
     }
 
     pub fn create_geometry(&self, meshes: &mut Assets<Mesh>) -> Vec<(u32, Handle<Mesh>)> {

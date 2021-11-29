@@ -1,4 +1,4 @@
-use crate::region::region_map::map_editor::MapEditor;
+use crate::region::region_map::map_editor::{MapEditor, MapEditorSettings};
 use crate::region::Direction;
 use crate::region::{
     region_assets::RegionAssets,
@@ -23,7 +23,8 @@ pub struct WanderingPlayer {
 }
 
 pub struct WanderResource {
-    map: RegionMap,
+    pub map: RegionMap,
+    pub editor_settings: MapEditorSettings,
 }
 
 pub fn map_wander(
@@ -32,7 +33,6 @@ pub fn map_wander(
     mut move_set: QuerySet<(
         Query<(&WanderLight, &mut Transform)>,
         Query<(&WanderCamera, &mut Transform)>,
-        Query<(Entity, &WanderGeometry)>,
     )>,
     egui_context: ResMut<EguiContext>,
     mut wander: ResMut<WanderResource>,
@@ -126,18 +126,7 @@ pub fn map_wander(
                 ));
             });
 
-        Window::new("Map")
-            .default_size(bevy_egui::egui::vec2(512.0, 512.0))
-            .scroll(false)
-            .show(egui_context.ctx(), |ui| {
-                ui.text_edit_singleline(&mut wander.map.name);
-                Frame::dark_canvas(ui.style()).show(ui, |ui| {
-                    let mut ed = MapEditor {
-                        map: &mut wander.map,
-                    };
-                    ed.ui_content(ui)
-                });
-            });
+        MapEditor::render(egui_context.ctx(), &mut wander)
     });
 }
 
@@ -159,7 +148,7 @@ pub fn resume_map_wander(
                 ..Default::default()
             })
             .insert(MapWander {})
-            .insert(WanderGeometry{});
+            .insert(WanderGeometry {});
     }
     commands.insert_resource(assets);
 
@@ -210,7 +199,10 @@ pub fn resume_map_wander(
         .insert(MapWander {});
 
     // Resource
-    commands.insert_resource(WanderResource { map });
+    commands.insert_resource(WanderResource {
+        map,
+        editor_settings: MapEditorSettings::default(),
+    });
 }
 
 pub fn exit_map_wander(mut commands: Commands, cleanup: Query<(Entity, &MapWander)>) {
@@ -249,7 +241,7 @@ pub fn map_wander_rebuild(
                     ..Default::default()
                 })
                 .insert(MapWander {})
-                .insert(WanderGeometry{});
+                .insert(WanderGeometry {});
         }
     }
 }
