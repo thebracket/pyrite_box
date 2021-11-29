@@ -5,7 +5,6 @@ use crate::region::{
     region_map::{geometry::GEOMETRY_SIZE, RegionMap},
 };
 use bevy::{prelude::*, render::camera::PerspectiveProjection};
-use bevy_egui::egui::Frame;
 use bevy_egui::{
     egui::{Pos2, Window},
     EguiContext,
