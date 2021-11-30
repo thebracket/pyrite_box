@@ -32,23 +32,6 @@ pub struct MapEditor<'a> {
 }
 
 impl<'a> MapEditor<'a> {
-    pub fn render(ctx: &CtxRef, wander: &mut WanderResource) {
-        Window::new("Map")
-            .default_size(bevy_egui::egui::vec2(512.0, 512.0))
-            .scroll(false)
-            .show(ctx, |ui| {
-                ui.checkbox(&mut wander.editor_settings.fill_walls, "Double-Sided Walls");
-                ui.text_edit_singleline(&mut wander.map.name);
-                Frame::dark_canvas(ui.style()).show(ui, |ui| {
-                    let mut ed = MapEditor {
-                        map: &mut wander.map,
-                        settings: &mut wander.editor_settings,
-                    };
-                    ed.ui_content(ui)
-                });
-            });
-    }
-
     pub fn render_in_module(ctx: &CtxRef, editor_settings: &mut MapEditorSettings, module: &mut Module, map_id: usize ) {
         let map = module.maps.get_mut(&map_id).unwrap();
         let mats = module.materials.clone();
@@ -74,18 +57,18 @@ impl<'a> MapEditor<'a> {
                         map,
                         settings: editor_settings,
                     };
-                    ed.ui_content(ui)
+                    ed.ui_content(ui, &mats)
                 });
             });
     }
 
-    fn ui_content(&mut self, ui: &mut Ui) -> bevy_egui::egui::Response {
+    fn ui_content(&mut self, ui: &mut Ui, mats: &HashMap<usize, (String, MaterialDefinition)>) -> bevy_egui::egui::Response {
         let (response, painter) = ui.allocate_painter(
             ui.available_size_before_wrap(),
             Sense::union(Sense::click(), Sense::hover()),
         );
 
-        let strokes = RenderStrokes::default();
+        let strokes = RenderStrokes::default(mats);
         let scale = Scaling::new(&response, &self.map);
 
         self.draw_base_map(&painter, &scale, &strokes);
@@ -173,19 +156,19 @@ impl<'a> MapEditor<'a> {
 
                 painter.line_segment(
                     self.north_wall_line(x, y, scale),
-                    strokes.wall_type(tile.boundaries[NORTH].0),
+                    strokes.wall_type(tile.boundaries[NORTH]),
                 );
                 painter.line_segment(
                     self.south_wall_line(x, y, scale),
-                    strokes.wall_type(tile.boundaries[SOUTH].0),
+                    strokes.wall_type(tile.boundaries[SOUTH]),
                 );
                 painter.line_segment(
                     self.east_wall_line(x, y, scale),
-                    strokes.wall_type(tile.boundaries[EAST].0),
+                    strokes.wall_type(tile.boundaries[EAST]),
                 );
                 painter.line_segment(
                     self.west_wall_line(x, y, scale),
-                    strokes.wall_type(tile.boundaries[WEST].0),
+                    strokes.wall_type(tile.boundaries[WEST]),
                 );
             }
         }
@@ -273,24 +256,36 @@ impl<'a> MapEditor<'a> {
     }
 }
 
-struct RenderStrokes {
+struct RenderStrokes<'a> {
     full: Stroke,
     none: Stroke,
     highlight: Stroke,
+    mats: &'a HashMap<usize, (String, MaterialDefinition)>,
 }
 
-impl RenderStrokes {
-    fn default() -> Self {
+impl<'a> RenderStrokes<'a> {
+    fn default(mats: &'a HashMap<usize, (String, MaterialDefinition)>) -> Self {
         Self {
             full: Stroke::new(1.0, Color32::from_rgba_premultiplied(255, 255, 255, 255)),
-            none: Stroke::new(1.0, Color32::from_rgba_premultiplied(128, 128, 128, 128)),
+            none: Stroke::new(1.0, Color32::from_rgba_premultiplied(32, 32, 32, 255)),
             highlight: Stroke::new(1.0, Color32::from_rgba_premultiplied(255, 255, 0, 255)),
+            mats
         }
     }
 
-    fn wall_type(&self, wall: RegionBoundaryType) -> Stroke {
-        match wall {
-            RegionBoundaryType::WALL => self.full,
+    fn wall_type(&self, wall: (RegionBoundaryType, u32)) -> Stroke {
+        match wall.0 {
+            RegionBoundaryType::WALL => {
+                let mat_idx = wall.1 as usize;
+                if let Some((_,MaterialDefinition::Color{r,g,b})) = self.mats.get(&mat_idx) {
+                    Stroke::new(
+                        1.0,
+                        Color32::from_rgb(*r,*g,*b),
+                    )
+                } else {
+                    self.full
+                }
+            },
             _ => self.none,
         }
     }

@@ -125,7 +125,7 @@ pub fn map_wander(
                 ));
             });
 
-        MapEditor::render(egui_context.ctx(), &mut wander)
+        //MapEditor::render(egui_context.ctx(), &mut wander)
     });
 }
 
