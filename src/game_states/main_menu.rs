@@ -20,6 +20,12 @@ pub fn main_menu(
                 "Bracket's just-for-fun, kinda like the Gold Box games from SSI, test engine.",
             );
 
+            if ui.button("Module Editor").clicked() {
+                state
+                    .set(AppState::ModuleEditor)
+                    .expect("Failed to change mode");
+            }
+
             // Testy play mode
             if ui.button("Launch Engine").clicked() {
                 state

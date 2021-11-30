@@ -3,11 +3,13 @@ use bevy_egui::EguiPlugin;
 mod game_states;
 mod region;
 use game_states::*;
+mod module;
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, Copy)]
 pub enum AppState {
     Loading,
     MainMenu,
+    ModuleEditor,
     MapWander, // Test mode for the map
 }
 
@@ -44,6 +46,16 @@ fn main() {
             SystemSet::on_enter(AppState::MainMenu).with_system(resume_main_menu.system()),
         )
         .add_system_set(SystemSet::on_exit(AppState::MainMenu).with_system(exit_main_menu.system()))
+        // Module Editor
+        .add_system_set(
+            SystemSet::on_update(AppState::ModuleEditor).with_system(module_editor.system()), //.with_system(texture_mode_system.system())
+        )
+        .add_system_set(
+            SystemSet::on_enter(AppState::ModuleEditor).with_system(resume_module_editor.system()),
+        )
+        .add_system_set(
+            SystemSet::on_exit(AppState::ModuleEditor).with_system(exit_module_editor.system()),
+        )
         // Map Wander
         .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(map_wander.system()))
         .add_system_set(

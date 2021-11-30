@@ -1,0 +1,144 @@
+use super::UiAssets;
+use crate::{
+    module::{default_pbr, MaterialDefinition, Module},
+    AppState,
+};
+use bevy::{app::Events, prelude::*};
+use bevy_egui::egui::Widget;
+use bevy_egui::{
+    egui::Pos2,
+    egui::{self, Color32},
+    EguiContext,
+};
+
+pub struct ModuleEditorUi;
+
+pub struct ModuleResource {
+    pub module: Module,
+    show_info: bool,
+    show_materials: bool,
+    current_material: usize,
+}
+
+pub fn module_editor(
+    egui_context: ResMut<EguiContext>,
+    mut state: ResMut<State<AppState>>,
+    mut module_res: ResMut<ModuleResource>,
+) {
+    egui::TopBottomPanel::top("menu_bar").show(egui_context.ctx(), |ui| {
+        egui::menu::bar(ui, |ui| {
+            egui::menu::menu(ui, "Module Editor", |ui| {
+                if ui.button("Module Info").clicked() {
+                    module_res.show_info = !module_res.show_info;
+                }
+                if ui.button("Materials").clicked() {
+                    module_res.show_materials = !module_res.show_materials;
+                }
+                if ui.button("Save").clicked() {
+                    module_res.module.save();
+                }
+            });
+        });
+    });
+
+    if module_res.show_info {
+        egui::Window::new("Module Editor")
+            .auto_sized()
+            .title_bar(true)
+            .show(egui_context.ctx(), |ui| {
+                ui.label("Module Name");
+                ui.text_edit_singleline(&mut module_res.module.name);
+                ui.label("Module Filename");
+                ui.text_edit_singleline(&mut module_res.module.filename);
+                ui.label("Module Description");
+                ui.text_edit_multiline(&mut module_res.module.description);
+            });
+    }
+
+    if module_res.show_materials {
+        egui::Window::new("Material Editor")
+            .auto_sized()
+            .title_bar(true)
+            .show(egui_context.ctx(), |ui| {
+                let current_label = module_res.module.materials[module_res.current_material]
+                    .0
+                    .clone();
+                let mut current_index = module_res.current_material;
+                egui::ComboBox::from_label("Material")
+                    .selected_text(current_label)
+                    .show_ui(ui, |ui| {
+                        for (i, (name, _v)) in module_res.module.materials.iter().enumerate() {
+                            ui.selectable_value(&mut current_index, i, name);
+                        }
+                    });
+                module_res.current_material = current_index;
+
+                if let MaterialDefinition::Color { .. } =
+                    module_res.module.materials[current_index].1
+                {
+                    if ui.button("Convert to PBR").clicked() {
+                        module_res.module.materials[current_index].1 = default_pbr();
+                    }
+                } else if let MaterialDefinition::Pbr { .. } =
+                    module_res.module.materials[current_index].1
+                {
+                    if ui.button("Convert to Color").clicked() {
+                        module_res.module.materials[current_index].1 =
+                            MaterialDefinition::Color { r: 0, g: 0, b: 0 };
+                    }
+                }
+
+                match &mut module_res.module.materials[current_index].1 {
+                    MaterialDefinition::Color { r, g, b } => {
+                        ui.label("RGB Solid Color");
+                        let mut color = Color32::from_rgb(*r, *g, *b);
+                        egui::color_picker::color_edit_button_srgba(
+                            ui,
+                            &mut color,
+                            egui::color_picker::Alpha::Opaque,
+                        );
+                        *r = color.r();
+                        *g = color.g();
+                        *b = color.b();
+                    }
+                    MaterialDefinition::Pbr {
+                        albedo,
+                        normal_map,
+                        occlusion,
+                        metallic_roughness_texture,
+                        emissive,
+                        roughness,
+                        metallic,
+                    } => {
+                        ui.label("Base Color Texture Filename");
+                        ui.text_edit_singleline(albedo);
+                        ui.label("Normal Map Texture Filename (empty for none)");
+                        ui.text_edit_singleline(normal_map);
+                        ui.label("Occlusion Map Texture Filename (empty for none)");
+                        ui.text_edit_singleline(occlusion);
+                        ui.label("Metallic/Roughness Texture Filename (empty for none)");
+                        ui.text_edit_singleline(metallic_roughness_texture);
+                        ui.label("Emissive Texture Filename (empty for none)");
+                        ui.text_edit_singleline(emissive);
+                        ui.label("Rougness Number");
+                        egui::Slider::new(roughness, 0.089..=1.0).ui(ui);
+                        ui.label("Metallic Number");
+                        egui::Slider::new(metallic, 0.0..=1.0).ui(ui);
+                    }
+                }
+            });
+    }
+}
+
+pub fn resume_module_editor(mut commands: Commands, ui_assets: Res<UiAssets>) {
+    commands.insert_resource(ModuleResource {
+        module: Module::default(),
+        show_info: false,
+        show_materials: false,
+        current_material: 0,
+    });
+}
+
+pub fn exit_module_editor(mut commands: Commands) {
+    commands.remove_resource::<ModuleResource>();
+}
