@@ -1,10 +1,12 @@
+use std::collections::HashMap;
+
 use super::RegionMap;
 use crate::{
     game_states::WanderResource,
     region::{
         region_map::{RegionBoundaryType, EAST, NORTH, SOUTH, WEST},
         Direction,
-    },
+    }, module::{Module, MaterialDefinition},
 };
 use bevy_egui::egui::{
     emath::{self, RectTransform},
@@ -12,13 +14,15 @@ use bevy_egui::egui::{
     Window,
 };
 
+#[derive(Clone)]
 pub struct MapEditorSettings {
     fill_walls: bool,
+    material: usize,
 }
 
 impl MapEditorSettings {
     pub fn default() -> Self {
-        Self { fill_walls: true }
+        Self { fill_walls: true, material: 0 }
     }
 }
 
@@ -39,6 +43,36 @@ impl<'a> MapEditor<'a> {
                     let mut ed = MapEditor {
                         map: &mut wander.map,
                         settings: &mut wander.editor_settings,
+                    };
+                    ed.ui_content(ui)
+                });
+            });
+    }
+
+    pub fn render_in_module(ctx: &CtxRef, editor_settings: &mut MapEditorSettings, module: &mut Module, map_id: usize ) {
+        let map = module.maps.get_mut(&map_id).unwrap();
+        let mats = module.materials.clone();
+        Window::new(format!("Map: {}", map.name))
+            .default_size(bevy_egui::egui::vec2(512.0, 512.0))
+            .scroll(false)
+            .show(ctx, |ui| {
+                ui.checkbox(&mut editor_settings.fill_walls, "Double-Sided Walls");
+
+                let current_label = mats[&editor_settings.material].0.clone();
+                bevy_egui::egui::ComboBox::from_label("Material")
+                    .selected_text(current_label)
+                    .show_ui(ui, |ui| {
+                        for (i, v) in mats.iter() {
+                            ui.selectable_value(&mut editor_settings.material, *i, v.0.clone());
+                        }
+                    });
+
+                ui.separator();
+                ui.text_edit_singleline(&mut map.name);
+                Frame::dark_canvas(ui.style()).show(ui, |ui| {
+                    let mut ed = MapEditor {
+                        map,
+                        settings: editor_settings,
                     };
                     ed.ui_content(ui)
                 });
@@ -204,6 +238,7 @@ impl<'a> MapEditor<'a> {
         let tile_idx = ((self.map.size.0 * y) + x) as usize;
         if response.clicked_by(PointerButton::Primary) {
             self.map.tiles[tile_idx].boundaries[boundary].0 = RegionBoundaryType::WALL;
+            self.map.tiles[tile_idx].boundaries[boundary].1 = self.settings.material as u32;
             if self.settings.fill_walls {
                 self.reciprocal_click(x, y, boundary, RegionBoundaryType::WALL);
             }
@@ -221,15 +256,19 @@ impl<'a> MapEditor<'a> {
         if boundary == NORTH && y > 0 {
             let tile_idx = ((self.map.size.0 * (y - 1)) + x) as usize;
             self.map.tiles[tile_idx].boundaries[SOUTH].0 = new_wall;
+            self.map.tiles[tile_idx].boundaries[SOUTH].1 = self.settings.material as u32;
         } else if boundary == SOUTH && y < self.map.size.1 - 1 {
             let tile_idx = ((self.map.size.0 * (y + 1)) + x) as usize;
             self.map.tiles[tile_idx].boundaries[NORTH].0 = new_wall;
+            self.map.tiles[tile_idx].boundaries[NORTH].1 = self.settings.material as u32;
         } else if boundary == WEST && x > 0 {
             let tile_idx = ((self.map.size.0 * y) + x - 1) as usize;
             self.map.tiles[tile_idx].boundaries[EAST].0 = new_wall;
+            self.map.tiles[tile_idx].boundaries[EAST].1 = self.settings.material as u32;
         } else if boundary == EAST && x < self.map.size.0 - 1 {
             let tile_idx = ((self.map.size.0 * y) + x + 1) as usize;
             self.map.tiles[tile_idx].boundaries[WEST].0 = new_wall;
+            self.map.tiles[tile_idx].boundaries[WEST].1 = self.settings.material as u32;
         }
     }
 }

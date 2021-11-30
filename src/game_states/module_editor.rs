@@ -1,6 +1,7 @@
 use super::UiAssets;
 use crate::{
     module::{default_pbr, MaterialDefinition, Module},
+    region::region_map::{RegionMap, map_editor::{MapEditor, MapEditorSettings}},
     AppState,
 };
 use bevy::{app::Events, prelude::*};
@@ -18,6 +19,11 @@ pub struct ModuleResource {
     show_info: bool,
     show_materials: bool,
     current_material: usize,
+    new_material_name: String,
+    show_maps: bool,
+    new_map: RegionMap,
+    editing_map: Option<usize>,
+    editor_settings: MapEditorSettings,
 }
 
 pub fn module_editor(
@@ -33,6 +39,9 @@ pub fn module_editor(
                 }
                 if ui.button("Materials").clicked() {
                     module_res.show_materials = !module_res.show_materials;
+                }
+                if ui.button("Map Manager").clicked() {
+                    module_res.show_maps = !module_res.show_maps;
                 }
                 if ui.button("Save").clicked() {
                     module_res.module.save();
@@ -57,38 +66,72 @@ pub fn module_editor(
 
     if module_res.show_materials {
         egui::Window::new("Material Editor")
-            .auto_sized()
             .title_bar(true)
             .show(egui_context.ctx(), |ui| {
-                let current_label = module_res.module.materials[module_res.current_material]
-                    .0
-                    .clone();
+                ui.label("ADD NEW MATERIAL");
+                ui.text_edit_singleline(&mut module_res.new_material_name);
+                if ui.button("Add Material").clicked() {
+                    let id = module_res.module.next_material_index;
+                    module_res.module.next_material_index += 1;
+                    let name = module_res.new_material_name.clone();
+                    module_res
+                        .module
+                        .materials
+                        .insert(id, (name, MaterialDefinition::Color { r: 0, g: 0, b: 0 }));
+                }
+                ui.separator();
+
                 let mut current_index = module_res.current_material;
+                ui.text_edit_singleline(
+                    &mut module_res
+                        .module
+                        .materials
+                        .get_mut(&current_index)
+                        .unwrap()
+                        .0,
+                );
+
+                let current_label = module_res.module.materials[&current_index].0.clone();
                 egui::ComboBox::from_label("Material")
                     .selected_text(current_label)
                     .show_ui(ui, |ui| {
-                        for (i, (name, _v)) in module_res.module.materials.iter().enumerate() {
-                            ui.selectable_value(&mut current_index, i, name);
+                        for (i, v) in module_res.module.materials.iter() {
+                            ui.selectable_value(&mut current_index, *i, v.0.clone());
                         }
                     });
                 module_res.current_material = current_index;
 
                 if let MaterialDefinition::Color { .. } =
-                    module_res.module.materials[current_index].1
+                    module_res.module.materials[&current_index].1
                 {
                     if ui.button("Convert to PBR").clicked() {
-                        module_res.module.materials[current_index].1 = default_pbr();
+                        module_res
+                            .module
+                            .materials
+                            .get_mut(&current_index)
+                            .unwrap()
+                            .1 = default_pbr();
                     }
                 } else if let MaterialDefinition::Pbr { .. } =
-                    module_res.module.materials[current_index].1
+                    module_res.module.materials[&current_index].1
                 {
                     if ui.button("Convert to Color").clicked() {
-                        module_res.module.materials[current_index].1 =
-                            MaterialDefinition::Color { r: 0, g: 0, b: 0 };
+                        module_res
+                            .module
+                            .materials
+                            .get_mut(&current_index)
+                            .unwrap()
+                            .1 = MaterialDefinition::Color { r: 0, g: 0, b: 0 };
                     }
                 }
 
-                match &mut module_res.module.materials[current_index].1 {
+                match &mut module_res
+                    .module
+                    .materials
+                    .get_mut(&current_index)
+                    .unwrap()
+                    .1
+                {
                     MaterialDefinition::Color { r, g, b } => {
                         ui.label("RGB Solid Color");
                         let mut color = Color32::from_rgb(*r, *g, *b);
@@ -128,14 +171,59 @@ pub fn module_editor(
                 }
             });
     }
+
+    if module_res.show_maps {
+        egui::Window::new("Maps in Module")
+            .title_bar(true)
+            .show(egui_context.ctx(), |ui| {
+                ui.label("New Map Name");
+                ui.text_edit_singleline(&mut module_res.new_map.name);
+                ui.label("Width");
+                egui::Slider::new(&mut module_res.new_map.size.0, 1..=64).ui(ui);
+                ui.label("Height");
+                egui::Slider::new(&mut module_res.new_map.size.1, 1..=64).ui(ui);
+                if ui.button("Create Map").clicked() {
+                    let id = module_res.module.next_map_index;
+                    module_res.module.next_map_index += 1;
+                    let m = module_res.new_map.clone();
+                    module_res.module.maps.insert(id, m);
+                }
+
+                ui.separator();
+                if module_res.module.maps.is_empty() {
+                    ui.label("There are no maps");
+                } else {
+                    let mut new_map: Option<usize> = None;
+                    for (k, v) in module_res.module.maps.iter() {
+                        if ui.button(&v.name).clicked() {
+                            new_map = Some(*k);
+                        }
+                    }
+                    if new_map.is_some() {
+                        module_res.editing_map = new_map;
+                    }
+                }
+            });
+    }
+
+    if let Some(map_id) = module_res.editing_map {
+        let mut es = module_res.editor_settings.clone();
+        MapEditor::render_in_module(egui_context.ctx(), &mut es, &mut module_res.module, map_id);
+        module_res.editor_settings = es;
+    }
 }
 
-pub fn resume_module_editor(mut commands: Commands, ui_assets: Res<UiAssets>) {
+pub fn resume_module_editor(mut commands: Commands) {
     commands.insert_resource(ModuleResource {
         module: Module::default(),
         show_info: false,
         show_materials: false,
         current_material: 0,
+        new_material_name: "New Material".to_string(),
+        show_maps: false,
+        new_map: RegionMap::default(),
+        editing_map: None,
+        editor_settings: MapEditorSettings::default(),
     });
 }
 

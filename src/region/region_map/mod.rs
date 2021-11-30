@@ -1,11 +1,13 @@
 pub mod geometry;
 use geometry::*;
+use serde::{Deserialize, Serialize};
 mod material_bucket;
 use self::material_bucket::{FeatureType, MaterialBucket};
 use super::Direction;
 use bevy::{prelude::*, render::mesh::VertexAttributeValues};
 pub mod map_editor;
 
+#[derive(Clone, Serialize, Deserialize)]
 pub struct RegionMap {
     pub name: String,
     pub size: (u32, u32),
@@ -19,7 +21,7 @@ pub const SOUTH: usize = 1;
 pub const EAST: usize = 2;
 pub const WEST: usize = 3;
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Serialize, Deserialize)]
 pub struct RegionTile {
     pub tile_type: RegionTileType,
     pub has_ceiling: bool,
@@ -29,14 +31,14 @@ pub struct RegionTile {
 }
 
 #[allow(dead_code)]
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum RegionTileType {
     EMPTY,
     FLOOR,
     SOLID,
 }
 
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub enum RegionBoundaryType {
     NONE,
     WALL,
