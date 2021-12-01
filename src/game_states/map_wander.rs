@@ -1,14 +1,14 @@
-use crate::region::region_map::map_editor::{MapEditor, MapEditorSettings};
+use crate::module::Module;
+use crate::region::region_map::map_editor::MapEditorSettings;
 use crate::region::Direction;
-use crate::region::{
-    region_assets::RegionAssets,
-    region_map::{geometry::GEOMETRY_SIZE, RegionMap},
-};
+use crate::region::{region_assets::RegionAssets, region_map::geometry::GEOMETRY_SIZE};
 use bevy::{prelude::*, render::camera::PerspectiveProjection};
 use bevy_egui::{
     egui::{Pos2, Window},
     EguiContext,
 };
+
+use super::ModuleSelector;
 
 pub struct MapWander {}
 pub struct WanderGeometry {}
@@ -22,7 +22,8 @@ pub struct WanderingPlayer {
 }
 
 pub struct WanderResource {
-    pub map: RegionMap,
+    pub module: Module,
+    pub map_idx: usize,
     pub editor_settings: MapEditorSettings,
 }
 
@@ -34,7 +35,7 @@ pub fn map_wander(
         Query<(&WanderCamera, &mut Transform)>,
     )>,
     egui_context: ResMut<EguiContext>,
-    mut wander: ResMut<WanderResource>,
+    wander: Res<WanderResource>,
 ) {
     player_query.iter_mut().for_each(|mut wp| {
         let mut moved = false;
@@ -119,9 +120,10 @@ pub fn map_wander(
             .title_bar(false)
             .fixed_pos(Pos2::new(500.0, 100.0))
             .show(egui_context.ctx(), |ui| {
+                let map_idx = wander.map_idx;
                 ui.label(format!(
                     "{}. X: {}, Y: {}, Facing: {:?}",
-                    wander.map.name, wp.x, wp.y, wp.facing
+                    wander.module.maps[&map_idx].name, wp.x, wp.y, wp.facing
                 ));
             });
 
@@ -133,16 +135,19 @@ pub fn resume_map_wander(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
+    asset_server: Res<AssetServer>,
+    startup: Res<ModuleSelector>,
 ) {
-    let map = RegionMap::default();
-    let (start_x, start_y, start_z) = map.starting_location;
-    let assets = RegionAssets::new(&mut materials, &mut meshes, &map);
+    let module = Module::load(startup.filename.as_ref().unwrap());
+    let map_idx = 0; // TODO: Change to starting map
+    let (start_x, start_y, start_z) = module.maps[&map_idx].starting_location;
+    let assets = RegionAssets::new(&mut materials, &mut meshes, &asset_server, &module, map_idx);
     for m in assets.meshes.iter() {
         // TODO: m.0 tells you what material to use
         commands
             .spawn_bundle(PbrBundle {
                 mesh: m.1.clone(),
-                material: assets.materials[m.0 as usize].clone(),
+                material: assets.materials[&(m.0 as usize)].clone(),
                 transform: Transform::from_xyz(0.0, 0.0, 0.0),
                 ..Default::default()
             })
@@ -199,7 +204,8 @@ pub fn resume_map_wander(
 
     // Resource
     commands.insert_resource(WanderResource {
-        map,
+        map_idx, // TODO: Change to starting map from module
+        module,
         editor_settings: MapEditorSettings::default(),
     });
 }
@@ -208,39 +214,4 @@ pub fn exit_map_wander(mut commands: Commands, cleanup: Query<(Entity, &MapWande
     cleanup
         .iter()
         .for_each(|(e, _)| commands.entity(e).despawn());
-}
-
-pub fn map_wander_rebuild(
-    geometry_query: Query<(Entity, &WanderGeometry)>,
-    mut wander: ResMut<WanderResource>,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<StandardMaterial>>,
-    mut commands: Commands,
-    mut assets: ResMut<RegionAssets>,
-) {
-    if wander.map.needs_rebuild {
-        wander.map.needs_rebuild = false;
-        geometry_query.iter().for_each(|(e, ..)| {
-            commands.entity(e).despawn();
-        });
-        for m in assets.materials.iter() {
-            materials.remove(m.clone());
-        }
-        for m in assets.meshes.iter() {
-            meshes.remove(m.1.clone());
-        }
-        *assets = RegionAssets::new(&mut materials, &mut meshes, &wander.map);
-        for m in assets.meshes.iter() {
-            // TODO: m.0 tells you what material to use
-            commands
-                .spawn_bundle(PbrBundle {
-                    mesh: m.1.clone(),
-                    material: assets.materials[m.0 as usize].clone(),
-                    transform: Transform::from_xyz(0.0, 0.0, 0.0),
-                    ..Default::default()
-                })
-                .insert(MapWander {})
-                .insert(WanderGeometry {});
-        }
-    }
 }

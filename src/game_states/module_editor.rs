@@ -1,18 +1,17 @@
-use super::UiAssets;
+use super::ModuleSelector;
 use crate::{
     module::{default_pbr, MaterialDefinition, Module},
-    region::region_map::{RegionMap, map_editor::{MapEditor, MapEditorSettings}},
-    AppState,
+    region::region_map::{
+        map_editor::{MapEditor, MapEditorSettings},
+        RegionMap,
+    },
 };
-use bevy::{app::Events, prelude::*};
+use bevy::prelude::*;
 use bevy_egui::egui::Widget;
 use bevy_egui::{
-    egui::Pos2,
     egui::{self, Color32},
     EguiContext,
 };
-
-pub struct ModuleEditorUi;
 
 pub struct ModuleResource {
     pub module: Module,
@@ -26,11 +25,7 @@ pub struct ModuleResource {
     editor_settings: MapEditorSettings,
 }
 
-pub fn module_editor(
-    egui_context: ResMut<EguiContext>,
-    mut state: ResMut<State<AppState>>,
-    mut module_res: ResMut<ModuleResource>,
-) {
+pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<ModuleResource>) {
     egui::TopBottomPanel::top("menu_bar").show(egui_context.ctx(), |ui| {
         egui::menu::bar(ui, |ui| {
             egui::menu::menu(ui, "Module Editor", |ui| {
@@ -213,18 +208,32 @@ pub fn module_editor(
     }
 }
 
-pub fn resume_module_editor(mut commands: Commands) {
-    commands.insert_resource(ModuleResource {
-        module: Module::default(),
-        show_info: false,
-        show_materials: false,
-        current_material: 0,
-        new_material_name: "New Material".to_string(),
-        show_maps: false,
-        new_map: RegionMap::default(),
-        editing_map: None,
-        editor_settings: MapEditorSettings::default(),
-    });
+pub fn resume_module_editor(mut commands: Commands, startup: Res<ModuleSelector>) {
+    if let Some(filename) = &startup.filename {
+        commands.insert_resource(ModuleResource {
+            module: Module::load(&filename),
+            show_info: false,
+            show_materials: false,
+            current_material: 0,
+            new_material_name: "New Material".to_string(),
+            show_maps: false,
+            new_map: RegionMap::default(),
+            editing_map: None,
+            editor_settings: MapEditorSettings::default(),
+        });
+    } else {
+        commands.insert_resource(ModuleResource {
+            module: Module::default(),
+            show_info: false,
+            show_materials: false,
+            current_material: 0,
+            new_material_name: "New Material".to_string(),
+            show_maps: false,
+            new_map: RegionMap::default(),
+            editing_map: None,
+            editor_settings: MapEditorSettings::default(),
+        });
+    }
 }
 
 pub fn exit_module_editor(mut commands: Commands) {

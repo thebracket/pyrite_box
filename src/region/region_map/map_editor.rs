@@ -2,11 +2,11 @@ use std::collections::HashMap;
 
 use super::RegionMap;
 use crate::{
-    game_states::WanderResource,
+    module::{MaterialDefinition, Module},
     region::{
         region_map::{RegionBoundaryType, EAST, NORTH, SOUTH, WEST},
         Direction,
-    }, module::{Module, MaterialDefinition},
+    },
 };
 use bevy_egui::egui::{
     emath::{self, RectTransform},
@@ -22,7 +22,10 @@ pub struct MapEditorSettings {
 
 impl MapEditorSettings {
     pub fn default() -> Self {
-        Self { fill_walls: true, material: 0 }
+        Self {
+            fill_walls: true,
+            material: 0,
+        }
     }
 }
 
@@ -32,7 +35,12 @@ pub struct MapEditor<'a> {
 }
 
 impl<'a> MapEditor<'a> {
-    pub fn render_in_module(ctx: &CtxRef, editor_settings: &mut MapEditorSettings, module: &mut Module, map_id: usize ) {
+    pub fn render_in_module(
+        ctx: &CtxRef,
+        editor_settings: &mut MapEditorSettings,
+        module: &mut Module,
+        map_id: usize,
+    ) {
         let map = module.maps.get_mut(&map_id).unwrap();
         let mats = module.materials.clone();
         Window::new(format!("Map: {}", map.name))
@@ -62,7 +70,11 @@ impl<'a> MapEditor<'a> {
             });
     }
 
-    fn ui_content(&mut self, ui: &mut Ui, mats: &HashMap<usize, (String, MaterialDefinition)>) -> bevy_egui::egui::Response {
+    fn ui_content(
+        &mut self,
+        ui: &mut Ui,
+        mats: &HashMap<usize, (String, MaterialDefinition)>,
+    ) -> bevy_egui::egui::Response {
         let (response, painter) = ui.allocate_painter(
             ui.available_size_before_wrap(),
             Sense::union(Sense::click(), Sense::hover()),
@@ -269,7 +281,7 @@ impl<'a> RenderStrokes<'a> {
             full: Stroke::new(1.0, Color32::from_rgba_premultiplied(255, 255, 255, 255)),
             none: Stroke::new(1.0, Color32::from_rgba_premultiplied(32, 32, 32, 255)),
             highlight: Stroke::new(1.0, Color32::from_rgba_premultiplied(255, 255, 0, 255)),
-            mats
+            mats,
         }
     }
 
@@ -277,15 +289,12 @@ impl<'a> RenderStrokes<'a> {
         match wall.0 {
             RegionBoundaryType::WALL => {
                 let mat_idx = wall.1 as usize;
-                if let Some((_,MaterialDefinition::Color{r,g,b})) = self.mats.get(&mat_idx) {
-                    Stroke::new(
-                        1.0,
-                        Color32::from_rgb(*r,*g,*b),
-                    )
+                if let Some((_, MaterialDefinition::Color { r, g, b })) = self.mats.get(&mat_idx) {
+                    Stroke::new(1.0, Color32::from_rgb(*r, *g, *b))
                 } else {
                     self.full
                 }
-            },
+            }
             _ => self.none,
         }
     }
