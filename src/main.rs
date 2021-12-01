@@ -16,7 +16,7 @@ pub enum AppState {
 fn main() {
     App::build()
         .insert_resource(WindowDescriptor {
-            title: "Nox Futura".to_string(),
+            title: "Pyrite Box".to_string(),
             width: 1280.0,
             height: 1024.0,
             vsync: false,

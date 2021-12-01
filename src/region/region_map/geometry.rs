@@ -89,6 +89,9 @@ pub fn add_floor_geometry(
     ];
 
     uv.extend_from_slice(&uv_base);
+
+    //calculate_tangent(&cube_geometry, &uv_base);
+    //println!("{:?}", CUBE_TANGENTS[1]);
 }
 
 pub fn add_cube_geometry(
@@ -620,12 +623,39 @@ pub fn add_west_facing_wall_geometry(
     #[rustfmt::skip]
     let uv_base: [[f32; 2]; 6] = [
         [tw, th],
+        [0.0, 0.0],
         [tw, 0.0],
         [0.0, 0.0],
-        [0.0, 0.0],
-        [0.0, th],
         [tw, th],
+        [0.0, th],
     ];
 
     uv.extend_from_slice(&uv_base);
 }
+
+/*fn calculate_tangent(pos: &[[f32;3]], uv: &[[f32;2]]) {
+    use bevy::math::{Vec3, Vec2};
+    let pos1 = Vec3::from(pos[0]);
+    let pos2 = Vec3::from(pos[1]);
+    let pos3 = Vec3::from(pos[2]);
+    let pos4 = Vec3::from(pos[4]);
+    let uv1 = Vec2::from(uv[0]);
+    let uv2 = Vec2::from(uv[1]);
+    let uv3 = Vec2::from(uv[2]);
+    let uv4 = Vec2::from(uv[4]);
+
+
+    let edge1 = pos2 - pos1;
+    let edge2 = pos3 - pos1;
+    let delta_uv1 = uv2 - uv1;
+    let delta_uv2 = uv3 - uv1;
+
+    let f = 1.0 / (delta_uv1.x * delta_uv2.y - delta_uv2.x * delta_uv1.y);
+    let tangent1 = Vec3::from([
+        f * (delta_uv2.y * edge1.x - delta_uv1.y * edge2.x),
+        f * (delta_uv2.y * edge1.y - delta_uv1.y * edge2.y),
+        f * (delta_uv2.y * edge1.z - delta_uv1.y * edge2.z),
+    ]).normalize();
+
+    println!("{:?}", tangent1);
+}*/
