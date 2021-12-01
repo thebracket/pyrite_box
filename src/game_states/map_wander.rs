@@ -1,5 +1,5 @@
 use crate::module::Module;
-use crate::region::region_map::map_editor::MapEditorSettings;
+use crate::region::region_map::map_editor::{MapEditorSettings, MapEditor};
 use crate::region::Direction;
 use crate::region::{region_assets::RegionAssets, region_map::geometry::GEOMETRY_SIZE};
 use bevy::{prelude::*, render::camera::PerspectiveProjection};
@@ -35,7 +35,7 @@ pub fn map_wander(
         Query<(&WanderCamera, &mut Transform)>,
     )>,
     egui_context: ResMut<EguiContext>,
-    wander: Res<WanderResource>,
+    mut wander: ResMut<WanderResource>,
 ) {
     player_query.iter_mut().for_each(|mut wp| {
         let mut moved = false;
@@ -127,7 +127,7 @@ pub fn map_wander(
                 ));
             });
 
-        //MapEditor::render(egui_context.ctx(), &mut wander)
+        MapEditor::render_in_module(egui_context.ctx(), &mut wander.editor_settings, &mut wander.module, wander.map_idx);
     });
 }
 
