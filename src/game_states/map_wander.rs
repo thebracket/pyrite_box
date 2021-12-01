@@ -168,7 +168,7 @@ pub fn resume_map_wander(
         .insert(WanderLight {});
 
     // camera
-    let perpsective = PerspectiveProjection {
+    let perspective = PerspectiveProjection {
         fov: 1.5708,
         aspect_ratio: 1280.0 / 1024.0,
         near: 0.1,
@@ -177,7 +177,7 @@ pub fn resume_map_wander(
 
     commands
         .spawn_bundle(PerspectiveCameraBundle {
-            perspective_projection: perpsective,
+            perspective_projection: perspective,
             transform: Transform::from_xyz(start_x, start_y, start_z).looking_at(
                 Vec3::new(start_x, start_y - 50.0, start_z),
                 Vec3::new(0.0, 0.0, 1.0),
