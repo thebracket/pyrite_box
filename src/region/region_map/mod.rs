@@ -12,7 +12,7 @@ pub struct RegionMap {
     pub name: String,
     pub size: (u32, u32),
     pub tiles: Vec<RegionTile>,
-    pub starting_location: (f32, f32, f32),
+    pub starting_location: (u32, u32),
     pub needs_rebuild: bool,
 }
 
@@ -66,9 +66,7 @@ impl RegionMap {
                 (SIZE.0 as usize) * (SIZE.1 as usize)
             ],
             starting_location: (
-                0.0 - (((SIZE.0 / 2) as f32 * GEOMETRY_SIZE) + GEOMETRY_SIZE / 2.0),
-                ((SIZE.1 / 2) as f32 * GEOMETRY_SIZE) + GEOMETRY_SIZE / 2.0,
-                GEOMETRY_SIZE * 0.5,
+                SIZE.0/2, SIZE.1/2
             ),
             needs_rebuild: false,
         };
@@ -87,7 +85,7 @@ impl RegionMap {
         map
     }
 
-    fn tile_location(&self, x: f32, y: f32) -> (f32, f32) {
+    pub fn tile_location(&self, x: f32, y: f32) -> (f32, f32) {
         (0.0 - x, y)
     }
 

@@ -11,7 +11,7 @@ use crate::{
 use bevy_egui::egui::{
     emath::{self, RectTransform},
     Color32, CtxRef, Frame, Painter, PointerButton, Pos2, Rect, Response, Sense, Stroke, Ui,
-    Window,
+    Window, Align2,
 };
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -102,8 +102,9 @@ impl<'a> MapEditor<'a> {
         if let Some(pointer_pos) = response.hover_pos() {
             match self.settings.mode {
                 MapEditorMode::Walls => self.wall_interact(&scale, &strokes, pointer_pos, &painter, &response),
-                MapEditorMode::Floor => self.floor_interact(&scale, pointer_pos, &painter, &response),
-                MapEditorMode::Ceiling => self.ceiling_interact(&scale, pointer_pos, &painter, &response),
+                MapEditorMode::Floor => self.floor_interact(&scale, pointer_pos, &response),
+                MapEditorMode::Ceiling => self.ceiling_interact(&scale, pointer_pos, &response),
+                MapEditorMode::Start => self.start_interact(&scale, pointer_pos, &response),
                 _ => {}
             }
         }
@@ -235,7 +236,28 @@ impl<'a> MapEditor<'a> {
                         Stroke::new(4.0, Color32::BLACK),
                     );
                 }
+
+                // Start loc
+                if self.settings.mode == MapEditorMode::Start {
+                    let px = (self.map.starting_location.0 as f32 * scale.box_x) + (scale.box_x / 2.0);
+                    let py = (self.map.starting_location.1 as f32 * scale.box_y) + (scale.box_y / 2.0);
+                    painter.text(scale.to_screen * Pos2{ x: px, y: py}, Align2::CENTER_CENTER, "S", bevy_egui::egui::TextStyle::Monospace, Color32::YELLOW);
+                }
             }
+        }
+    }
+
+    fn start_interact(
+        &mut self,
+        scale: &Scaling,
+        pointer_pos: Pos2,
+        response: &Response,
+    )
+    {
+        if response.clicked_by(PointerButton::Primary) {
+            let pos = MapWallInteraction::new(scale, pointer_pos, &self.map);
+            self.map.starting_location.0 = pos.tile_x;
+            self.map.starting_location.1 = pos.tile_y;
         }
     }
 
@@ -243,7 +265,6 @@ impl<'a> MapEditor<'a> {
         &mut self,
         scale: &Scaling,
         pointer_pos: Pos2,
-        painter: &Painter,
         response: &Response,
     )
     {
@@ -266,7 +287,6 @@ impl<'a> MapEditor<'a> {
         &mut self,
         scale: &Scaling,
         pointer_pos: Pos2,
-        painter: &Painter,
         response: &Response,
     )
     {

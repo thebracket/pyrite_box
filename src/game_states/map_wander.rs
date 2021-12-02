@@ -143,7 +143,15 @@ pub fn resume_map_wander(
 ) {
     let module = Module::load(startup.filename.as_ref().unwrap());
     let map_idx = 0; // TODO: Change to starting map
-    let (start_x, start_y, start_z) = module.maps[&map_idx].starting_location;
+    let (start_x, start_y, start_z) = {
+        let (sx, sy) = module.maps[&map_idx].starting_location;
+        let (x, y) = module.maps[&map_idx].tile_location(sx as f32, sy as f32);
+        (
+            x * GEOMETRY_SIZE,
+            y * GEOMETRY_SIZE,
+            0.5,
+        )
+    };
     let assets = RegionAssets::new(&mut materials, &mut meshes, &asset_server, &module, map_idx);
     for m in assets.meshes.iter() {
         // TODO: m.0 tells you what material to use
