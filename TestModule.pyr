@@ -1833,7 +1833,7 @@
                     ceiling_material: 3,
                 ),
             ],
-            starting_location: (15, 4),
+            starting_location: (15, 4, West),
             needs_rebuild: true,
         ),
     },

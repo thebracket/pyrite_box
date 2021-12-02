@@ -11,7 +11,7 @@ pub struct RegionMap {
     pub name: String,
     pub size: (u32, u32),
     pub tiles: Vec<RegionTile>,
-    pub starting_location: (u32, u32),
+    pub starting_location: (u32, u32, Direction),
     pub needs_rebuild: bool,
 }
 
@@ -64,7 +64,7 @@ impl RegionMap {
                 };
                 (SIZE.0 as usize) * (SIZE.1 as usize)
             ],
-            starting_location: (SIZE.0 / 2, SIZE.1 / 2),
+            starting_location: (SIZE.0 / 2, SIZE.1 / 2, Direction::North),
             needs_rebuild: false,
         };
 

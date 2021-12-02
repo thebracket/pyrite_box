@@ -41,19 +41,19 @@ pub fn map_wander(
         let mut moved = false;
         if keyboard_input.just_pressed(KeyCode::Right) {
             wp.facing = match wp.facing {
-                Direction::North => Direction::West,
-                Direction::West => Direction::South,
-                Direction::South => Direction::East,
-                Direction::East => Direction::North,
+                Direction::North => Direction::East,
+                Direction::East => Direction::South,
+                Direction::South => Direction::West,
+                Direction::West => Direction::North,
             };
             moved = true;
         }
         if keyboard_input.just_pressed(KeyCode::Left) {
             wp.facing = match wp.facing {
-                Direction::North => Direction::East,
-                Direction::East => Direction::South,
-                Direction::South => Direction::West,
-                Direction::West => Direction::North,
+                Direction::North => Direction::West,
+                Direction::West => Direction::South,
+                Direction::South => Direction::East,
+                Direction::East => Direction::North,
             };
             moved = true;
         }
@@ -81,13 +81,15 @@ pub fn map_wander(
         }
 
         if moved {
+            let map_idx = wander.map_idx;
+            let (x,y) = wander.module.maps[&map_idx].tile_location(wp.x as f32, wp.y as f32);
             move_set.q0_mut().iter_mut().for_each(|(_, mut trans)| {
-                trans.translation.x = (wp.x as f32 * GEOMETRY_SIZE) + (GEOMETRY_SIZE / 2.0);
-                trans.translation.y = (wp.y as f32 * GEOMETRY_SIZE) + (GEOMETRY_SIZE / 2.0);
+                trans.translation.x = (x * GEOMETRY_SIZE) + (GEOMETRY_SIZE / 2.0);
+                trans.translation.y = (y * GEOMETRY_SIZE) + (GEOMETRY_SIZE / 2.0);
             });
             move_set.q1_mut().iter_mut().for_each(|(_, mut trans)| {
-                trans.translation.x = (wp.x as f32 * GEOMETRY_SIZE) + (GEOMETRY_SIZE / 2.0);
-                trans.translation.y = (wp.y as f32 * GEOMETRY_SIZE) + (GEOMETRY_SIZE / 2.0);
+                trans.translation.x = (x * GEOMETRY_SIZE) + (GEOMETRY_SIZE / 2.0);
+                trans.translation.y = (y * GEOMETRY_SIZE) + (GEOMETRY_SIZE / 2.0);
                 let target = match wp.facing {
                     Direction::North => Vec3::new(
                         trans.translation.x,
@@ -99,12 +101,12 @@ pub fn map_wander(
                         trans.translation.y + 50.0,
                         trans.translation.z,
                     ),
-                    Direction::East => Vec3::new(
+                    Direction::West => Vec3::new(
                         trans.translation.x + 50.0,
                         trans.translation.y,
                         trans.translation.z,
                     ),
-                    Direction::West => Vec3::new(
+                    Direction::East => Vec3::new(
                         trans.translation.x - 50.0,
                         trans.translation.y,
                         trans.translation.z,
@@ -148,10 +150,10 @@ pub fn resume_map_wander(
 ) {
     let module = Module::load(startup.filename.as_ref().unwrap());
     let map_idx = 0; // TODO: Change to starting map
-    let (start_x, start_y, start_z) = {
-        let (sx, sy) = module.maps[&map_idx].starting_location;
+    let (start_x, start_y, start_z, facing, tile_x, tile_y) = {
+        let (sx, sy, direction) = module.maps[&map_idx].starting_location;
         let (x, y) = module.maps[&map_idx].tile_location(sx as f32, sy as f32);
-        (x * GEOMETRY_SIZE, y * GEOMETRY_SIZE, 0.5 * GEOMETRY_SIZE)
+        ((x+0.5) * GEOMETRY_SIZE, (y+0.5) * GEOMETRY_SIZE, 0.5 * GEOMETRY_SIZE, direction, sx, sy)
     };
     let assets = RegionAssets::new(&mut materials, &mut meshes, &asset_server, &module, map_idx);
     for m in assets.meshes.iter() {
@@ -196,7 +198,12 @@ pub fn resume_map_wander(
         .spawn_bundle(PerspectiveCameraBundle {
             perspective_projection: perspective,
             transform: Transform::from_xyz(start_x, start_y, start_z).looking_at(
-                Vec3::new(start_x, start_y - 50.0, start_z),
+                match facing {
+                    Direction::North => Vec3::new(start_x, start_y - 50.0, start_z),
+                    Direction::South => Vec3::new(start_x, start_y + 50.0, start_z),
+                    Direction::East => Vec3::new(start_x - 50.0, start_y, start_z),
+                    Direction::West => Vec3::new(start_x + 50.0, start_y, start_z),
+                },
                 Vec3::new(0.0, 0.0, 1.0),
             ),
             ..Default::default()
@@ -208,9 +215,9 @@ pub fn resume_map_wander(
     commands
         .spawn()
         .insert(WanderingPlayer {
-            x: (start_x / GEOMETRY_SIZE) as i32,
-            y: (start_y / GEOMETRY_SIZE) as i32,
-            facing: Direction::North,
+            x: tile_x as i32,
+            y: tile_y as i32,
+            facing,
         })
         .insert(MapWander {});
 
