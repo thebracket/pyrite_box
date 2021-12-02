@@ -149,7 +149,7 @@ pub fn resume_map_wander(
         (
             x * GEOMETRY_SIZE,
             y * GEOMETRY_SIZE,
-            0.5,
+            0.5 * GEOMETRY_SIZE,
         )
     };
     let assets = RegionAssets::new(&mut materials, &mut meshes, &asset_server, &module, map_idx);
