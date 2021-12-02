@@ -28,6 +28,7 @@ pub struct MapEditorSettings {
     mode: MapEditorMode,
     fill_walls: bool,
     material: usize,
+    pub highlight_player: Option<(i32,i32)>,
 }
 
 impl MapEditorSettings {
@@ -36,6 +37,7 @@ impl MapEditorSettings {
             mode: MapEditorMode::Walls,
             fill_walls: true,
             material: 0,
+            highlight_player: None,
         }
     }
 }
@@ -429,6 +431,21 @@ impl<'a> MapEditor<'a> {
                         scale.to_screen * Pos2 { x: px, y: py },
                         Align2::CENTER_CENTER,
                         "S",
+                        bevy_egui::egui::TextStyle::Monospace,
+                        Color32::YELLOW,
+                    );
+                }
+
+                // Start loc
+                if let Some((x,y)) = self.settings.highlight_player {
+                    let px =
+                        (x as f32 * scale.box_x) + (scale.box_x / 2.0);
+                    let py =
+                        (y as f32 * scale.box_y) + (scale.box_y / 2.0);
+                    painter.text(
+                        scale.to_screen * Pos2 { x: px, y: py },
+                        Align2::CENTER_CENTER,
+                        "@",
                         bevy_egui::egui::TextStyle::Monospace,
                         Color32::YELLOW,
                     );

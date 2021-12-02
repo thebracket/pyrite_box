@@ -131,6 +131,7 @@ pub fn map_wander(
 
         let map_idx = wander.map_idx;
         let mut settings = wander.editor_settings.clone();
+        settings.highlight_player = Some((wp.x, wp.y));
         MapEditor::render_in_module(
             egui_context.ctx(),
             &mut settings,
