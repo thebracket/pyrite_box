@@ -16,7 +16,7 @@ use bevy_egui::egui::{
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum MapEditorMode {
-    Walls, Floor, Ceiling
+    Walls, Floor, Ceiling, Start
 }
 
 #[derive(Clone)]
@@ -59,6 +59,7 @@ impl<'a> MapEditor<'a> {
                     ui.radio_value(&mut editor_settings.mode, MapEditorMode::Walls, "Wall");
                     ui.radio_value(&mut editor_settings.mode, MapEditorMode::Floor, "Floor");
                     ui.radio_value(&mut editor_settings.mode, MapEditorMode::Ceiling, "Ceiling");
+                    ui.radio_value(&mut editor_settings.mode, MapEditorMode::Start, "Start");
                 });
                 ui.checkbox(&mut editor_settings.fill_walls, "Double-Sided Walls");
 
@@ -218,7 +219,7 @@ impl<'a> MapEditor<'a> {
                     );
                 }
 
-                // Display Floors
+                // Display Ceilings
                 if self.settings.mode == MapEditorMode::Ceiling && tile.has_ceiling {
                     let px = x as f32 * scale.box_x;
                     let py = y as f32 * scale.box_y;
