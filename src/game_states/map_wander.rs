@@ -127,7 +127,10 @@ pub fn map_wander(
                 ));
             });
 
-        MapEditor::render_in_module(egui_context.ctx(), &mut wander.editor_settings, &mut wander.module, wander.map_idx);
+        let map_idx = wander.map_idx;
+        let mut settings = wander.editor_settings.clone();
+        MapEditor::render_in_module(egui_context.ctx(), &mut settings, &mut wander.module, map_idx);
+        wander.editor_settings = settings;
     });
 }
 
@@ -214,4 +217,36 @@ pub fn exit_map_wander(mut commands: Commands, cleanup: Query<(Entity, &MapWande
     cleanup
         .iter()
         .for_each(|(e, _)| commands.entity(e).despawn());
+}
+
+pub fn map_wander_rebuild(
+    mut wander: ResMut<WanderResource>,
+    mut commands: Commands,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut assets: ResMut<RegionAssets>,
+    geometry_query: Query<(Entity, &WanderGeometry)>,
+) {
+    let map_idx = wander.map_idx;
+    if wander.module.maps[&map_idx].needs_rebuild {
+        wander.module.maps.get_mut(&map_idx).unwrap().needs_rebuild = false;
+
+        geometry_query.iter().for_each(|(e, ..)| {
+            commands.entity(e).despawn();
+        });
+
+        assets.rebuild_geometry(&mut meshes, &wander.module, map_idx);
+
+        for m in assets.meshes.iter() {
+            // TODO: m.0 tells you what material to use
+            commands
+                .spawn_bundle(PbrBundle {
+                    mesh: m.1.clone(),
+                    material: assets.materials[&(m.0 as usize)].clone(),
+                    transform: Transform::from_xyz(0.0, 0.0, 0.0),
+                    ..Default::default()
+                })
+                .insert(MapWander {})
+                .insert(WanderGeometry {});
+        }
+    }
 }

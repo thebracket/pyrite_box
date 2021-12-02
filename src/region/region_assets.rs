@@ -77,4 +77,16 @@ impl RegionAssets {
             meshes,
         }
     }
+
+    pub fn rebuild_geometry(
+        &mut self,
+        meshes: &mut Assets<Mesh>,
+        module: &Module,
+        map_idx: usize,
+    ) {
+        for mh in self.meshes.iter() {
+            meshes.remove(mh.1.clone());
+        }
+        self.meshes = module.maps[&map_idx].create_geometry(meshes);
+    }
 }

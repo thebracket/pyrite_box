@@ -59,6 +59,9 @@ fn main() {
         // Map Wander
         .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(map_wander.system()))
         .add_system_set(
+            SystemSet::on_update(AppState::MapWander).with_system(map_wander_rebuild.system()),
+        )
+        .add_system_set(
             SystemSet::on_enter(AppState::MapWander).with_system(resume_map_wander.system()),
         )
         .add_system_set(
