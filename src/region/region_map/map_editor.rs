@@ -10,13 +10,16 @@ use crate::{
 };
 use bevy_egui::egui::{
     emath::{self, RectTransform},
-    Color32, CtxRef, Frame, Painter, PointerButton, Pos2, Rect, Response, Sense, Stroke, Ui,
-    Window, Align2,
+    Align2, Color32, CtxRef, Frame, Painter, PointerButton, Pos2, Rect, Response, Sense, Stroke,
+    Ui, Window,
 };
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum MapEditorMode {
-    Walls, Floor, Ceiling, Start
+    Walls,
+    Floor,
+    Ceiling,
+    Start,
 }
 
 #[derive(Clone)]
@@ -54,7 +57,7 @@ impl<'a> MapEditor<'a> {
             .default_size(bevy_egui::egui::vec2(512.0, 512.0))
             .scroll(false)
             .show(ctx, |ui| {
-                ui.group(|ui| {
+                ui.horizontal(|ui| {
                     ui.label("Mode:");
                     ui.radio_value(&mut editor_settings.mode, MapEditorMode::Walls, "Wall");
                     ui.radio_value(&mut editor_settings.mode, MapEditorMode::Floor, "Floor");
@@ -101,7 +104,9 @@ impl<'a> MapEditor<'a> {
 
         if let Some(pointer_pos) = response.hover_pos() {
             match self.settings.mode {
-                MapEditorMode::Walls => self.wall_interact(&scale, &strokes, pointer_pos, &painter, &response),
+                MapEditorMode::Walls => {
+                    self.wall_interact(&scale, &strokes, pointer_pos, &painter, &response)
+                }
                 MapEditorMode::Floor => self.floor_interact(&scale, pointer_pos, &response),
                 MapEditorMode::Ceiling => self.ceiling_interact(&scale, pointer_pos, &response),
                 MapEditorMode::Start => self.start_interact(&scale, pointer_pos, &response),
@@ -203,15 +208,25 @@ impl<'a> MapEditor<'a> {
                 );
 
                 // Display Floors
-                if self.settings.mode == MapEditorMode::Floor && tile.tile_type == RegionTileType::FLOOR {
+                if self.settings.mode == MapEditorMode::Floor
+                    && tile.tile_type == RegionTileType::Floor
+                {
                     let px = x as f32 * scale.box_x;
                     let py = y as f32 * scale.box_y;
                     let x20 = scale.x10 * 8.0;
                     let y20 = scale.y10 * 8.0;
                     painter.rect(
                         bevy_egui::egui::Rect::from_two_pos(
-                            scale.to_screen * Pos2{ x: px + x20, y: py + y20 },
-                            scale.to_screen * Pos2{ x: (px + scale.box_x) - x20, y: (py + scale.box_y) - y20 },
+                            scale.to_screen
+                                * Pos2 {
+                                    x: px + x20,
+                                    y: py + y20,
+                                },
+                            scale.to_screen
+                                * Pos2 {
+                                    x: (px + scale.box_x) - x20,
+                                    y: (py + scale.box_y) - y20,
+                                },
                         ),
                         1.0,
                         strokes.fill(tile.floor_material as usize),
@@ -227,8 +242,16 @@ impl<'a> MapEditor<'a> {
                     let y20 = scale.y10 * 8.0;
                     painter.rect(
                         bevy_egui::egui::Rect::from_two_pos(
-                            scale.to_screen * Pos2{ x: px + x20, y: py + y20 },
-                            scale.to_screen * Pos2{ x: (px + scale.box_x) - x20, y: (py + scale.box_y) - y20 },
+                            scale.to_screen
+                                * Pos2 {
+                                    x: px + x20,
+                                    y: py + y20,
+                                },
+                            scale.to_screen
+                                * Pos2 {
+                                    x: (px + scale.box_x) - x20,
+                                    y: (py + scale.box_y) - y20,
+                                },
                         ),
                         1.0,
                         strokes.fill(tile.ceiling_material as usize),
@@ -238,21 +261,23 @@ impl<'a> MapEditor<'a> {
 
                 // Start loc
                 if self.settings.mode == MapEditorMode::Start {
-                    let px = (self.map.starting_location.0 as f32 * scale.box_x) + (scale.box_x / 2.0);
-                    let py = (self.map.starting_location.1 as f32 * scale.box_y) + (scale.box_y / 2.0);
-                    painter.text(scale.to_screen * Pos2{ x: px, y: py}, Align2::CENTER_CENTER, "S", bevy_egui::egui::TextStyle::Monospace, Color32::YELLOW);
+                    let px =
+                        (self.map.starting_location.0 as f32 * scale.box_x) + (scale.box_x / 2.0);
+                    let py =
+                        (self.map.starting_location.1 as f32 * scale.box_y) + (scale.box_y / 2.0);
+                    painter.text(
+                        scale.to_screen * Pos2 { x: px, y: py },
+                        Align2::CENTER_CENTER,
+                        "S",
+                        bevy_egui::egui::TextStyle::Monospace,
+                        Color32::YELLOW,
+                    );
                 }
             }
         }
     }
 
-    fn start_interact(
-        &mut self,
-        scale: &Scaling,
-        pointer_pos: Pos2,
-        response: &Response,
-    )
-    {
+    fn start_interact(&mut self, scale: &Scaling, pointer_pos: Pos2, response: &Response) {
         if response.clicked_by(PointerButton::Primary) {
             let pos = MapWallInteraction::new(scale, pointer_pos, &self.map);
             self.map.starting_location.0 = pos.tile_x;
@@ -260,35 +285,23 @@ impl<'a> MapEditor<'a> {
         }
     }
 
-    fn floor_interact(
-        &mut self,
-        scale: &Scaling,
-        pointer_pos: Pos2,
-        response: &Response,
-    )
-    {
+    fn floor_interact(&mut self, scale: &Scaling, pointer_pos: Pos2, response: &Response) {
         if response.clicked_by(PointerButton::Primary) {
             let pos = MapWallInteraction::new(scale, pointer_pos, &self.map);
             let tile_idx = ((self.map.size.0 * pos.tile_y) + pos.tile_x) as usize;
             self.map.tiles[tile_idx].floor_material = self.settings.material as u32;
-            self.map.tiles[tile_idx].tile_type = RegionTileType::FLOOR;
+            self.map.tiles[tile_idx].tile_type = RegionTileType::Floor;
             self.map.needs_rebuild = true;
         }
         if response.clicked_by(PointerButton::Secondary) {
             let pos = MapWallInteraction::new(scale, pointer_pos, &self.map);
             let tile_idx = ((self.map.size.0 * pos.tile_y) + pos.tile_x) as usize;
-            self.map.tiles[tile_idx].tile_type = RegionTileType::EMPTY;
+            self.map.tiles[tile_idx].tile_type = RegionTileType::Empty;
             self.map.needs_rebuild = true;
         }
     }
 
-    fn ceiling_interact(
-        &mut self,
-        scale: &Scaling,
-        pointer_pos: Pos2,
-        response: &Response,
-    )
-    {
+    fn ceiling_interact(&mut self, scale: &Scaling, pointer_pos: Pos2, response: &Response) {
         if response.clicked_by(PointerButton::Primary) {
             let pos = MapWallInteraction::new(scale, pointer_pos, &self.map);
             let tile_idx = ((self.map.size.0 * pos.tile_y) + pos.tile_x) as usize;
@@ -350,22 +363,28 @@ impl<'a> MapEditor<'a> {
     fn wall_interact_click(&mut self, x: u32, y: u32, boundary: usize, response: &Response) {
         let tile_idx = ((self.map.size.0 * y) + x) as usize;
         if response.clicked_by(PointerButton::Primary) {
-            self.map.tiles[tile_idx].boundaries[boundary].0 = RegionBoundaryType::WALL;
+            self.map.tiles[tile_idx].boundaries[boundary].0 = RegionBoundaryType::Wall;
             self.map.tiles[tile_idx].boundaries[boundary].1 = self.settings.material as u32;
             if self.settings.fill_walls {
-                self.wall_reciprocal_click(x, y, boundary, RegionBoundaryType::WALL);
+                self.wall_reciprocal_click(x, y, boundary, RegionBoundaryType::Wall);
             }
             self.map.needs_rebuild = true;
         } else if response.clicked_by(PointerButton::Secondary) {
-            self.map.tiles[tile_idx].boundaries[boundary].0 = RegionBoundaryType::NONE;
+            self.map.tiles[tile_idx].boundaries[boundary].0 = RegionBoundaryType::None;
             if self.settings.fill_walls {
-                self.wall_reciprocal_click(x, y, boundary, RegionBoundaryType::NONE);
+                self.wall_reciprocal_click(x, y, boundary, RegionBoundaryType::None);
             }
             self.map.needs_rebuild = true;
         }
     }
 
-    fn wall_reciprocal_click(&mut self, x: u32, y: u32, boundary: usize, new_wall: RegionBoundaryType) {
+    fn wall_reciprocal_click(
+        &mut self,
+        x: u32,
+        y: u32,
+        boundary: usize,
+        new_wall: RegionBoundaryType,
+    ) {
         if boundary == NORTH && y > 0 {
             let tile_idx = ((self.map.size.0 * (y - 1)) + x) as usize;
             self.map.tiles[tile_idx].boundaries[SOUTH].0 = new_wall;
@@ -405,12 +424,17 @@ impl<'a> RenderStrokes<'a> {
 
     fn wall_type(&self, wall: (RegionBoundaryType, u32)) -> Stroke {
         match wall.0 {
-            RegionBoundaryType::WALL => {
+            RegionBoundaryType::Wall => {
                 let mat_idx = wall.1 as usize;
                 if let Some((_, MaterialDefinition::Color { r, g, b })) = self.mats.get(&mat_idx) {
                     Stroke::new(1.0, Color32::from_rgb(*r, *g, *b))
-                } else if let Some((_, MaterialDefinition::Pbr { display_color, .. })) = self.mats.get(&mat_idx) {
-                    Stroke::new(1.0, Color32::from_rgb(display_color.0, display_color.1, display_color.2))
+                } else if let Some((_, MaterialDefinition::Pbr { display_color, .. })) =
+                    self.mats.get(&mat_idx)
+                {
+                    Stroke::new(
+                        1.0,
+                        Color32::from_rgb(display_color.0, display_color.1, display_color.2),
+                    )
                 } else {
                     self.full
                 }
@@ -421,8 +445,10 @@ impl<'a> RenderStrokes<'a> {
 
     fn fill(&self, mat_idx: usize) -> Color32 {
         match self.mats.get(&mat_idx) {
-            Some((_, MaterialDefinition::Color{r,g,b})) => Color32::from_rgb(*r, *g, *b),
-            Some((_, MaterialDefinition::Pbr { display_color, ..})) => Color32::from_rgb(display_color.0, display_color.1, display_color.2),
+            Some((_, MaterialDefinition::Color { r, g, b })) => Color32::from_rgb(*r, *g, *b),
+            Some((_, MaterialDefinition::Pbr { display_color, .. })) => {
+                Color32::from_rgb(display_color.0, display_color.1, display_color.2)
+            }
             _ => Color32::from_rgb(64, 64, 64),
         }
     }

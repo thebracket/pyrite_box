@@ -32,15 +32,15 @@ pub struct RegionTile {
 #[allow(dead_code)]
 #[derive(Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum RegionTileType {
-    EMPTY,
-    FLOOR,
-    SOLID,
+    Empty,
+    Floor,
+    Solid,
 }
 
 #[derive(Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub enum RegionBoundaryType {
-    NONE,
-    WALL,
+    None,
+    Wall,
 }
 
 impl RegionMap {
@@ -52,33 +52,31 @@ impl RegionMap {
             tiles: vec![
                 RegionTile {
                     has_ceiling: false,
-                    tile_type: RegionTileType::FLOOR,
+                    tile_type: RegionTileType::Floor,
                     boundaries: [
-                        (RegionBoundaryType::NONE, 1),
-                        (RegionBoundaryType::NONE, 1),
-                        (RegionBoundaryType::NONE, 1),
-                        (RegionBoundaryType::NONE, 1),
+                        (RegionBoundaryType::None, 1),
+                        (RegionBoundaryType::None, 1),
+                        (RegionBoundaryType::None, 1),
+                        (RegionBoundaryType::None, 1),
                     ],
                     floor_material: 0,
                     ceiling_material: 1,
                 };
                 (SIZE.0 as usize) * (SIZE.1 as usize)
             ],
-            starting_location: (
-                SIZE.0/2, SIZE.1/2
-            ),
+            starting_location: (SIZE.0 / 2, SIZE.1 / 2),
             needs_rebuild: false,
         };
 
         for x in 0..SIZE.0 {
-            map.tiles[((0 * SIZE.0) + x) as usize].boundaries[NORTH].0 = RegionBoundaryType::WALL;
+            map.tiles[((0 * SIZE.0) + x) as usize].boundaries[NORTH].0 = RegionBoundaryType::Wall;
             map.tiles[(((SIZE.1 - 1) * SIZE.0) + x) as usize].boundaries[SOUTH].0 =
-                RegionBoundaryType::WALL;
+                RegionBoundaryType::Wall;
         }
         for y in 0..SIZE.1 {
-            map.tiles[((y * SIZE.0) + 0) as usize].boundaries[WEST].0 = RegionBoundaryType::WALL;
+            map.tiles[((y * SIZE.0) + 0) as usize].boundaries[WEST].0 = RegionBoundaryType::Wall;
             map.tiles[((y * SIZE.0) + (SIZE.0 - 1)) as usize].boundaries[EAST].0 =
-                RegionBoundaryType::WALL;
+                RegionBoundaryType::Wall;
         }
 
         map
@@ -107,7 +105,7 @@ impl RegionMap {
                 }
 
                 match self.tiles[tile_idx].tile_type {
-                    RegionTileType::FLOOR => {
+                    RegionTileType::Floor => {
                         bucket.add_feature(
                             FeatureType::Floor,
                             self.tiles[tile_idx].floor_material,
@@ -115,7 +113,7 @@ impl RegionMap {
                             sy,
                         );
                     }
-                    RegionTileType::SOLID => {
+                    RegionTileType::Solid => {
                         bucket.add_feature(
                             FeatureType::Cube,
                             self.tiles[tile_idx].floor_material,
@@ -123,10 +121,10 @@ impl RegionMap {
                             sy,
                         );
                     }
-                    RegionTileType::EMPTY => {}
+                    RegionTileType::Empty => {}
                 }
 
-                if self.tiles[tile_idx].boundaries[NORTH].0 == RegionBoundaryType::WALL {
+                if self.tiles[tile_idx].boundaries[NORTH].0 == RegionBoundaryType::Wall {
                     bucket.add_feature(
                         FeatureType::Wall(Direction::South),
                         self.tiles[tile_idx].boundaries[NORTH].1,
@@ -134,7 +132,7 @@ impl RegionMap {
                         sy,
                     );
                 }
-                if self.tiles[tile_idx].boundaries[SOUTH].0 == RegionBoundaryType::WALL {
+                if self.tiles[tile_idx].boundaries[SOUTH].0 == RegionBoundaryType::Wall {
                     bucket.add_feature(
                         FeatureType::Wall(Direction::North),
                         self.tiles[tile_idx].boundaries[SOUTH].1,
@@ -142,7 +140,7 @@ impl RegionMap {
                         sy,
                     );
                 }
-                if self.tiles[tile_idx].boundaries[EAST].0 == RegionBoundaryType::WALL {
+                if self.tiles[tile_idx].boundaries[EAST].0 == RegionBoundaryType::Wall {
                     bucket.add_feature(
                         FeatureType::Wall(Direction::West),
                         self.tiles[tile_idx].boundaries[EAST].1,
@@ -150,7 +148,7 @@ impl RegionMap {
                         sy,
                     );
                 }
-                if self.tiles[tile_idx].boundaries[WEST].0 == RegionBoundaryType::WALL {
+                if self.tiles[tile_idx].boundaries[WEST].0 == RegionBoundaryType::Wall {
                     bucket.add_feature(
                         FeatureType::Wall(Direction::East),
                         self.tiles[tile_idx].boundaries[WEST].1,

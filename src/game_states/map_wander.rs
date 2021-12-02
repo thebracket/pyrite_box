@@ -1,5 +1,5 @@
 use crate::module::Module;
-use crate::region::region_map::map_editor::{MapEditorSettings, MapEditor};
+use crate::region::region_map::map_editor::{MapEditor, MapEditorSettings};
 use crate::region::Direction;
 use crate::region::{region_assets::RegionAssets, region_map::geometry::GEOMETRY_SIZE};
 use bevy::{prelude::*, render::camera::PerspectiveProjection};
@@ -129,7 +129,12 @@ pub fn map_wander(
 
         let map_idx = wander.map_idx;
         let mut settings = wander.editor_settings.clone();
-        MapEditor::render_in_module(egui_context.ctx(), &mut settings, &mut wander.module, map_idx);
+        MapEditor::render_in_module(
+            egui_context.ctx(),
+            &mut settings,
+            &mut wander.module,
+            map_idx,
+        );
         wander.editor_settings = settings;
     });
 }
@@ -146,11 +151,7 @@ pub fn resume_map_wander(
     let (start_x, start_y, start_z) = {
         let (sx, sy) = module.maps[&map_idx].starting_location;
         let (x, y) = module.maps[&map_idx].tile_location(sx as f32, sy as f32);
-        (
-            x * GEOMETRY_SIZE,
-            y * GEOMETRY_SIZE,
-            0.5 * GEOMETRY_SIZE,
-        )
+        (x * GEOMETRY_SIZE, y * GEOMETRY_SIZE, 0.5 * GEOMETRY_SIZE)
     };
     let assets = RegionAssets::new(&mut materials, &mut meshes, &asset_server, &module, map_idx);
     for m in assets.meshes.iter() {

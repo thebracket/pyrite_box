@@ -150,7 +150,8 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                         metallic,
                     } => {
                         ui.label("Editor Display Color");
-                        let mut color = Color32::from_rgb(display_color.0, display_color.1, display_color.2);
+                        let mut color =
+                            Color32::from_rgb(display_color.0, display_color.1, display_color.2);
                         egui::color_picker::color_edit_button_srgba(
                             ui,
                             &mut color,
