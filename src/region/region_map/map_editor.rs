@@ -105,7 +105,6 @@ impl<'a> MapEditor<'a> {
                 MapEditorMode::Floor => self.floor_interact(&scale, pointer_pos, &response),
                 MapEditorMode::Ceiling => self.ceiling_interact(&scale, pointer_pos, &response),
                 MapEditorMode::Start => self.start_interact(&scale, pointer_pos, &response),
-                _ => {}
             }
         }
 

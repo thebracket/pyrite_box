@@ -1,5 +1,4 @@
 pub mod geometry;
-use geometry::*;
 use serde::{Deserialize, Serialize};
 mod material_bucket;
 use self::material_bucket::{FeatureType, MaterialBucket};
