@@ -82,7 +82,7 @@ pub fn map_wander(
 
         if moved {
             let map_idx = wander.map_idx;
-            let (x,y) = wander.module.maps[&map_idx].tile_location(wp.x as f32, wp.y as f32);
+            let (x, y) = wander.module.maps[&map_idx].tile_location(wp.x as f32, wp.y as f32);
             move_set.q0_mut().iter_mut().for_each(|(_, mut trans)| {
                 trans.translation.x = (x * GEOMETRY_SIZE) + (GEOMETRY_SIZE / 2.0);
                 trans.translation.y = (y * GEOMETRY_SIZE) + (GEOMETRY_SIZE / 2.0);
@@ -153,7 +153,14 @@ pub fn resume_map_wander(
     let (start_x, start_y, start_z, facing, tile_x, tile_y) = {
         let (sx, sy, direction) = module.maps[&map_idx].starting_location;
         let (x, y) = module.maps[&map_idx].tile_location(sx as f32, sy as f32);
-        ((x+0.5) * GEOMETRY_SIZE, (y+0.5) * GEOMETRY_SIZE, 0.5 * GEOMETRY_SIZE, direction, sx, sy)
+        (
+            (x + 0.5) * GEOMETRY_SIZE,
+            (y + 0.5) * GEOMETRY_SIZE,
+            0.5 * GEOMETRY_SIZE,
+            direction,
+            sx,
+            sy,
+        )
     };
     let assets = RegionAssets::new(&mut materials, &mut meshes, &asset_server, &module, map_idx);
     for m in assets.meshes.iter() {

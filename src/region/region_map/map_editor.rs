@@ -20,6 +20,7 @@ pub enum MapEditorMode {
     Floor,
     Ceiling,
     Start,
+    Opening,
 }
 
 #[derive(Clone)]
@@ -63,6 +64,7 @@ impl<'a> MapEditor<'a> {
                     ui.radio_value(&mut editor_settings.mode, MapEditorMode::Floor, "Floor");
                     ui.radio_value(&mut editor_settings.mode, MapEditorMode::Ceiling, "Ceiling");
                     ui.radio_value(&mut editor_settings.mode, MapEditorMode::Start, "Start");
+                    ui.radio_value(&mut editor_settings.mode, MapEditorMode::Opening, "Opening");
                 });
                 ui.checkbox(&mut editor_settings.fill_walls, "Double-Sided Walls");
 
@@ -104,7 +106,7 @@ impl<'a> MapEditor<'a> {
 
         if let Some(pointer_pos) = response.hover_pos() {
             match self.settings.mode {
-                MapEditorMode::Walls => {
+                MapEditorMode::Walls | MapEditorMode::Opening => {
                     self.wall_interact(&scale, &strokes, pointer_pos, &painter, &response)
                 }
                 MapEditorMode::Floor => self.floor_interact(&scale, pointer_pos, &response),
@@ -184,6 +186,130 @@ impl<'a> MapEditor<'a> {
         ]
     }
 
+    fn north_wall_opening(&self, x: u32, y: u32, scale: &Scaling) -> [[Pos2; 2]; 2] {
+        let px = x as f32 * scale.box_x;
+        let py = y as f32 * scale.box_y;
+        [
+            [
+                scale.to_screen
+                    * Pos2 {
+                        x: px + scale.x10,
+                        y: py + scale.y10,
+                    },
+                scale.to_screen
+                    * Pos2 {
+                        x: px + (scale.x10 * 8.0),
+                        y: py + scale.y10,
+                    },
+            ],
+            [
+                scale.to_screen
+                    * Pos2 {
+                        x: px + scale.box_x - (scale.x10 * 8.0),
+                        y: py + scale.y10,
+                    },
+                scale.to_screen
+                    * Pos2 {
+                        x: px + scale.box_x - scale.x10,
+                        y: py + scale.y10,
+                    },
+            ],
+        ]
+    }
+
+    fn south_wall_opening(&self, x: u32, y: u32, scale: &Scaling) -> [[Pos2; 2]; 2] {
+        let px = x as f32 * scale.box_x;
+        let py = y as f32 * scale.box_y;
+        [
+            [
+                scale.to_screen
+                    * Pos2 {
+                        x: px + scale.x10,
+                        y: py + scale.box_y - scale.y10,
+                    },
+                scale.to_screen
+                    * Pos2 {
+                        x: px + (scale.x10 * 8.0),
+                        y: py + scale.box_y - scale.y10,
+                    },
+            ],
+            [
+                scale.to_screen
+                    * Pos2 {
+                        x: px + scale.box_x - (scale.x10 * 8.0),
+                        y: py + scale.box_y - scale.y10,
+                    },
+                scale.to_screen
+                    * Pos2 {
+                        x: px + scale.box_x - scale.x10,
+                        y: py + scale.box_y - scale.y10,
+                    },
+            ],
+        ]
+    }
+
+    fn west_wall_opening(&self, x: u32, y: u32, scale: &Scaling) -> [[Pos2; 2]; 2] {
+        let px = x as f32 * scale.box_x;
+        let py = y as f32 * scale.box_y;
+        [
+            [
+                scale.to_screen
+                    * Pos2 {
+                        x: px + scale.x10,
+                        y: py + scale.y10,
+                    },
+                scale.to_screen
+                    * Pos2 {
+                        x: px + scale.x10,
+                        y: py + (scale.y10 * 8.0),
+                    },
+            ],
+            [
+                scale.to_screen
+                    * Pos2 {
+                        x: px + scale.x10,
+                        y: py + scale.box_y - (scale.y10 * 8.0),
+                    },
+                scale.to_screen
+                    * Pos2 {
+                        x: px + scale.x10,
+                        y: py + scale.box_y - scale.y10,
+                    },
+            ],
+        ]
+    }
+
+    fn east_wall_opening(&self, x: u32, y: u32, scale: &Scaling) -> [[Pos2; 2]; 2] {
+        let px = x as f32 * scale.box_x;
+        let py = y as f32 * scale.box_y;
+        [
+            [
+                scale.to_screen
+                    * Pos2 {
+                        x: px + scale.box_x - scale.x10,
+                        y: py + scale.y10,
+                    },
+                scale.to_screen
+                    * Pos2 {
+                        x: px + scale.box_x - scale.x10,
+                        y: py + (scale.y10 * 8.0),
+                    },
+            ],
+            [
+                scale.to_screen
+                    * Pos2 {
+                        x: px + scale.box_x - scale.x10,
+                        y: py + scale.box_y - (scale.y10 * 8.0),
+                    },
+                scale.to_screen
+                    * Pos2 {
+                        x: px + scale.box_x - scale.x10,
+                        y: py + scale.box_y - scale.y10,
+                    },
+            ],
+        ]
+    }
+
     fn draw_base_map(&self, painter: &Painter, scale: &Scaling, strokes: &RenderStrokes) {
         for y in 0..self.map.size.1 {
             for x in 0..self.map.size.0 {
@@ -206,6 +332,40 @@ impl<'a> MapEditor<'a> {
                     self.west_wall_line(x, y, scale),
                     strokes.wall_type(tile.boundaries[WEST]),
                 );
+
+                // Openings
+                if tile.boundaries[NORTH].0 == RegionBoundaryType::Opening {
+                    self.north_wall_opening(x, y, scale)
+                        .iter()
+                        .for_each(|segment| {
+                            painter
+                                .line_segment(*segment, strokes.wall_type(tile.boundaries[NORTH]));
+                        });
+                }
+                if tile.boundaries[SOUTH].0 == RegionBoundaryType::Opening {
+                    self.south_wall_opening(x, y, scale)
+                        .iter()
+                        .for_each(|segment| {
+                            painter
+                                .line_segment(*segment, strokes.wall_type(tile.boundaries[SOUTH]));
+                        });
+                }
+                if tile.boundaries[EAST].0 == RegionBoundaryType::Opening {
+                    self.east_wall_opening(x, y, scale)
+                        .iter()
+                        .for_each(|segment| {
+                            painter
+                                .line_segment(*segment, strokes.wall_type(tile.boundaries[EAST]));
+                        });
+                }
+                if tile.boundaries[WEST].0 == RegionBoundaryType::Opening {
+                    self.west_wall_opening(x, y, scale)
+                        .iter()
+                        .for_each(|segment| {
+                            painter
+                                .line_segment(*segment, strokes.wall_type(tile.boundaries[WEST]));
+                        });
+                }
 
                 // Display Floors
                 if self.settings.mode == MapEditorMode::Floor
@@ -363,10 +523,21 @@ impl<'a> MapEditor<'a> {
     fn wall_interact_click(&mut self, x: u32, y: u32, boundary: usize, response: &Response) {
         let tile_idx = ((self.map.size.0 * y) + x) as usize;
         if response.clicked_by(PointerButton::Primary) {
-            self.map.tiles[tile_idx].boundaries[boundary].0 = RegionBoundaryType::Wall;
+            self.map.tiles[tile_idx].boundaries[boundary].0 = match self.settings.mode {
+                MapEditorMode::Opening => RegionBoundaryType::Opening,
+                _ => RegionBoundaryType::Wall,
+            };
             self.map.tiles[tile_idx].boundaries[boundary].1 = self.settings.material as u32;
             if self.settings.fill_walls {
-                self.wall_reciprocal_click(x, y, boundary, RegionBoundaryType::Wall);
+                self.wall_reciprocal_click(
+                    x,
+                    y,
+                    boundary,
+                    match self.settings.mode {
+                        MapEditorMode::Opening => RegionBoundaryType::Opening,
+                        _ => RegionBoundaryType::Wall,
+                    },
+                );
             }
             self.map.needs_rebuild = true;
         } else if response.clicked_by(PointerButton::Secondary) {
@@ -424,7 +595,7 @@ impl<'a> RenderStrokes<'a> {
 
     fn wall_type(&self, wall: (RegionBoundaryType, u32)) -> Stroke {
         match wall.0 {
-            RegionBoundaryType::Wall => {
+            RegionBoundaryType::Wall | RegionBoundaryType::Opening => {
                 let mat_idx = wall.1 as usize;
                 if let Some((_, MaterialDefinition::Color { r, g, b })) = self.mats.get(&mat_idx) {
                     Stroke::new(1.0, Color32::from_rgb(*r, *g, *b))

@@ -41,6 +41,7 @@ pub enum RegionTileType {
 pub enum RegionBoundaryType {
     None,
     Wall,
+    Opening,
 }
 
 impl RegionMap {
