@@ -25,6 +25,7 @@ impl RegionAssets {
                     mats.insert(*idx, handle.clone());
                 }
                 MaterialDefinition::Pbr {
+                    display_color: _,
                     albedo,
                     roughness,
                     metallic,

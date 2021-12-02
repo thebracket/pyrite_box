@@ -14,6 +14,7 @@
             b: 13,
         )),
         0: ("Grass", Pbr(
+            display_color: (0, 255, 0),
             albedo: "leafy-grass2-albedo.png",
             normal_map: "leafy-grass2-normal-dx.png",
             occlusion: "leafy-grass2-ao.png",
@@ -23,6 +24,7 @@
             metallic: 0,
         )),
         3: ("Stone Block Wall", Pbr(
+            display_color: (255, 255, 255),
             albedo: "stone-block-wall_albedo.png",
             normal_map: "stone-block-wall_normal-dx.png",
             occlusion: "stone-block-wall_ao.png",

@@ -8,6 +8,7 @@ pub enum MaterialDefinition {
         b: u8,
     },
     Pbr {
+        display_color: (u8, u8, u8),
         albedo: String,
         normal_map: String,
         occlusion: String,
@@ -20,6 +21,7 @@ pub enum MaterialDefinition {
 
 pub fn default_pbr() -> crate::module::MaterialDefinition {
     MaterialDefinition::Pbr {
+        display_color: (255, 255, 255),
         albedo: String::new(),
         normal_map: String::new(),
         occlusion: String::new(),

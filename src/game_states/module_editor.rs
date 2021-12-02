@@ -140,6 +140,7 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                         *b = color.b();
                     }
                     MaterialDefinition::Pbr {
+                        display_color,
                         albedo,
                         normal_map,
                         occlusion,
@@ -148,6 +149,16 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                         roughness,
                         metallic,
                     } => {
+                        ui.label("Editor Display Color");
+                        let mut color = Color32::from_rgb(display_color.0, display_color.1, display_color.2);
+                        egui::color_picker::color_edit_button_srgba(
+                            ui,
+                            &mut color,
+                            egui::color_picker::Alpha::Opaque,
+                        );
+                        display_color.0 = color.r();
+                        display_color.1 = color.g();
+                        display_color.2 = color.b();
                         ui.label("Base Color Texture Filename");
                         ui.text_edit_singleline(albedo);
                         ui.label("Normal Map Texture Filename (empty for none)");
