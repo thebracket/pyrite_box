@@ -120,7 +120,7 @@ pub fn map_wander(
             .auto_sized()
             .resizable(false)
             .title_bar(false)
-            .fixed_pos(Pos2::new(500.0, 100.0))
+            .fixed_pos(Pos2::new(500.0, 25.0))
             .show(egui_context.ctx(), |ui| {
                 let map_idx = wander.map_idx;
                 ui.label(format!(
