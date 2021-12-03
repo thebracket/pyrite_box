@@ -5,7 +5,7 @@ pub struct MapEditorSettings {
     pub mode: MapEditorMode,
     pub fill_walls: bool,
     pub material: usize,
-    pub highlight_player: Option<(i32,i32)>,
+    pub highlight_player: Option<(i32, i32)>,
 }
 
 impl MapEditorSettings {

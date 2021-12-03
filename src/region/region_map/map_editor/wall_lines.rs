@@ -1,8 +1,8 @@
-use bevy_egui::egui::Pos2;
-use crate::module::Direction;
 use super::scaling::Scaling;
+use crate::module::Direction;
+use bevy_egui::egui::Pos2;
 
-pub fn wall_line(direction: Direction, x: u32, y:u32, scale: &Scaling) -> [Pos2; 2] {
+pub fn wall_line(direction: Direction, x: u32, y: u32, scale: &Scaling) -> [Pos2; 2] {
     match direction {
         Direction::North => north_wall_line(x, y, scale),
         Direction::South => south_wall_line(x, y, scale),

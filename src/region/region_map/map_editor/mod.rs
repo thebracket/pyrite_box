@@ -9,19 +9,17 @@ use scaling::Scaling;
 mod wall_interaction;
 use wall_interaction::MapWallInteraction;
 mod wall_lines;
-use wall_lines::{wall_line, wall_opening};
-use std::collections::HashMap;
 use super::{RegionMap, RegionTileType};
 use crate::{
-    module::{MaterialDefinition, Module, Direction},
-    region::{
-        region_map::{RegionBoundaryType},
-    },
+    module::{Direction, MaterialDefinition, Module},
+    region::region_map::RegionBoundaryType,
 };
 use bevy_egui::egui::{
-    Align2, Color32, CtxRef, Frame, Painter, PointerButton, Pos2, Response, Sense, Stroke,
-    Ui, Window,
+    Align2, Color32, CtxRef, Frame, Painter, PointerButton, Pos2, Response, Sense, Stroke, Ui,
+    Window,
 };
+use std::collections::HashMap;
+use wall_lines::{wall_line, wall_opening};
 
 pub struct MapEditor<'a> {
     pub map: &'a mut RegionMap,
@@ -108,14 +106,18 @@ impl<'a> MapEditor<'a> {
                 let tile = &self.map.tiles[tile_idx];
 
                 for dir in 0..4 {
-                    let direction : Direction = dir.into();
+                    let direction: Direction = dir.into();
                     match tile.boundaries[dir].0 {
                         RegionBoundaryType::Opening => {
                             wall_opening(direction, x, y, scale)
                                 .iter()
                                 .for_each(|segment| {
-                                    painter
-                                        .line_segment(*segment, strokes.wall_type(tile.boundaries[Direction::North.to_exit_index()]));
+                                    painter.line_segment(
+                                        *segment,
+                                        strokes.wall_type(
+                                            tile.boundaries[Direction::North.to_exit_index()],
+                                        ),
+                                    );
                                 });
                         }
                         RegionBoundaryType::None | RegionBoundaryType::Wall => {
@@ -195,11 +197,9 @@ impl<'a> MapEditor<'a> {
                 }
 
                 // Current player position
-                if let Some((x,y)) = self.settings.highlight_player {
-                    let px =
-                        (x as f32 * scale.box_x) + (scale.box_x / 2.0);
-                    let py =
-                        (y as f32 * scale.box_y) + (scale.box_y / 2.0);
+                if let Some((x, y)) = self.settings.highlight_player {
+                    let px = (x as f32 * scale.box_x) + (scale.box_x / 2.0);
+                    let py = (y as f32 * scale.box_y) + (scale.box_y / 2.0);
                     painter.text(
                         scale.to_screen * Pos2 { x: px, y: py },
                         Align2::CENTER_CENTER,
@@ -266,7 +266,12 @@ impl<'a> MapEditor<'a> {
                 wall_line(direction, wall.tile_x, wall.tile_y, &scale),
                 strokes.highlight,
             );
-            self.wall_interact_click(wall.tile_x, wall.tile_y, direction.to_exit_index(), response);
+            self.wall_interact_click(
+                wall.tile_x,
+                wall.tile_y,
+                direction.to_exit_index(),
+                response,
+            );
         }
     }
 
@@ -309,20 +314,23 @@ impl<'a> MapEditor<'a> {
         if boundary == Direction::North.to_exit_index() && y > 0 {
             let tile_idx = ((self.map.size.0 * (y - 1)) + x) as usize;
             self.map.tiles[tile_idx].boundaries[Direction::South.to_exit_index()].0 = new_wall;
-            self.map.tiles[tile_idx].boundaries[Direction::South.to_exit_index()].1 = self.settings.material as u32;
+            self.map.tiles[tile_idx].boundaries[Direction::South.to_exit_index()].1 =
+                self.settings.material as u32;
         } else if boundary == Direction::South.to_exit_index() && y < self.map.size.1 - 1 {
             let tile_idx = ((self.map.size.0 * (y + 1)) + x) as usize;
             self.map.tiles[tile_idx].boundaries[Direction::North.to_exit_index()].0 = new_wall;
-            self.map.tiles[tile_idx].boundaries[Direction::North.to_exit_index()].1 = self.settings.material as u32;
+            self.map.tiles[tile_idx].boundaries[Direction::North.to_exit_index()].1 =
+                self.settings.material as u32;
         } else if boundary == Direction::West.to_exit_index() && x > 0 {
             let tile_idx = ((self.map.size.0 * y) + x - 1) as usize;
             self.map.tiles[tile_idx].boundaries[Direction::East.to_exit_index()].0 = new_wall;
-            self.map.tiles[tile_idx].boundaries[Direction::East.to_exit_index()].1 = self.settings.material as u32;
+            self.map.tiles[tile_idx].boundaries[Direction::East.to_exit_index()].1 =
+                self.settings.material as u32;
         } else if boundary == Direction::East.to_exit_index() && x < self.map.size.0 - 1 {
             let tile_idx = ((self.map.size.0 * y) + x + 1) as usize;
             self.map.tiles[tile_idx].boundaries[Direction::West.to_exit_index()].0 = new_wall;
-            self.map.tiles[tile_idx].boundaries[Direction::West.to_exit_index()].1 = self.settings.material as u32;
+            self.map.tiles[tile_idx].boundaries[Direction::West.to_exit_index()].1 =
+                self.settings.material as u32;
         }
     }
 }
-

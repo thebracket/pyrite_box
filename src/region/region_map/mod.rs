@@ -65,14 +65,19 @@ impl RegionMap {
         };
 
         for x in 0..SIZE.0 {
-            map.tiles[((0 * SIZE.0) + x) as usize].boundaries[Direction::North.to_exit_index() as usize].0 = RegionBoundaryType::Wall;
-            map.tiles[(((SIZE.1 - 1) * SIZE.0) + x) as usize].boundaries[Direction::South.to_exit_index()].0 =
-                RegionBoundaryType::Wall;
+            map.tiles[((0 * SIZE.0) + x) as usize].boundaries
+                [Direction::North.to_exit_index() as usize]
+                .0 = RegionBoundaryType::Wall;
+            map.tiles[(((SIZE.1 - 1) * SIZE.0) + x) as usize].boundaries
+                [Direction::South.to_exit_index()]
+            .0 = RegionBoundaryType::Wall;
         }
         for y in 0..SIZE.1 {
-            map.tiles[((y * SIZE.0) + 0) as usize].boundaries[Direction::West.to_exit_index()].0 = RegionBoundaryType::Wall;
-            map.tiles[((y * SIZE.0) + (SIZE.0 - 1)) as usize].boundaries[Direction::East.to_exit_index()].0 =
+            map.tiles[((y * SIZE.0) + 0) as usize].boundaries[Direction::West.to_exit_index()].0 =
                 RegionBoundaryType::Wall;
+            map.tiles[((y * SIZE.0) + (SIZE.0 - 1)) as usize].boundaries
+                [Direction::East.to_exit_index()]
+            .0 = RegionBoundaryType::Wall;
         }
 
         map
@@ -120,7 +125,9 @@ impl RegionMap {
                     RegionTileType::Empty => {}
                 }
 
-                if self.tiles[tile_idx].boundaries[Direction::North.to_exit_index()].0 == RegionBoundaryType::Wall {
+                if self.tiles[tile_idx].boundaries[Direction::North.to_exit_index()].0
+                    == RegionBoundaryType::Wall
+                {
                     bucket.add_feature(
                         FeatureType::Wall(Direction::South),
                         self.tiles[tile_idx].boundaries[Direction::North.to_exit_index()].1,
@@ -128,7 +135,9 @@ impl RegionMap {
                         sy,
                     );
                 }
-                if self.tiles[tile_idx].boundaries[Direction::South.to_exit_index()].0 == RegionBoundaryType::Wall {
+                if self.tiles[tile_idx].boundaries[Direction::South.to_exit_index()].0
+                    == RegionBoundaryType::Wall
+                {
                     bucket.add_feature(
                         FeatureType::Wall(Direction::North),
                         self.tiles[tile_idx].boundaries[Direction::South.to_exit_index()].1,
@@ -136,7 +145,9 @@ impl RegionMap {
                         sy,
                     );
                 }
-                if self.tiles[tile_idx].boundaries[Direction::East.to_exit_index()].0 == RegionBoundaryType::Wall {
+                if self.tiles[tile_idx].boundaries[Direction::East.to_exit_index()].0
+                    == RegionBoundaryType::Wall
+                {
                     bucket.add_feature(
                         FeatureType::Wall(Direction::West),
                         self.tiles[tile_idx].boundaries[Direction::East.to_exit_index()].1,
@@ -144,7 +155,9 @@ impl RegionMap {
                         sy,
                     );
                 }
-                if self.tiles[tile_idx].boundaries[Direction::West.to_exit_index()].0 == RegionBoundaryType::Wall {
+                if self.tiles[tile_idx].boundaries[Direction::West.to_exit_index()].0
+                    == RegionBoundaryType::Wall
+                {
                     bucket.add_feature(
                         FeatureType::Wall(Direction::East),
                         self.tiles[tile_idx].boundaries[Direction::West.to_exit_index()].1,

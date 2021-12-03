@@ -1,6 +1,6 @@
+use crate::module::Direction;
 use crate::module::Module;
 use crate::region::region_map::map_editor::{MapEditor, MapEditorSettings};
-use crate::module::Direction;
 use crate::region::{region_assets::RegionAssets, region_map::geometry::GEOMETRY_SIZE};
 use bevy::{prelude::*, render::camera::PerspectiveProjection};
 use bevy_egui::{

@@ -1,5 +1,5 @@
 use bevy::math::Vec3;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Direction {
@@ -48,26 +48,10 @@ impl Direction {
 
     pub fn camera_look_at(self, translation: &Vec3) -> Vec3 {
         match self {
-            Direction::North => Vec3::new(
-                translation.x,
-                translation.y - 50.0,
-                translation.z,
-            ),
-            Direction::South => Vec3::new(
-                translation.x,
-                translation.y + 50.0,
-                translation.z,
-            ),
-            Direction::West => Vec3::new(
-                translation.x + 50.0,
-                translation.y,
-                translation.z,
-            ),
-            Direction::East => Vec3::new(
-                translation.x - 50.0,
-                translation.y,
-                translation.z,
-            ),
+            Direction::North => Vec3::new(translation.x, translation.y - 50.0, translation.z),
+            Direction::South => Vec3::new(translation.x, translation.y + 50.0, translation.z),
+            Direction::West => Vec3::new(translation.x + 50.0, translation.y, translation.z),
+            Direction::East => Vec3::new(translation.x - 50.0, translation.y, translation.z),
         }
     }
 

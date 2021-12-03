@@ -1,6 +1,6 @@
-use bevy_egui::egui::Pos2;
-use crate::{module::Direction, region::region_map::RegionMap};
 use super::scaling::Scaling;
+use crate::{module::Direction, region::region_map::RegionMap};
+use bevy_egui::egui::Pos2;
 
 pub struct MapWallInteraction {
     pub tile_x: u32,

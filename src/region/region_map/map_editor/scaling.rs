@@ -1,5 +1,5 @@
-use bevy_egui::egui::{emath::RectTransform, Response, Rect, Pos2};
 use crate::region::region_map::RegionMap;
+use bevy_egui::egui::{emath::RectTransform, Pos2, Rect, Response};
 
 pub struct Scaling {
     pub box_x: f32,
