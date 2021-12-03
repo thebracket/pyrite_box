@@ -1,6 +1,6 @@
 use crate::module::Module;
 use crate::region::region_map::map_editor::{MapEditor, MapEditorSettings};
-use crate::region::Direction;
+use crate::module::Direction;
 use crate::region::{region_assets::RegionAssets, region_map::geometry::GEOMETRY_SIZE};
 use bevy::{prelude::*, render::camera::PerspectiveProjection};
 use bevy_egui::{
@@ -40,41 +40,21 @@ pub fn map_wander(
     player_query.iter_mut().for_each(|mut wp| {
         let mut moved = false;
         if keyboard_input.just_pressed(KeyCode::Right) {
-            wp.facing = match wp.facing {
-                Direction::North => Direction::East,
-                Direction::East => Direction::South,
-                Direction::South => Direction::West,
-                Direction::West => Direction::North,
-            };
+            wp.facing = wp.facing.turn_right();
             moved = true;
         }
         if keyboard_input.just_pressed(KeyCode::Left) {
-            wp.facing = match wp.facing {
-                Direction::North => Direction::West,
-                Direction::West => Direction::South,
-                Direction::South => Direction::East,
-                Direction::East => Direction::North,
-            };
+            wp.facing = wp.facing.turn_left();
             moved = true;
         }
         if keyboard_input.just_pressed(KeyCode::Up) {
-            let (dx, dy) = match wp.facing {
-                Direction::North => (0, -1),
-                Direction::East => (1, 0),
-                Direction::South => (0, 1),
-                Direction::West => (-1, 0),
-            };
+            let (dx, dy) = wp.facing.delta_forward();
             wp.x += dx;
             wp.y += dy;
             moved = true;
         }
         if keyboard_input.just_pressed(KeyCode::Down) {
-            let (dx, dy) = match wp.facing {
-                Direction::North => (0, 1),
-                Direction::East => (-1, 0),
-                Direction::South => (0, -1),
-                Direction::West => (1, 0),
-            };
+            let (dx, dy) = wp.facing.delta_backward();
             wp.x += dx;
             wp.y += dy;
             moved = true;
@@ -90,28 +70,7 @@ pub fn map_wander(
             move_set.q1_mut().iter_mut().for_each(|(_, mut trans)| {
                 trans.translation.x = (x * GEOMETRY_SIZE) + (GEOMETRY_SIZE / 2.0);
                 trans.translation.y = (y * GEOMETRY_SIZE) + (GEOMETRY_SIZE / 2.0);
-                let target = match wp.facing {
-                    Direction::North => Vec3::new(
-                        trans.translation.x,
-                        trans.translation.y - 50.0,
-                        trans.translation.z,
-                    ),
-                    Direction::South => Vec3::new(
-                        trans.translation.x,
-                        trans.translation.y + 50.0,
-                        trans.translation.z,
-                    ),
-                    Direction::West => Vec3::new(
-                        trans.translation.x + 50.0,
-                        trans.translation.y,
-                        trans.translation.z,
-                    ),
-                    Direction::East => Vec3::new(
-                        trans.translation.x - 50.0,
-                        trans.translation.y,
-                        trans.translation.z,
-                    ),
-                };
+                let target = wp.facing.camera_look_at(&trans.translation);
                 trans.look_at(target, Vec3::new(0.0, 0.0, 1.0));
             });
         }
@@ -206,12 +165,7 @@ pub fn resume_map_wander(
         .spawn_bundle(PerspectiveCameraBundle {
             perspective_projection: perspective,
             transform: Transform::from_xyz(start_x, start_y, start_z).looking_at(
-                match facing {
-                    Direction::North => Vec3::new(start_x, start_y - 50.0, start_z),
-                    Direction::South => Vec3::new(start_x, start_y + 50.0, start_z),
-                    Direction::East => Vec3::new(start_x - 50.0, start_y, start_z),
-                    Direction::West => Vec3::new(start_x + 50.0, start_y, start_z),
-                },
+                facing.camera_look_at(&Vec3::new(start_x, start_y, start_z)),
                 Vec3::new(0.0, 0.0, 1.0),
             ),
             ..Default::default()
@@ -261,7 +215,6 @@ pub fn map_wander_rebuild(
         assets.rebuild_geometry(&mut meshes, &wander.module, map_idx);
 
         for m in assets.meshes.iter() {
-            // TODO: m.0 tells you what material to use
             commands
                 .spawn_bundle(PbrBundle {
                     mesh: m.1.clone(),

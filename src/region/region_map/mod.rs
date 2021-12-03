@@ -2,9 +2,9 @@ pub mod geometry;
 use serde::{Deserialize, Serialize};
 mod material_bucket;
 use self::material_bucket::{FeatureType, MaterialBucket};
-use super::Direction;
 use bevy::{prelude::*, render::mesh::VertexAttributeValues};
 pub mod map_editor;
+use crate::module::Direction;
 
 #[derive(Clone, Serialize, Deserialize)]
 pub struct RegionMap {
@@ -14,11 +14,6 @@ pub struct RegionMap {
     pub starting_location: (u32, u32, Direction),
     pub needs_rebuild: bool,
 }
-
-pub const NORTH: usize = 0;
-pub const SOUTH: usize = 1;
-pub const EAST: usize = 2;
-pub const WEST: usize = 3;
 
 #[derive(Clone, Copy, Serialize, Deserialize)]
 pub struct RegionTile {
@@ -70,13 +65,13 @@ impl RegionMap {
         };
 
         for x in 0..SIZE.0 {
-            map.tiles[((0 * SIZE.0) + x) as usize].boundaries[NORTH].0 = RegionBoundaryType::Wall;
-            map.tiles[(((SIZE.1 - 1) * SIZE.0) + x) as usize].boundaries[SOUTH].0 =
+            map.tiles[((0 * SIZE.0) + x) as usize].boundaries[Direction::North.to_exit_index() as usize].0 = RegionBoundaryType::Wall;
+            map.tiles[(((SIZE.1 - 1) * SIZE.0) + x) as usize].boundaries[Direction::South.to_exit_index()].0 =
                 RegionBoundaryType::Wall;
         }
         for y in 0..SIZE.1 {
-            map.tiles[((y * SIZE.0) + 0) as usize].boundaries[WEST].0 = RegionBoundaryType::Wall;
-            map.tiles[((y * SIZE.0) + (SIZE.0 - 1)) as usize].boundaries[EAST].0 =
+            map.tiles[((y * SIZE.0) + 0) as usize].boundaries[Direction::West.to_exit_index()].0 = RegionBoundaryType::Wall;
+            map.tiles[((y * SIZE.0) + (SIZE.0 - 1)) as usize].boundaries[Direction::East.to_exit_index()].0 =
                 RegionBoundaryType::Wall;
         }
 
@@ -125,34 +120,34 @@ impl RegionMap {
                     RegionTileType::Empty => {}
                 }
 
-                if self.tiles[tile_idx].boundaries[NORTH].0 == RegionBoundaryType::Wall {
+                if self.tiles[tile_idx].boundaries[Direction::North.to_exit_index()].0 == RegionBoundaryType::Wall {
                     bucket.add_feature(
                         FeatureType::Wall(Direction::South),
-                        self.tiles[tile_idx].boundaries[NORTH].1,
+                        self.tiles[tile_idx].boundaries[Direction::North.to_exit_index()].1,
                         sx,
                         sy,
                     );
                 }
-                if self.tiles[tile_idx].boundaries[SOUTH].0 == RegionBoundaryType::Wall {
+                if self.tiles[tile_idx].boundaries[Direction::South.to_exit_index()].0 == RegionBoundaryType::Wall {
                     bucket.add_feature(
                         FeatureType::Wall(Direction::North),
-                        self.tiles[tile_idx].boundaries[SOUTH].1,
+                        self.tiles[tile_idx].boundaries[Direction::South.to_exit_index()].1,
                         sx,
                         sy,
                     );
                 }
-                if self.tiles[tile_idx].boundaries[EAST].0 == RegionBoundaryType::Wall {
+                if self.tiles[tile_idx].boundaries[Direction::East.to_exit_index()].0 == RegionBoundaryType::Wall {
                     bucket.add_feature(
                         FeatureType::Wall(Direction::West),
-                        self.tiles[tile_idx].boundaries[EAST].1,
+                        self.tiles[tile_idx].boundaries[Direction::East.to_exit_index()].1,
                         sx,
                         sy,
                     );
                 }
-                if self.tiles[tile_idx].boundaries[WEST].0 == RegionBoundaryType::Wall {
+                if self.tiles[tile_idx].boundaries[Direction::West.to_exit_index()].0 == RegionBoundaryType::Wall {
                     bucket.add_feature(
                         FeatureType::Wall(Direction::East),
-                        self.tiles[tile_idx].boundaries[WEST].1,
+                        self.tiles[tile_idx].boundaries[Direction::West.to_exit_index()].1,
                         sx,
                         sy,
                     );
