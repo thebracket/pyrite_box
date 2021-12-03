@@ -436,7 +436,7 @@ impl<'a> MapEditor<'a> {
                     );
                 }
 
-                // Start loc
+                // Current player position
                 if let Some((x,y)) = self.settings.highlight_player {
                     let px =
                         (x as f32 * scale.box_x) + (scale.box_x / 2.0);
