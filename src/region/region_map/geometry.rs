@@ -1,29 +1,21 @@
 pub const GEOMETRY_SIZE: f32 = 10.0;
 
-pub(crate) const CUBE_NORMALS: [[f32; 3]; 10] = [
+pub(crate) const CUBE_NORMALS: [[f32; 3]; 6] = [
     [0.0, 0.0, -1.0],
     [0.0, 0.0, 1.0],
     [-1.0, 0.0, 0.0],
     [1.0, 0.0, 0.0],
     [0.0, -1.0, 0.0],
     [0.0, 1.0, 0.0],
-    [0.0, 0.5, 0.5],  // RampNS
-    [0.0, -0.5, 0.5], // RampSN
-    [0.5, 0.0, 0.5],  // RampEW
-    [-0.5, 0.0, 0.5], // RampWE
 ];
 
-pub(crate) const CUBE_TANGENTS: [[f32; 3]; 10] = [
+pub(crate) const CUBE_TANGENTS: [[f32; 3]; 6] = [
     [-1.0, 0.0, 0.0],
     [1.0, 0.0, 0.0],
     [0.0, 0.0, 1.0],
     [0.0, 0.0, -1.0],
     [1.0, 0.0, 0.0],
     [-1.0, 0.0, 0.0],
-    [0.5, 0.0, 0.0], // RampNS
-    [0.5, 0.0, 0.0], // RampSN
-    [0.5, 0.5, 0.0], // RampEW
-    [0.0, 0.5, 0.0], // RampWE
 ];
 
 pub fn add_floor_geometry(
