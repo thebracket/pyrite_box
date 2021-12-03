@@ -25,6 +25,7 @@ pub struct WanderResource {
     pub module: Module,
     pub map_idx: usize,
     pub editor_settings: MapEditorSettings,
+    pub show_editor: bool,
 }
 
 pub fn map_wander(
@@ -59,6 +60,9 @@ pub fn map_wander(
             wp.y += dy;
             moved = true;
         }
+        if keyboard_input.just_pressed(KeyCode::E) {
+            wander.show_editor = !wander.show_editor;
+        }
 
         if moved {
             let map_idx = wander.map_idx;
@@ -88,16 +92,18 @@ pub fn map_wander(
                 ));
             });
 
-        let map_idx = wander.map_idx;
-        let mut settings = wander.editor_settings.clone();
-        settings.highlight_player = Some((wp.x, wp.y, wp.facing));
-        MapEditor::render_in_module(
-            egui_context.ctx(),
-            &mut settings,
-            &mut wander.module,
-            map_idx,
-        );
-        wander.editor_settings = settings;
+        if wander.show_editor {
+            let map_idx = wander.map_idx;
+            let mut settings = wander.editor_settings.clone();
+            settings.highlight_player = Some((wp.x, wp.y, wp.facing));
+            MapEditor::render_in_module(
+                egui_context.ctx(),
+                &mut settings,
+                &mut wander.module,
+                map_idx,
+            );
+            wander.editor_settings = settings;
+        }
     });
 }
 
@@ -188,6 +194,7 @@ pub fn resume_map_wander(
         map_idx, // TODO: Change to starting map from module
         module,
         editor_settings: MapEditorSettings::default(),
+        show_editor: false,
     });
 }
 
