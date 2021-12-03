@@ -1838,4 +1838,6 @@
         ),
     },
     next_map_index: 1,
+    events: [],
+    module_start_event: None,
 )

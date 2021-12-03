@@ -2,8 +2,7 @@ use crate::region::region_map::RegionMap;
 use ron::ser::{to_string_pretty, PrettyConfig};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-
-use super::MaterialDefinition;
+use super::{MaterialDefinition, game_events::GameEvent};
 
 /// Represents an adventure module, bundling all assets together.
 #[derive(Serialize, Deserialize)]
@@ -15,6 +14,8 @@ pub struct Module {
     pub next_material_index: usize,
     pub maps: HashMap<usize, RegionMap>,
     pub next_map_index: usize,
+    pub events: Vec<GameEvent>,
+    pub module_start_event: Option<String>,
 }
 
 impl Module {
@@ -47,6 +48,8 @@ impl Module {
             next_material_index: 2,
             maps: HashMap::new(),
             next_map_index: 0,
+            events: Vec::new(),
+            module_start_event: None,
         }
     }
 

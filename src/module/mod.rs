@@ -4,3 +4,4 @@ mod materials;
 pub use materials::{default_pbr, MaterialDefinition};
 mod direction;
 pub use direction::Direction;
+pub mod game_events;

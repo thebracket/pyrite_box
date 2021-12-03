@@ -1,6 +1,6 @@
 use super::ModuleSelector;
 use crate::{
-    module::{default_pbr, MaterialDefinition, Module},
+    module::{default_pbr, MaterialDefinition, Module, game_events::{GameEvent, EventPicker, GameEventStep}},
     region::region_map::{
         map_editor::{MapEditor, MapEditorSettings},
         RegionMap,
@@ -23,6 +23,10 @@ pub struct ModuleResource {
     new_map: RegionMap,
     editing_map: Option<usize>,
     editor_settings: MapEditorSettings,
+    show_events: bool,
+    new_event_tag: String,
+    editing_event: Option<String>,
+    new_event_step: EventPicker,
 }
 
 pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<ModuleResource>) {
@@ -37,6 +41,9 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                 }
                 if ui.button("Map Manager").clicked() {
                     module_res.show_maps = !module_res.show_maps;
+                }
+                if ui.button("Event Scripting").clicked() {
+                    module_res.show_events = !module_res.show_events;
                 }
                 if ui.button("Save").clicked() {
                     module_res.module.save();
@@ -218,6 +225,68 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
         MapEditor::render_in_module(egui_context.ctx(), &mut es, &mut module_res.module, map_id);
         module_res.editor_settings = es;
     }
+
+    if module_res.show_events {
+        egui::Window::new("Events")
+            .title_bar(true)
+            .show(egui_context.ctx(), |ui| {
+                ui.label("New Event Tag");
+                ui.text_edit_singleline(&mut module_res.new_event_tag);
+                if ui.button("Add Event").clicked() {
+                    let new_event = GameEvent{
+                        tag: module_res.new_event_tag.clone(),
+                        steps: Vec::new()
+                    };
+                    module_res.module.events.push(new_event);
+                }
+                ui.separator();
+                let mut edit_event = None;
+                for e in module_res.module.events.iter() {
+                    if ui.button(&e.tag).clicked() {
+                        edit_event = Some(e.tag.clone());
+                    }
+                }
+                if edit_event.is_some() {
+                    module_res.editing_event = edit_event;
+                }
+            });
+    }
+
+    if module_res.editing_event.is_some() {
+        let tag = module_res.editing_event.clone().unwrap();
+        let mut next_step = module_res.new_event_step;
+        if let Some(event) = module_res.module.events.iter_mut().find(|e| e.tag.eq(&tag)) {
+            egui::Window::new(format!("Event: {}", tag))
+                .title_bar(true)
+                .resizable(true)
+                .show(egui_context.ctx(), |ui| {
+                    ui.text_edit_singleline(&mut event.tag);
+
+                    egui::ComboBox::from_label("New Step").show_ui(ui, |ui| {
+                        ui.selectable_value(&mut next_step, EventPicker::LogText, "Log Text");
+                    });
+
+                    if ui.button("Add Step").clicked() {
+                        match next_step {
+                            EventPicker::LogText => {
+                                event.steps.push(GameEventStep::LogText("Hello".to_string()));
+                            }
+                        }
+                    }
+
+                    // List steps
+                    for (line, e) in event.steps.iter_mut().enumerate() {
+                        match e {
+                            GameEventStep::LogText(s) => {
+                                ui.label(format!("{} : Log Text", line));
+                                ui.text_edit_singleline(s);
+                            }
+                        }
+                    }
+                });
+        }
+        module_res.new_event_step = next_step;
+    }
 }
 
 pub fn resume_module_editor(mut commands: Commands, startup: Res<ModuleSelector>) {
@@ -232,6 +301,10 @@ pub fn resume_module_editor(mut commands: Commands, startup: Res<ModuleSelector>
             new_map: RegionMap::default(),
             editing_map: None,
             editor_settings: MapEditorSettings::default(),
+            show_events: false,
+            new_event_tag: String::new(),
+            editing_event: None,
+            new_event_step: EventPicker::LogText,
         });
     } else {
         commands.insert_resource(ModuleResource {
@@ -244,6 +317,10 @@ pub fn resume_module_editor(mut commands: Commands, startup: Res<ModuleSelector>
             new_map: RegionMap::default(),
             editing_map: None,
             editor_settings: MapEditorSettings::default(),
+            show_events: false,
+            new_event_tag: String::new(),
+            editing_event: None,
+            new_event_step: EventPicker::LogText,
         });
     }
 }
