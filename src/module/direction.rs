@@ -1,4 +1,5 @@
 use bevy::math::Vec3;
+use bevy_egui::egui::Vec2;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -66,6 +67,15 @@ impl Direction {
             Direction::South => SOUTH,
             Direction::East => EAST,
             Direction::West => WEST,
+        }
+    }
+
+    pub fn to_direction_vec2(self, length: f32) -> Vec2 {
+        match self {
+            Direction::North => Vec2 { x: 0.0, y: -length },
+            Direction::South => Vec2 { x: 0.0, y: length },
+            Direction::East => Vec2 { x: length, y: 0.0 },
+            Direction::West => Vec2 { x: -length, y: 0.0 },
         }
     }
 }

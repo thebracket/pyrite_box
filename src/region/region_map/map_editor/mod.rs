@@ -187,25 +187,23 @@ impl<'a> MapEditor<'a> {
                         (self.map.starting_location.0 as f32 * scale.box_x) + (scale.box_x / 2.0);
                     let py =
                         (self.map.starting_location.1 as f32 * scale.box_y) + (scale.box_y / 2.0);
-                    painter.text(
+
+                    painter.arrow(
                         scale.to_screen * Pos2 { x: px, y: py },
-                        Align2::CENTER_CENTER,
-                        "S",
-                        bevy_egui::egui::TextStyle::Monospace,
-                        Color32::YELLOW,
+                        self.map.starting_location.2.to_direction_vec2(10.0),
+                        strokes.highlight,
                     );
                 }
 
                 // Current player position
-                if let Some((x, y)) = self.settings.highlight_player {
+                if let Some((x, y, facing)) = self.settings.highlight_player {
                     let px = (x as f32 * scale.box_x) + (scale.box_x / 2.0);
                     let py = (y as f32 * scale.box_y) + (scale.box_y / 2.0);
-                    painter.text(
+
+                    painter.arrow(
                         scale.to_screen * Pos2 { x: px, y: py },
-                        Align2::CENTER_CENTER,
-                        "@",
-                        bevy_egui::egui::TextStyle::Monospace,
-                        Color32::YELLOW,
+                        facing.to_direction_vec2(10.0),
+                        strokes.highlight,
                     );
                 }
             }
@@ -215,8 +213,14 @@ impl<'a> MapEditor<'a> {
     fn start_interact(&mut self, scale: &Scaling, pointer_pos: Pos2, response: &Response) {
         if response.clicked_by(PointerButton::Primary) {
             let pos = MapWallInteraction::new(scale, pointer_pos, &self.map);
-            self.map.starting_location.0 = pos.tile_x;
-            self.map.starting_location.1 = pos.tile_y;
+            if self.map.starting_location.0 == pos.tile_x
+                && self.map.starting_location.1 == pos.tile_y
+            {
+                self.map.starting_location.2 = self.map.starting_location.2.turn_right();
+            } else {
+                self.map.starting_location.0 = pos.tile_x;
+                self.map.starting_location.1 = pos.tile_y;
+            }
         }
     }
 

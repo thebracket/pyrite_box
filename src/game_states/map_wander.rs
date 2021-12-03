@@ -90,7 +90,7 @@ pub fn map_wander(
 
         let map_idx = wander.map_idx;
         let mut settings = wander.editor_settings.clone();
-        settings.highlight_player = Some((wp.x, wp.y));
+        settings.highlight_player = Some((wp.x, wp.y, wp.facing));
         MapEditor::render_in_module(
             egui_context.ctx(),
             &mut settings,
