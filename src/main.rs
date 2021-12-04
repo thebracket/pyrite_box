@@ -3,6 +3,7 @@ use bevy_egui::EguiPlugin;
 mod game_states;
 mod region;
 use game_states::{gamelog::display_game_log, *};
+use module::game_events::{event_triggers, TriggerEvent};
 mod module;
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, Copy)]
@@ -24,6 +25,7 @@ fn main() {
             ..Default::default()
         })
         .add_state(AppState::Loading)
+        .add_event::<TriggerEvent>()
         .add_plugins(DefaultPlugins)
         .add_plugin(EguiPlugin)
         .add_plugin(FrameTimeDiagnosticsPlugin::default())
@@ -63,6 +65,9 @@ fn main() {
         )
         .add_system_set(
             SystemSet::on_update(AppState::MapWander).with_system(display_game_log.system()),
+        )
+        .add_system_set(
+            SystemSet::on_update(AppState::MapWander).with_system(event_triggers.system()),
         )
         .add_system_set(
             SystemSet::on_enter(AppState::MapWander).with_system(resume_map_wander.system()),

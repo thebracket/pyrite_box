@@ -1,8 +1,7 @@
-use serde::{Deserialize, Serialize};
-
-use crate::game_states::gamelog::GameLog;
-
 use super::Module;
+use crate::game_states::{gamelog::GameLog, WanderResource};
+use bevy::prelude::*;
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Serialize, Deserialize)]
 pub struct GameEvent {
@@ -34,5 +33,17 @@ pub fn run_events(module: &Module, tag: &str, log: &mut GameLog) {
                 }
             }
         }
+    }
+}
+
+pub struct TriggerEvent(pub String);
+
+pub fn event_triggers(
+    wander: Res<WanderResource>,
+    mut log: ResMut<GameLog>,
+    mut events: EventReader<TriggerEvent>,
+) {
+    for trigger in events.iter() {
+        run_events(&wander.module, &trigger.0, &mut log);
     }
 }

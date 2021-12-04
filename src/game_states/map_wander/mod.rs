@@ -1,5 +1,6 @@
 use self::gamelog::GameLog;
-use crate::module::game_events::run_events;
+use super::ModuleSelector;
+use crate::module::game_events::TriggerEvent;
 use crate::module::Direction;
 use crate::module::Module;
 use crate::region::region_map::map_editor::{MapEditor, MapEditorSettings};
@@ -9,8 +10,6 @@ use bevy_egui::{
     egui::{Pos2, Window},
     EguiContext,
 };
-
-use super::ModuleSelector;
 pub mod gamelog;
 
 pub struct MapWander {}
@@ -116,6 +115,7 @@ pub fn resume_map_wander(
     mut materials: ResMut<Assets<StandardMaterial>>,
     asset_server: Res<AssetServer>,
     startup: Res<ModuleSelector>,
+    mut triggers: EventWriter<TriggerEvent>,
 ) {
     let module = Module::load(startup.filename.as_ref().unwrap());
     let map_idx = 0; // TODO: Change to starting map
@@ -183,14 +183,11 @@ pub fn resume_map_wander(
         .insert(WanderCamera {});
 
     // Wander player - start by running module/map initialization events
-    let mut log = GameLog::new();
     if !module.module_start_event.is_empty() {
-        let tag = module.module_start_event.clone();
-        run_events(&module, &tag, &mut log);
+        triggers.send(TriggerEvent(module.module_start_event.clone()));
     }
     if !module.maps[&map_idx].map_start_event.is_empty() {
-        let tag = module.maps[&map_idx].map_start_event.clone();
-        run_events(&module, &tag, &mut log);
+        triggers.send(TriggerEvent(module.maps[&map_idx].map_start_event.clone()));
     }
     commands
         .spawn()
@@ -199,8 +196,7 @@ pub fn resume_map_wander(
             y: tile_y as i32,
             facing,
         })
-        .insert(MapWander {})
-        .insert(log);
+        .insert(MapWander {});
 
     // Resource
     commands.insert_resource(WanderResource {
@@ -209,6 +205,8 @@ pub fn resume_map_wander(
         editor_settings: MapEditorSettings::default(),
         show_editor: false,
     });
+
+    commands.insert_resource(GameLog::new());
 }
 
 pub fn exit_map_wander(mut commands: Commands, cleanup: Query<(Entity, &MapWander)>) {

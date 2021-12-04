@@ -15,14 +15,12 @@ impl GameLog {
     }
 }
 
-pub fn display_game_log(log_query: Query<&GameLog>, egui_context: ResMut<EguiContext>) {
+pub fn display_game_log(log: Res<GameLog>, egui_context: ResMut<EguiContext>) {
     Window::new("Log")
         .title_bar(true)
         .show(egui_context.ctx(), |ui| {
-            log_query.iter().for_each(|log| {
-                for line in log.buffer.iter() {
-                    ui.label(line);
-                }
-            });
+            for line in log.buffer.iter() {
+                ui.label(line);
+            }
         });
 }

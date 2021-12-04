@@ -1851,7 +1851,7 @@
             steps: [
                 LogText("You have entered the monster-crawling slums of Quiche. Small, ugly things scurry from beneath your feet. In the distance, an alarm sounds."),
                 CallEvent("CallTest"),
-                LogText("Original sequence continued"),
+                LogText("Original sequence continued."),
             ],
         ),
         (
