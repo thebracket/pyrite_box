@@ -15,7 +15,7 @@ pub struct Module {
     pub maps: HashMap<usize, RegionMap>,
     pub next_map_index: usize,
     pub events: Vec<GameEvent>,
-    pub module_start_event: Option<String>,
+    pub module_start_event: String,
 }
 
 impl Module {
@@ -49,7 +49,7 @@ impl Module {
             maps: HashMap::new(),
             next_map_index: 0,
             events: Vec::new(),
-            module_start_event: None,
+            module_start_event: String::new(),
         }
     }
 

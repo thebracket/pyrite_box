@@ -63,6 +63,8 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                 ui.text_edit_singleline(&mut module_res.module.filename);
                 ui.label("Module Description");
                 ui.text_edit_multiline(&mut module_res.module.description);
+                ui.label("Event Tag - On Start");
+                ui.text_edit_singleline(&mut module_res.module.module_start_event);
             });
     }
 
@@ -263,7 +265,7 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                     ui.text_edit_singleline(&mut event.tag);
 
                     egui::ComboBox::from_label("New Step").show_ui(ui, |ui| {
-                        ui.selectable_value(&mut next_step, EventPicker::LogText, "Log Text");
+                        ui.selectable_value(&mut next_step, EventPicker::LogText, "LogText");
                     });
 
                     if ui.button("Add Step").clicked() {

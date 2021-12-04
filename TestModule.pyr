@@ -39,6 +39,7 @@
         0: (
             name: "Quiche Slums",
             size: (16, 16),
+            map_start_event: "SlumsStart",
             tiles: [
                 (
                     tile_type: Floor,
@@ -1838,6 +1839,19 @@
         ),
     },
     next_map_index: 1,
-    events: [],
-    module_start_event: None,
+    events: [
+        (
+            tag: "ModuleStart",
+            steps: [
+                LogText("Welcome to the Module, we got fun and games."),
+            ],
+        ),
+        (
+            tag: "SlumsStart",
+            steps: [
+                LogText("You have entered the monster-crawling slums of Quiche. Small, ugly things scurry from beneath your feet. In the distance, an alarm sounds."),
+            ],
+        )
+    ],
+    module_start_event: "ModuleStart",
 )

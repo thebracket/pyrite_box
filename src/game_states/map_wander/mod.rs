@@ -1,5 +1,6 @@
 use crate::module::Direction;
 use crate::module::Module;
+use crate::module::game_events::run_events;
 use crate::region::region_map::map_editor::{MapEditor, MapEditorSettings};
 use crate::region::{region_assets::RegionAssets, region_map::geometry::GEOMETRY_SIZE};
 use bevy::{prelude::*, render::camera::PerspectiveProjection};
@@ -7,8 +8,10 @@ use bevy_egui::{
     egui::{Pos2, Window},
     EguiContext,
 };
+use self::gamelog::GameLog;
 
 use super::ModuleSelector;
+pub mod gamelog;
 
 pub struct MapWander {}
 pub struct WanderGeometry {}
@@ -179,7 +182,16 @@ pub fn resume_map_wander(
         .insert(MapWander {})
         .insert(WanderCamera {});
 
-    // Wander player
+    // Wander player - start by running module/map initialization events
+    let mut log = GameLog::new();
+    if !module.module_start_event.is_empty() {
+        let tag = module.module_start_event.clone();
+        run_events(&module, &tag, &mut log);
+    }
+    if !module.maps[&map_idx].map_start_event.is_empty() {
+        let tag = module.maps[&map_idx].map_start_event.clone();
+        run_events(&module, &tag, &mut log);
+    }
     commands
         .spawn()
         .insert(WanderingPlayer {
@@ -187,7 +199,8 @@ pub fn resume_map_wander(
             y: tile_y as i32,
             facing,
         })
-        .insert(MapWander {});
+        .insert(MapWander {})
+        .insert(log);
 
     // Resource
     commands.insert_resource(WanderResource {

@@ -13,6 +13,7 @@ pub struct RegionMap {
     pub tiles: Vec<RegionTile>,
     pub starting_location: (u32, u32, Direction),
     pub needs_rebuild: bool,
+    pub map_start_event: String,
 }
 
 #[derive(Clone, Copy, Serialize, Deserialize)]
@@ -62,6 +63,7 @@ impl RegionMap {
             ],
             starting_location: (SIZE.0 / 2, SIZE.1 / 2, Direction::North),
             needs_rebuild: false,
+            map_start_event: String::new(),
         };
 
         for x in 0..SIZE.0 {
