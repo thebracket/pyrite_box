@@ -265,13 +265,17 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                     ui.text_edit_singleline(&mut event.tag);
 
                     egui::ComboBox::from_label("New Step").show_ui(ui, |ui| {
-                        ui.selectable_value(&mut next_step, EventPicker::LogText, "LogText");
+                        ui.selectable_value(&mut next_step, EventPicker::LogText, "Log");
+                        ui.selectable_value(&mut next_step, EventPicker::CallEvent, "Call");
                     });
 
                     if ui.button("Add Step").clicked() {
                         match next_step {
                             EventPicker::LogText => {
                                 event.steps.push(GameEventStep::LogText("Hello".to_string()));
+                            }
+                            EventPicker::CallEvent => {
+                                event.steps.push(GameEventStep::CallEvent(String::new()));
                             }
                         }
                     }
@@ -282,6 +286,10 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                             GameEventStep::LogText(s) => {
                                 ui.label(format!("{} : Log Text", line));
                                 ui.text_edit_singleline(s);
+                            }
+                            GameEventStep::CallEvent(tag) => {
+                                ui.label(format!("{} : Call Event", line));
+                                ui.text_edit_singleline(tag);
                             }
                         }
                     }

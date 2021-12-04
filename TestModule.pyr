@@ -1850,8 +1850,16 @@
             tag: "SlumsStart",
             steps: [
                 LogText("You have entered the monster-crawling slums of Quiche. Small, ugly things scurry from beneath your feet. In the distance, an alarm sounds."),
+                CallEvent("CallTest"),
+                LogText("Original sequence continued"),
             ],
-        )
+        ),
+        (
+            tag: "CallTest",
+            steps: [
+                LogText("This event was called by another event."),
+            ],
+        ),
     ],
     module_start_event: "ModuleStart",
 )
