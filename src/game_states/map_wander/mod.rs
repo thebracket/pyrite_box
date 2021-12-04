@@ -28,6 +28,7 @@ pub struct WanderResource {
     pub map_idx: usize,
     pub editor_settings: MapEditorSettings,
     pub show_editor: bool,
+    pub allow_movement: bool,
 }
 
 pub fn map_wander(
@@ -42,25 +43,27 @@ pub fn map_wander(
 ) {
     player_query.iter_mut().for_each(|mut wp| {
         let mut moved = false;
-        if keyboard_input.just_pressed(KeyCode::Right) {
-            wp.facing = wp.facing.turn_right();
-            moved = true;
-        }
-        if keyboard_input.just_pressed(KeyCode::Left) {
-            wp.facing = wp.facing.turn_left();
-            moved = true;
-        }
-        if keyboard_input.just_pressed(KeyCode::Up) {
-            let (dx, dy) = wp.facing.delta_forward();
-            wp.x += dx;
-            wp.y += dy;
-            moved = true;
-        }
-        if keyboard_input.just_pressed(KeyCode::Down) {
-            let (dx, dy) = wp.facing.delta_backward();
-            wp.x += dx;
-            wp.y += dy;
-            moved = true;
+        if wander.allow_movement {
+            if keyboard_input.just_pressed(KeyCode::Right) {
+                wp.facing = wp.facing.turn_right();
+                moved = true;
+            }
+            if keyboard_input.just_pressed(KeyCode::Left) {
+                wp.facing = wp.facing.turn_left();
+                moved = true;
+            }
+            if keyboard_input.just_pressed(KeyCode::Up) {
+                let (dx, dy) = wp.facing.delta_forward();
+                wp.x += dx;
+                wp.y += dy;
+                moved = true;
+            }
+            if keyboard_input.just_pressed(KeyCode::Down) {
+                let (dx, dy) = wp.facing.delta_backward();
+                wp.x += dx;
+                wp.y += dy;
+                moved = true;
+            }
         }
         if keyboard_input.just_pressed(KeyCode::E) {
             wander.show_editor = !wander.show_editor;
@@ -204,6 +207,7 @@ pub fn resume_map_wander(
         module,
         editor_settings: MapEditorSettings::default(),
         show_editor: false,
+        allow_movement: true,
     });
 
     commands.insert_resource(GameLog::new());
