@@ -1,6 +1,10 @@
 use super::ModuleSelector;
 use crate::{
-    module::{default_pbr, MaterialDefinition, Module, game_events::{GameEvent, EventPicker, GameEventStep}},
+    module::{
+        default_pbr,
+        game_events::{EventPicker, GameEvent, GameEventStep},
+        MaterialDefinition, Module,
+    },
     region::region_map::{
         map_editor::{MapEditor, MapEditorSettings},
         RegionMap,
@@ -235,9 +239,9 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                 ui.label("New Event Tag");
                 ui.text_edit_singleline(&mut module_res.new_event_tag);
                 if ui.button("Add Event").clicked() {
-                    let new_event = GameEvent{
+                    let new_event = GameEvent {
                         tag: module_res.new_event_tag.clone(),
-                        steps: Vec::new()
+                        steps: Vec::new(),
                     };
                     module_res.module.events.push(new_event);
                 }
@@ -272,7 +276,9 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                     if ui.button("Add Step").clicked() {
                         match next_step {
                             EventPicker::LogText => {
-                                event.steps.push(GameEventStep::LogText("Hello".to_string()));
+                                event
+                                    .steps
+                                    .push(GameEventStep::LogText("Hello".to_string()));
                             }
                             EventPicker::CallEvent => {
                                 event.steps.push(GameEventStep::CallEvent(String::new()));

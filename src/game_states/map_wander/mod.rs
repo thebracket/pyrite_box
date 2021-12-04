@@ -1,6 +1,7 @@
+use self::gamelog::GameLog;
+use crate::module::game_events::run_events;
 use crate::module::Direction;
 use crate::module::Module;
-use crate::module::game_events::run_events;
 use crate::region::region_map::map_editor::{MapEditor, MapEditorSettings};
 use crate::region::{region_assets::RegionAssets, region_map::geometry::GEOMETRY_SIZE};
 use bevy::{prelude::*, render::camera::PerspectiveProjection};
@@ -8,7 +9,6 @@ use bevy_egui::{
     egui::{Pos2, Window},
     EguiContext,
 };
-use self::gamelog::GameLog;
 
 use super::ModuleSelector;
 pub mod gamelog;

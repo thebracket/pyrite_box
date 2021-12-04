@@ -1,8 +1,8 @@
+use super::{game_events::GameEvent, MaterialDefinition};
 use crate::region::region_map::RegionMap;
 use ron::ser::{to_string_pretty, PrettyConfig};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use super::{MaterialDefinition, game_events::GameEvent};
 
 /// Represents an adventure module, bundling all assets together.
 #[derive(Serialize, Deserialize)]

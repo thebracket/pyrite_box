@@ -2,7 +2,7 @@ use bevy::{diagnostic::FrameTimeDiagnosticsPlugin, prelude::*};
 use bevy_egui::EguiPlugin;
 mod game_states;
 mod region;
-use game_states::{*, gamelog::display_game_log};
+use game_states::{gamelog::display_game_log, *};
 mod module;
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, Copy)]

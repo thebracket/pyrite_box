@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_egui::{EguiContext, egui::Window};
+use bevy_egui::{egui::Window, EguiContext};
 
 pub struct GameLog {
     buffer: Vec<String>,
@@ -7,9 +7,7 @@ pub struct GameLog {
 
 impl GameLog {
     pub fn new() -> Self {
-        Self {
-            buffer: Vec::new(),
-        }
+        Self { buffer: Vec::new() }
     }
 
     pub fn add_line(&mut self, line: &str) {
@@ -17,10 +15,7 @@ impl GameLog {
     }
 }
 
-pub fn display_game_log(
-    log_query: Query<&GameLog>,
-    egui_context: ResMut<EguiContext>,
-) {
+pub fn display_game_log(log_query: Query<&GameLog>, egui_context: ResMut<EguiContext>) {
     Window::new("Log")
         .title_bar(true)
         .show(egui_context.ctx(), |ui| {
