@@ -8,7 +8,10 @@ pub struct GameLog {
 
 impl GameLog {
     pub fn new() -> Self {
-        Self { buffer: Vec::new(), blocking: false, }
+        Self {
+            buffer: Vec::new(),
+            blocking: false,
+        }
     }
 
     pub fn add_line(&mut self, line: &str) {
@@ -16,10 +19,7 @@ impl GameLog {
     }
 }
 
-pub fn display_game_log(
-    mut log: ResMut<GameLog>,
-    egui_context: ResMut<EguiContext>,
-) {
+pub fn display_game_log(mut log: ResMut<GameLog>, egui_context: ResMut<EguiContext>) {
     Window::new("Log")
         .title_bar(true)
         .show(egui_context.ctx(), |ui| {
@@ -29,9 +29,7 @@ pub fn display_game_log(
                     ui.label(line.as_str());
                 } else {
                     blocking = true;
-                    ui.label(
-                        &line.as_str()[..*progress]
-                    );
+                    ui.label(&line.as_str()[..*progress]);
                     *progress += 1;
                     if *progress == line.len() {
                         *revealed = true;

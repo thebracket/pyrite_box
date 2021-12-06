@@ -1,15 +1,12 @@
-use std::collections::VecDeque;
 use super::GameEventStep;
 use crate::game_states::{gamelog::GameLog, WanderResource};
 use bevy::prelude::*;
+use std::collections::VecDeque;
 
 #[derive(Clone)]
 pub struct TriggerEvent(pub String);
 
-pub fn event_triggers(
-    mut events: EventReader<TriggerEvent>,
-    mut state: ResMut<ScriptState>,
-) {
+pub fn event_triggers(mut events: EventReader<TriggerEvent>, mut state: ResMut<ScriptState>) {
     for trigger in events.iter() {
         state.event_queue.push_front(trigger.clone());
     }
@@ -18,7 +15,7 @@ pub fn event_triggers(
 pub fn event_runner(
     mut wander: ResMut<WanderResource>,
     mut state: ResMut<ScriptState>,
-    mut log : ResMut<GameLog>,
+    mut log: ResMut<GameLog>,
 ) {
     wander.allow_movement = false;
 
@@ -32,12 +29,17 @@ pub fn event_runner(
     // Walk the stack
     let mut new_stack_entries = Vec::new();
     if let Some(stack_entry) = state.stack.pop() {
-        if let Some(event) = wander.module.events.iter().find(|e| e.tag.eq(&stack_entry.tag)) {
+        if let Some(event) = wander
+            .module
+            .events
+            .iter()
+            .find(|e| e.tag.eq(&stack_entry.tag))
+        {
             if stack_entry.line < event.steps.len() {
                 // Put the next event into the stack
-                new_stack_entries.push(ScriptPoint{
+                new_stack_entries.push(ScriptPoint {
                     tag: stack_entry.tag.clone(),
-                    line: stack_entry.line+1,
+                    line: stack_entry.line + 1,
                 });
 
                 // Execute it
@@ -49,8 +51,9 @@ pub fn event_runner(
                         // Add the jump to the stack
                         // The next event in this script is also in the stack, so it'll resume
                         // upon return.
-                        new_stack_entries.push(ScriptPoint{
-                            tag: tag.clone(), line: 0
+                        new_stack_entries.push(ScriptPoint {
+                            tag: tag.clone(),
+                            line: 0,
                         })
                     }
                 }
@@ -64,14 +67,19 @@ pub fn event_runner(
             return;
         }
 
-        new_stack_entries.drain(..).for_each(|s| state.stack.push(s));
+        new_stack_entries
+            .drain(..)
+            .for_each(|s| state.stack.push(s));
         return;
     }
 
     // If we've got this far, then there isn't a script running.
     // Check to see if a new one has been requested.
     if let Some(new_event) = state.event_queue.pop_back() {
-        state.stack.push(ScriptPoint{ tag : new_event.0, line: 0 });
+        state.stack.push(ScriptPoint {
+            tag: new_event.0,
+            line: 0,
+        });
         return;
     }
 
@@ -82,21 +90,19 @@ pub fn event_runner(
 /// Represents the execution stack of scripts that run one step per
 /// tick.
 struct ScriptStack {
-    stack : Vec<ScriptPoint>,
+    stack: Vec<ScriptPoint>,
 }
 
 impl ScriptStack {
     fn new() -> Self {
-        Self {
-            stack: Vec::new()
-        }
+        Self { stack: Vec::new() }
     }
 
     fn pop(&mut self) -> Option<ScriptPoint> {
         self.stack.pop()
     }
 
-    fn push(&mut self, event : ScriptPoint) {
+    fn push(&mut self, event: ScriptPoint) {
         self.stack.push(event);
     }
 }
@@ -113,14 +119,14 @@ struct ScriptPoint {
 /// Current scripting state
 /// Intended to be a resource
 pub struct ScriptState {
-    event_queue : VecDeque<TriggerEvent>,
+    event_queue: VecDeque<TriggerEvent>,
     stack: ScriptStack,
 }
 
 impl ScriptState {
     pub fn new() -> Self {
         Self {
-            event_queue : VecDeque::new(),
+            event_queue: VecDeque::new(),
             stack: ScriptStack::new(),
         }
     }
