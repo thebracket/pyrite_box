@@ -3,7 +3,7 @@ use bevy_egui::EguiPlugin;
 mod game_states;
 mod region;
 use game_states::{gamelog::display_game_log, *};
-use module::game_events::{event_triggers, TriggerEvent};
+use module::game_events::{event_triggers, TriggerEvent, event_runner};
 mod module;
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, Copy)]
@@ -42,7 +42,7 @@ fn main() {
         .add_system_set(SystemSet::on_exit(AppState::Loading).with_system(exit_loading.system()))
         // Main Menu State
         .add_system_set(
-            SystemSet::on_update(AppState::MainMenu).with_system(main_menu.system()), //.with_system(texture_mode_system.system())
+            SystemSet::on_update(AppState::MainMenu).with_system(main_menu.system()),
         )
         .add_system_set(
             SystemSet::on_enter(AppState::MainMenu).with_system(resume_main_menu.system()),
@@ -68,6 +68,9 @@ fn main() {
         )
         .add_system_set(
             SystemSet::on_update(AppState::MapWander).with_system(event_triggers.system()),
+        )
+        .add_system_set(
+            SystemSet::on_update(AppState::MapWander).with_system(event_runner.system()),
         )
         .add_system_set(
             SystemSet::on_enter(AppState::MapWander).with_system(resume_map_wander.system()),

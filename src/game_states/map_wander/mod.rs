@@ -1,5 +1,6 @@
 use self::gamelog::GameLog;
 use super::ModuleSelector;
+use crate::module::game_events::ScriptState;
 use crate::module::game_events::TriggerEvent;
 use crate::module::Direction;
 use crate::module::Module;
@@ -120,6 +121,7 @@ pub fn resume_map_wander(
     startup: Res<ModuleSelector>,
     mut triggers: EventWriter<TriggerEvent>,
 ) {
+    commands.insert_resource(ScriptState::new());
     let module = Module::load(startup.filename.as_ref().unwrap());
     let map_idx = 0; // TODO: Change to starting map
     let (start_x, start_y, start_z, facing, tile_x, tile_y) = {
