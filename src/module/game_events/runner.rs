@@ -21,6 +21,15 @@ pub fn event_runner(
     mut log : ResMut<GameLog>,
 ) {
     wander.allow_movement = false;
+
+    // This is where we stop execution if something else has the system's attention.
+    // For example, don't run the next script node until a log entry has finished
+    // rendering.
+    if log.blocking {
+        return;
+    }
+
+    // Walk the stack
     let mut new_stack_entries = Vec::new();
     if let Some(stack_entry) = state.stack.pop() {
         if let Some(event) = wander.module.events.iter().find(|e| e.tag.eq(&stack_entry.tag)) {
@@ -58,6 +67,9 @@ pub fn event_runner(
         new_stack_entries.drain(..).for_each(|s| state.stack.push(s));
         return;
     }
+
+    // If we've got this far, then there isn't a script running.
+    // Check to see if a new one has been requested.
     if let Some(new_event) = state.event_queue.pop_back() {
         state.stack.push(ScriptPoint{ tag : new_event.0, line: 0 });
         return;
@@ -69,40 +81,40 @@ pub fn event_runner(
 
 /// Represents the execution stack of scripts that run one step per
 /// tick.
-pub struct ScriptStack {
-    pub stack : Vec<ScriptPoint>,
+struct ScriptStack {
+    stack : Vec<ScriptPoint>,
 }
 
 impl ScriptStack {
-    pub fn new() -> Self {
+    fn new() -> Self {
         Self {
             stack: Vec::new()
         }
     }
 
-    pub fn pop(&mut self) -> Option<ScriptPoint> {
+    fn pop(&mut self) -> Option<ScriptPoint> {
         self.stack.pop()
     }
 
-    pub fn push(&mut self, event : ScriptPoint) {
+    fn push(&mut self, event : ScriptPoint) {
         self.stack.push(event);
     }
 }
 
 /// Represents an execution point within a script
-pub struct ScriptPoint {
+struct ScriptPoint {
     /// The event tag at which the script points
-    pub tag: String,
+    tag: String,
 
     /// The current execution index
-    pub line: usize,
+    line: usize,
 }
 
 /// Current scripting state
 /// Intended to be a resource
 pub struct ScriptState {
-    pub event_queue : VecDeque<TriggerEvent>,
-    pub stack: ScriptStack,
+    event_queue : VecDeque<TriggerEvent>,
+    stack: ScriptStack,
 }
 
 impl ScriptState {
