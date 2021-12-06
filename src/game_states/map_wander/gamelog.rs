@@ -6,7 +6,7 @@ use bevy_egui::{
 };
 use std::time::Duration;
 
-const MS_DELAY_LOG: u64 = 33;
+const MS_DELAY_LOG: u64 = 10;
 pub const DEFAULT_TEXT_COLOR: Color32 = Color32::from_rgb(64, 255, 64);
 
 pub struct GameLog {
