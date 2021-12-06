@@ -1843,21 +1843,36 @@
         (
             tag: "ModuleStart",
             steps: [
-                LogText("Welcome to the Module, we got fun and games."),
+                LogText(
+                    text: "Welcome to the Module, we got fun and games.",
+                    color: Some((255, 0, 255)),
+                ),
             ],
         ),
         (
             tag: "SlumsStart",
             steps: [
-                LogText("You have entered the monster-crawling slums of Quiche. Small, ugly things scurry from beneath your feet. In the distance, an alarm sounds."),
+                LogText(
+                    text: "You have entered the monster-crawling slums of Quiche. Small, ugly things scurry from beneath your feet. In the distance, an alarm sounds."
+                ),
                 CallEvent("CallTest"),
-                LogText("Original sequence continued."),
+                LogText(
+                    text: "Original sequence continued. Yay, script stacks work.",
+                    color: Some((0, 0, 255))
+                ),
             ],
         ),
         (
             tag: "CallTest",
             steps: [
-                LogText("This event was called by another event."),
+                LogText(
+                    text: "Jumped to CallTest and ran it.",
+                    color: Some((255, 0, 0)),
+                ),
+                LogText(
+                    text: "Execution will go back now",
+                    color: Some((255, 255, 0)),
+                ),
             ],
         ),
     ],

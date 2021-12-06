@@ -8,7 +8,7 @@ opt-level = 1
 
 [dependencies]
 bevy = "0.5"
-bevy_egui = "0.7.1"
+bevy_egui = "0.8.0"
 bracket-random = "0.8"
 serde = "1.0"
 ron = "0.7"

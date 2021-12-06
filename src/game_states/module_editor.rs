@@ -276,9 +276,10 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                     if ui.button("Add Step").clicked() {
                         match next_step {
                             EventPicker::LogText => {
-                                event
-                                    .steps
-                                    .push(GameEventStep::LogText("Hello".to_string()));
+                                event.steps.push(GameEventStep::LogText {
+                                    text: "Hello".to_string(),
+                                    color: None,
+                                });
                             }
                             EventPicker::CallEvent => {
                                 event.steps.push(GameEventStep::CallEvent(String::new()));
@@ -289,9 +290,9 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                     // List steps
                     for (line, e) in event.steps.iter_mut().enumerate() {
                         match e {
-                            GameEventStep::LogText(s) => {
+                            GameEventStep::LogText { text, color } => {
                                 ui.label(format!("{} : Log Text", line));
-                                ui.text_edit_singleline(s);
+                                ui.text_edit_singleline(text);
                             }
                             GameEventStep::CallEvent(tag) => {
                                 ui.label(format!("{} : Call Event", line));

@@ -1,3 +1,4 @@
+use bevy_egui::egui::Color32;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Serialize, Deserialize)]
@@ -8,7 +9,10 @@ pub struct GameEvent {
 
 #[derive(Clone, Serialize, Deserialize)]
 pub enum GameEventStep {
-    LogText(String),
+    LogText {
+        text: String,
+        color: Option<(u8, u8, u8)>,
+    },
     CallEvent(String),
 }
 

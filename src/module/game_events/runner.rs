@@ -1,6 +1,10 @@
 use super::GameEventStep;
-use crate::game_states::{gamelog::GameLog, WanderResource};
+use crate::game_states::{
+    gamelog::{GameLog, DEFAULT_TEXT_COLOR},
+    WanderResource,
+};
 use bevy::prelude::*;
+use bevy_egui::egui::Color32;
 use std::collections::VecDeque;
 
 #[derive(Clone)]
@@ -44,8 +48,12 @@ pub fn event_runner(
 
                 // Execute it
                 match &event.steps[stack_entry.line] {
-                    GameEventStep::LogText(text) => {
-                        log.add_line(&text);
+                    GameEventStep::LogText { text, color } => {
+                        if let Some(color) = color {
+                            log.add_line(&text, Color32::from_rgb(color.0, color.1, color.2));
+                        } else {
+                            log.add_line(&text, DEFAULT_TEXT_COLOR);
+                        }
                     }
                     GameEventStep::CallEvent(tag) => {
                         // Add the jump to the stack
