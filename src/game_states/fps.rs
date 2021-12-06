@@ -17,7 +17,7 @@ pub fn setup_fps(mut commands: Commands, asset_server: Res<AssetServer>) {
                 align_self: AlignSelf::FlexEnd,
                 position_type: PositionType::Absolute,
                 position: Rect {
-                    bottom: Val::Px(5.0),
+                    top: Val::Px(5.0),
                     left: Val::Px(5.0),
                     ..Default::default()
                 },

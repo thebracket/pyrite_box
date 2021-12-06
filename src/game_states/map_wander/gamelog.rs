@@ -4,12 +4,15 @@ use bevy_egui::{
     egui::{Color32, Sense, Shape, TextFormat, Window},
     EguiContext,
 };
+use std::time::Duration;
 
+const MS_DELAY_LOG: u64 = 33;
 pub const DEFAULT_TEXT_COLOR: Color32 = Color32::from_rgb(64, 255, 64);
 
 pub struct GameLog {
     buffer: Vec<GameLogEntry>,
     pub blocking: bool,
+    timer: Timer,
 }
 
 impl GameLog {
@@ -17,6 +20,7 @@ impl GameLog {
         Self {
             buffer: Vec::new(),
             blocking: false,
+            timer: Timer::new(Duration::from_millis(MS_DELAY_LOG), false),
         }
     }
 
@@ -37,16 +41,27 @@ struct GameLogEntry {
     color: Color32,
 }
 
-pub fn display_game_log(mut log: ResMut<GameLog>, egui_context: ResMut<EguiContext>) {
+pub fn display_game_log(
+    mut log: ResMut<GameLog>,
+    egui_context: ResMut<EguiContext>,
+    time: Res<Time>,
+) {
     let white = Color32::WHITE;
 
     Window::new("Log")
-        .title_bar(true)
+        .title_bar(false)
+        .resizable(false)
+        .fixed_pos((0.0, 1024.0 - 220.0))
         .show(egui_context.ctx(), |ui| {
             let mut blocking = false;
+            ui.set_height(220.0);
+            ui.set_width(1280.0);
 
             let mut job = LayoutJob::default();
 
+            log.timer.tick(time.delta());
+            let timer_finished = log.timer.finished();
+            let mut restart_timer = false;
             for e in log.buffer.iter_mut() {
                 if e.revealed {
                     job.append(
@@ -89,11 +104,18 @@ pub fn display_game_log(mut log: ResMut<GameLog>, egui_context: ResMut<EguiConte
                             },
                         );
                     }
-                    e.progress += 1;
-                    if e.progress == e.text.len() {
-                        e.revealed = true;
+                    if timer_finished {
+                        restart_timer = true;
+                        e.progress += 1;
+                        if e.progress == e.text.len() {
+                            e.revealed = true;
+                        }
                     }
                 }
+            }
+
+            if restart_timer {
+                log.timer = Timer::new(Duration::from_millis(MS_DELAY_LOG), false);
             }
 
             job.wrap_width = ui.available_width();
