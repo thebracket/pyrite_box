@@ -1,4 +1,3 @@
-use bevy_egui::egui::Color32;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Serialize, Deserialize)]

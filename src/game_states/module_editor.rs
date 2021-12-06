@@ -290,7 +290,7 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                     // List steps
                     for (line, e) in event.steps.iter_mut().enumerate() {
                         match e {
-                            GameEventStep::LogText { text, color } => {
+                            GameEventStep::LogText { text, ..} => {
                                 ui.label(format!("{} : Log Text", line));
                                 ui.text_edit_singleline(text);
                             }

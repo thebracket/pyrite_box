@@ -30,7 +30,6 @@ impl<'a> MapEditor<'a> {
         let mats = module.materials.clone();
         Window::new(format!("Map: {}", map.name))
             .default_size(bevy_egui::egui::vec2(512.0, 512.0))
-            .scroll(false)
             .show(ctx, |ui| {
                 ui.horizontal(|ui| {
                     ui.label("Mode:");
