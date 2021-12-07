@@ -167,6 +167,47 @@ impl RegionMap {
                         sy,
                     );
                 }
+
+                if self.tiles[tile_idx].boundaries[Direction::North.to_exit_index()].0
+                    == RegionBoundaryType::Opening
+                {
+                    bucket.add_feature(
+                        FeatureType::Opening(Direction::South),
+                        self.tiles[tile_idx].boundaries[Direction::North.to_exit_index()].1,
+                        sx,
+                        sy,
+                    );
+                }
+                if self.tiles[tile_idx].boundaries[Direction::South.to_exit_index()].0
+                    == RegionBoundaryType::Opening
+                {
+                    bucket.add_feature(
+                        FeatureType::Opening(Direction::North),
+                        self.tiles[tile_idx].boundaries[Direction::South.to_exit_index()].1,
+                        sx,
+                        sy,
+                    );
+                }
+                if self.tiles[tile_idx].boundaries[Direction::East.to_exit_index()].0
+                    == RegionBoundaryType::Opening
+                {
+                    bucket.add_feature(
+                        FeatureType::Opening(Direction::West),
+                        self.tiles[tile_idx].boundaries[Direction::East.to_exit_index()].1,
+                        sx,
+                        sy,
+                    );
+                }
+                if self.tiles[tile_idx].boundaries[Direction::West.to_exit_index()].0
+                    == RegionBoundaryType::Opening
+                {
+                    bucket.add_feature(
+                        FeatureType::Opening(Direction::East),
+                        self.tiles[tile_idx].boundaries[Direction::West.to_exit_index()].1,
+                        sx,
+                        sy,
+                    );
+                }
             }
         }
 

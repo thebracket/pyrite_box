@@ -651,3 +651,79 @@ pub fn add_west_facing_wall_geometry(
 
     println!("{:?}", tangent1);
 }*/
+
+pub fn add_south_facing_opening_geometry(
+    vertices: &mut Vec<[f32; 3]>,
+    normals: &mut Vec<[f32; 3]>,
+    uv: &mut Vec<[f32; 2]>,
+    tangents: &mut Vec<[f32; 3]>,
+    x: f32,
+    y: f32,
+    z: f32,
+    w: f32,
+    h: f32,
+) {
+    add_south_facing_wall_geometry(
+        vertices, normals, uv, tangents, x, y, z, w / 4.0, h
+    );
+    add_south_facing_wall_geometry(
+        vertices, normals, uv, tangents, x + 0.75, y, z, w / 4.0, h
+    );
+}
+
+pub fn add_north_facing_opening_geometry(
+    vertices: &mut Vec<[f32; 3]>,
+    normals: &mut Vec<[f32; 3]>,
+    uv: &mut Vec<[f32; 2]>,
+    tangents: &mut Vec<[f32; 3]>,
+    x: f32,
+    y: f32,
+    z: f32,
+    w: f32,
+    h: f32,
+) {
+    add_north_facing_wall_geometry(
+        vertices, normals, uv, tangents, x, y, z, w / 4.0, h
+    );
+    add_north_facing_wall_geometry(
+        vertices, normals, uv, tangents, x + 0.75, y, z, w / 4.0, h
+    );
+}
+
+pub fn add_east_facing_opening_geometry(
+    vertices: &mut Vec<[f32; 3]>,
+    normals: &mut Vec<[f32; 3]>,
+    uv: &mut Vec<[f32; 2]>,
+    tangents: &mut Vec<[f32; 3]>,
+    x: f32,
+    y: f32,
+    z: f32,
+    w: f32,
+    h: f32,
+) {
+    add_east_facing_wall_geometry(
+        vertices, normals, uv, tangents, x, y, z, w, h / 4.0
+    );
+    add_east_facing_wall_geometry(
+        vertices, normals, uv, tangents, x, y + 0.75, z, w, h / 4.0
+    );
+}
+
+pub fn add_west_facing_opening_geometry(
+    vertices: &mut Vec<[f32; 3]>,
+    normals: &mut Vec<[f32; 3]>,
+    uv: &mut Vec<[f32; 2]>,
+    tangents: &mut Vec<[f32; 3]>,
+    x: f32,
+    y: f32,
+    z: f32,
+    w: f32,
+    h: f32,
+) {
+    add_west_facing_wall_geometry(
+        vertices, normals, uv, tangents, x, y, z, w, h /4.0
+    );
+    add_west_facing_wall_geometry(
+        vertices, normals, uv, tangents, x, y + 0.75, z, w, h / 4.0
+    );
+}

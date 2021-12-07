@@ -8,6 +8,7 @@ pub enum FeatureType {
     Ceiling,
     Wall(Direction),
     Cube,
+    Opening(Direction),
 }
 
 pub struct MaterialBucket {
@@ -91,6 +92,60 @@ impl MaterialBucket {
                 }
                 Direction::West => {
                     add_west_facing_wall_geometry(
+                        &mut bucket.vertices,
+                        &mut bucket.normals,
+                        &mut bucket.uv,
+                        &mut bucket.tangents,
+                        x,
+                        y,
+                        0.0,
+                        1.0,
+                        1.0,
+                    );
+                }
+            },
+            FeatureType::Opening(dir) => match dir {
+                Direction::East => {
+                    add_east_facing_opening_geometry(
+                        &mut bucket.vertices,
+                        &mut bucket.normals,
+                        &mut bucket.uv,
+                        &mut bucket.tangents,
+                        x,
+                        y,
+                        0.0,
+                        1.0,
+                        1.0,
+                    );
+                }
+                Direction::North => {
+                    add_north_facing_opening_geometry(
+                        &mut bucket.vertices,
+                        &mut bucket.normals,
+                        &mut bucket.uv,
+                        &mut bucket.tangents,
+                        x,
+                        y,
+                        0.0,
+                        1.0,
+                        1.0,
+                    );
+                }
+                Direction::South => {
+                    add_south_facing_opening_geometry(
+                        &mut bucket.vertices,
+                        &mut bucket.normals,
+                        &mut bucket.uv,
+                        &mut bucket.tangents,
+                        x,
+                        y,
+                        0.0,
+                        1.0,
+                        1.0,
+                    );
+                }
+                Direction::West => {
+                    add_west_facing_opening_geometry(
                         &mut bucket.vertices,
                         &mut bucket.normals,
                         &mut bucket.uv,
