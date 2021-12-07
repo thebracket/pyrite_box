@@ -2,7 +2,11 @@ use bevy::{diagnostic::FrameTimeDiagnosticsPlugin, prelude::*};
 use bevy_egui::EguiPlugin;
 mod game_states;
 mod region;
-use game_states::{gamelog::display_game_log, *};
+use game_states::{
+    gamelog::display_game_log,
+    player_movement::{player_move, PlayerMoveRequest},
+    *,
+};
 use module::game_events::{event_runner, event_triggers, TriggerEvent};
 mod module;
 
@@ -26,6 +30,7 @@ fn main() {
         })
         .add_state(AppState::Loading)
         .add_event::<TriggerEvent>()
+        .add_event::<PlayerMoveRequest>()
         .add_plugins(DefaultPlugins)
         .add_plugin(EguiPlugin)
         .add_plugin(FrameTimeDiagnosticsPlugin::default())
@@ -70,6 +75,7 @@ fn main() {
         .add_system_set(
             SystemSet::on_update(AppState::MapWander).with_system(event_runner.system()),
         )
+        .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(player_move.system()))
         .add_system_set(
             SystemSet::on_enter(AppState::MapWander).with_system(resume_map_wander.system()),
         )

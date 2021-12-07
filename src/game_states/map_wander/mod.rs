@@ -1,4 +1,5 @@
 use self::gamelog::GameLog;
+use self::player_movement::PlayerMoveRequest;
 use super::ModuleSelector;
 use crate::module::game_events::ScriptState;
 use crate::module::game_events::TriggerEvent;
@@ -12,6 +13,7 @@ use bevy_egui::{
     EguiContext,
 };
 pub mod gamelog;
+pub mod player_movement;
 
 pub struct MapWander {}
 pub struct WanderGeometry {}
@@ -34,55 +36,28 @@ pub struct WanderResource {
 
 pub fn map_wander(
     keyboard_input: Res<Input<KeyCode>>,
-    mut player_query: Query<&mut WanderingPlayer>,
-    mut move_set: QuerySet<(
-        Query<(&WanderLight, &mut Transform)>,
-        Query<(&WanderCamera, &mut Transform)>,
-    )>,
+    player_query: Query<&WanderingPlayer>,
     egui_context: ResMut<EguiContext>,
     mut wander: ResMut<WanderResource>,
+    mut move_request: EventWriter<PlayerMoveRequest>,
 ) {
-    player_query.iter_mut().for_each(|mut wp| {
-        let mut moved = false;
+    player_query.iter().for_each(|wp| {
         if wander.allow_movement {
             if keyboard_input.just_pressed(KeyCode::Right) {
-                wp.facing = wp.facing.turn_right();
-                moved = true;
+                move_request.send(PlayerMoveRequest::TurnRight);
             }
             if keyboard_input.just_pressed(KeyCode::Left) {
-                wp.facing = wp.facing.turn_left();
-                moved = true;
+                move_request.send(PlayerMoveRequest::TurnLeft);
             }
             if keyboard_input.just_pressed(KeyCode::Up) {
-                let (dx, dy) = wp.facing.delta_forward();
-                wp.x += dx;
-                wp.y += dy;
-                moved = true;
+                move_request.send(PlayerMoveRequest::Forwards);
             }
             if keyboard_input.just_pressed(KeyCode::Down) {
-                let (dx, dy) = wp.facing.delta_backward();
-                wp.x += dx;
-                wp.y += dy;
-                moved = true;
+                move_request.send(PlayerMoveRequest::Backwards);
             }
         }
         if keyboard_input.just_pressed(KeyCode::E) {
             wander.show_editor = !wander.show_editor;
-        }
-
-        if moved {
-            let map_idx = wander.map_idx;
-            let (x, y) = wander.module.maps[&map_idx].tile_location(wp.x as f32, wp.y as f32);
-            move_set.q0_mut().iter_mut().for_each(|(_, mut trans)| {
-                trans.translation.x = (x * GEOMETRY_SIZE) + (GEOMETRY_SIZE / 2.0);
-                trans.translation.y = (y * GEOMETRY_SIZE) + (GEOMETRY_SIZE / 2.0);
-            });
-            move_set.q1_mut().iter_mut().for_each(|(_, mut trans)| {
-                trans.translation.x = (x * GEOMETRY_SIZE) + (GEOMETRY_SIZE / 2.0);
-                trans.translation.y = (y * GEOMETRY_SIZE) + (GEOMETRY_SIZE / 2.0);
-                let target = wp.facing.camera_look_at(&trans.translation);
-                trans.look_at(target, Vec3::new(0.0, 0.0, 1.0));
-            });
         }
 
         Window::new("Navigation")

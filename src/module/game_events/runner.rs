@@ -1,6 +1,7 @@
 use super::GameEventStep;
 use crate::game_states::{
     gamelog::{GameLog, DEFAULT_TEXT_COLOR},
+    player_movement::PlayerMoveRequest,
     WanderResource,
 };
 use bevy::prelude::*;
@@ -20,7 +21,8 @@ pub fn event_runner(
     mut wander: ResMut<WanderResource>,
     mut state: ResMut<ScriptState>,
     mut log: ResMut<GameLog>,
-    time : Res<Time>,
+    time: Res<Time>,
+    mut move_request: EventWriter<PlayerMoveRequest>,
 ) {
     wander.allow_movement = false;
 
@@ -68,6 +70,10 @@ pub fn event_runner(
                     }
                     GameEventStep::PauseMs(ms) => {
                         new_timer = Some(Timer::new(Duration::from_millis(*ms), false));
+                    }
+                    GameEventStep::MovePlayer(mv, delay) => {
+                        move_request.send(*mv);
+                        new_timer = Some(Timer::new(Duration::from_millis(*delay), false));
                     }
                     GameEventStep::CallEvent(tag) => {
                         // Add the jump to the stack

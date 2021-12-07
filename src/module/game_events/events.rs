@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use crate::game_states::player_movement::PlayerMoveRequest;
+
 #[derive(Clone, Serialize, Deserialize)]
 pub struct GameEvent {
     pub tag: String,
@@ -15,6 +17,7 @@ pub enum GameEventStep {
     ClearLog,
     PauseMs(u64),
     CallEvent(String),
+    MovePlayer(PlayerMoveRequest, u64),
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -23,4 +26,5 @@ pub enum EventPicker {
     ClearLog,
     PauseMs,
     CallEvent,
+    MovePlayer,
 }

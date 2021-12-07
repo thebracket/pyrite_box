@@ -1872,6 +1872,21 @@
                     color: Some((255, 0, 0)),
                 ),
                 LogText(
+                    text: "Let's go for a walk.",
+                    color: Some((255, 255, 0)),
+                ),
+                PauseMs(1000),
+                MovePlayer(Forwards, 1000),
+                LogText(
+                    text: "Here's a fine example of a wall.",
+                    color: None,
+                ),
+                MovePlayer(TurnRight, 1000),
+                MovePlayer(TurnRight, 1000),
+                MovePlayer(Forwards, 1000),
+                MovePlayer(TurnRight, 1000),
+                MovePlayer(TurnRight, 1000),
+                LogText(
                     text: "Execution will go back now",
                     color: Some((255, 255, 0)),
                 ),

@@ -1,4 +1,4 @@
-use super::ModuleSelector;
+use super::{player_movement::PlayerMoveRequest, ModuleSelector};
 use crate::{
     module::{
         default_pbr,
@@ -273,6 +273,7 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                         ui.selectable_value(&mut next_step, EventPicker::ClearLog, "Clear Log");
                         ui.selectable_value(&mut next_step, EventPicker::CallEvent, "Call");
                         ui.selectable_value(&mut next_step, EventPicker::PauseMs, "Pause Delay MS");
+                        ui.selectable_value(&mut next_step, EventPicker::MovePlayer, "Move Player");
                     });
 
                     if ui.button("Add Step").clicked() {
@@ -291,6 +292,12 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                             }
                             EventPicker::CallEvent => {
                                 event.steps.push(GameEventStep::CallEvent(String::new()));
+                            }
+                            EventPicker::MovePlayer => {
+                                event.steps.push(GameEventStep::MovePlayer(
+                                    PlayerMoveRequest::Forwards,
+                                    1000,
+                                ));
                             }
                         }
                     }
@@ -312,6 +319,10 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                             GameEventStep::CallEvent(tag) => {
                                 ui.label(format!("{} : Call Event", line));
                                 ui.text_edit_singleline(tag);
+                            }
+                            GameEventStep::MovePlayer(..) => {
+                                ui.label(format!("{} : Move Player", line));
+                                // TODO: Editor support
                             }
                         }
                     }
