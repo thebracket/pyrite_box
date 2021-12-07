@@ -32,6 +32,10 @@ impl GameLog {
             color,
         });
     }
+
+    pub fn clear(&mut self) {
+        self.buffer.clear();
+    }
 }
 
 struct GameLogEntry {

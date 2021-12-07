@@ -55,6 +55,9 @@ pub fn event_runner(
                             log.add_line(&text, DEFAULT_TEXT_COLOR);
                         }
                     }
+                    GameEventStep::ClearLog => {
+                        log.clear();
+                    }
                     GameEventStep::CallEvent(tag) => {
                         // Add the jump to the stack
                         // The next event in this script is also in the stack, so it'll resume

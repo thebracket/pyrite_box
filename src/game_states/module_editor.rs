@@ -270,6 +270,7 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
 
                     egui::ComboBox::from_label("New Step").show_ui(ui, |ui| {
                         ui.selectable_value(&mut next_step, EventPicker::LogText, "Log");
+                        ui.selectable_value(&mut next_step, EventPicker::ClearLog, "Clear Log");
                         ui.selectable_value(&mut next_step, EventPicker::CallEvent, "Call");
                     });
 
@@ -280,6 +281,9 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                                     text: "Hello".to_string(),
                                     color: None,
                                 });
+                            }
+                            EventPicker::ClearLog => {
+                                event.steps.push(GameEventStep::ClearLog);
                             }
                             EventPicker::CallEvent => {
                                 event.steps.push(GameEventStep::CallEvent(String::new()));
@@ -293,6 +297,9 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                             GameEventStep::LogText { text, .. } => {
                                 ui.label(format!("{} : Log Text", line));
                                 ui.text_edit_singleline(text);
+                            }
+                            GameEventStep::ClearLog => {
+                                ui.label(format!("{} : Clear Log", line));
                             }
                             GameEventStep::CallEvent(tag) => {
                                 ui.label(format!("{} : Call Event", line));

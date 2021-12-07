@@ -12,11 +12,13 @@ pub enum GameEventStep {
         text: String,
         color: Option<(u8, u8, u8)>,
     },
+    ClearLog,
     CallEvent(String),
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum EventPicker {
     LogText,
+    ClearLog,
     CallEvent,
 }
