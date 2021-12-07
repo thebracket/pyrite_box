@@ -16,6 +16,7 @@ pub struct Module {
     pub next_map_index: usize,
     pub events: Vec<GameEvent>,
     pub module_start_event: String,
+    pub starting_map_idx: usize,
 }
 
 impl Module {
@@ -50,6 +51,7 @@ impl Module {
             next_map_index: 0,
             events: Vec::new(),
             module_start_event: String::new(),
+            starting_map_idx: 0,
         }
     }
 

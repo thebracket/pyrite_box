@@ -2,6 +2,7 @@
     name: "New Module",
     description: "",
     filename: "TestModule.pyr",
+    starting_map_idx: 0,
     materials: {
         1: ("Gray", Color(
             r: 128,
