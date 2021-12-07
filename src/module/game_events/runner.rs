@@ -75,6 +75,9 @@ pub fn event_runner(
                         move_request.send(*mv);
                         new_timer = Some(Timer::new(Duration::from_millis(*delay), false));
                     }
+                    GameEventStep::ChangeMap{index, x, y} => {
+                        move_request.send(PlayerMoveRequest::ChangeMap{index: *index, x: *x, y: *y});
+                    }
                     GameEventStep::CallEvent(tag) => {
                         // Add the jump to the stack
                         // The next event in this script is also in the stack, so it'll resume

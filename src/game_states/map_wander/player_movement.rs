@@ -9,6 +9,7 @@ pub enum PlayerMoveRequest {
     Backwards,
     TurnLeft,
     TurnRight,
+    ChangeMap{index: usize, x: u32, y: u32},
 }
 
 pub fn player_move(
@@ -18,7 +19,7 @@ pub fn player_move(
         Query<(&WanderLight, &mut Transform)>,
         Query<(&WanderCamera, &mut Transform)>,
     )>,
-    wander: Res<WanderResource>,
+    mut wander: ResMut<WanderResource>,
     mut triggers: EventWriter<TriggerEvent>,
 ) {
     let mut moved = false;
@@ -47,6 +48,13 @@ pub fn player_move(
                     wp.x += dx;
                     wp.y += dy;
                     moved = true;
+                }
+                PlayerMoveRequest::ChangeMap{index, x, y} => {
+                    wp.x = *x as i32;
+                    wp.y = *y as i32;
+                    wander.map_idx = *index;
+                    moved = true;
+                    wander.module.maps.get_mut(index).unwrap().needs_rebuild = true;
                 }
             }
         }
