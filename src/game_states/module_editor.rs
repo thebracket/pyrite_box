@@ -272,6 +272,7 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                         ui.selectable_value(&mut next_step, EventPicker::LogText, "Log");
                         ui.selectable_value(&mut next_step, EventPicker::ClearLog, "Clear Log");
                         ui.selectable_value(&mut next_step, EventPicker::CallEvent, "Call");
+                        ui.selectable_value(&mut next_step, EventPicker::PauseMs, "Pause Delay MS");
                     });
 
                     if ui.button("Add Step").clicked() {
@@ -284,6 +285,9 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                             }
                             EventPicker::ClearLog => {
                                 event.steps.push(GameEventStep::ClearLog);
+                            }
+                            EventPicker::PauseMs => {
+                                event.steps.push(GameEventStep::PauseMs(33));
                             }
                             EventPicker::CallEvent => {
                                 event.steps.push(GameEventStep::CallEvent(String::new()));
@@ -300,6 +304,10 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                             }
                             GameEventStep::ClearLog => {
                                 ui.label(format!("{} : Clear Log", line));
+                            }
+                            GameEventStep::PauseMs(ms) => {
+                                ui.label(format!("{} : Pause Ms", line));
+                                ui.add(egui::Slider::new(ms, 1..=10000));
                             }
                             GameEventStep::CallEvent(tag) => {
                                 ui.label(format!("{} : Call Event", line));

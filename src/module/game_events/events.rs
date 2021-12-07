@@ -13,6 +13,7 @@ pub enum GameEventStep {
         color: Option<(u8, u8, u8)>,
     },
     ClearLog,
+    PauseMs(u64),
     CallEvent(String),
 }
 
@@ -20,5 +21,6 @@ pub enum GameEventStep {
 pub enum EventPicker {
     LogText,
     ClearLog,
+    PauseMs,
     CallEvent,
 }

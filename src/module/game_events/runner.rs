@@ -5,7 +5,7 @@ use crate::game_states::{
 };
 use bevy::prelude::*;
 use bevy_egui::egui::Color32;
-use std::collections::VecDeque;
+use std::{collections::VecDeque, time::Duration};
 
 #[derive(Clone)]
 pub struct TriggerEvent(pub String);
@@ -20,6 +20,7 @@ pub fn event_runner(
     mut wander: ResMut<WanderResource>,
     mut state: ResMut<ScriptState>,
     mut log: ResMut<GameLog>,
+    time : Res<Time>,
 ) {
     wander.allow_movement = false;
 
@@ -29,9 +30,16 @@ pub fn event_runner(
     if log.blocking {
         return;
     }
+    if let Some(timer) = &mut state.blocking_delay {
+        timer.tick(time.delta());
+        if !timer.finished() {
+            return;
+        }
+    }
 
     // Walk the stack
     let mut new_stack_entries = Vec::new();
+    let mut new_timer = None;
     if let Some(stack_entry) = state.stack.pop() {
         if let Some(event) = wander
             .module
@@ -58,6 +66,9 @@ pub fn event_runner(
                     GameEventStep::ClearLog => {
                         log.clear();
                     }
+                    GameEventStep::PauseMs(ms) => {
+                        new_timer = Some(Timer::new(Duration::from_millis(*ms), false));
+                    }
                     GameEventStep::CallEvent(tag) => {
                         // Add the jump to the stack
                         // The next event in this script is also in the stack, so it'll resume
@@ -81,6 +92,8 @@ pub fn event_runner(
         new_stack_entries
             .drain(..)
             .for_each(|s| state.stack.push(s));
+
+        state.blocking_delay = new_timer;
         return;
     }
 
@@ -132,6 +145,7 @@ struct ScriptPoint {
 pub struct ScriptState {
     event_queue: VecDeque<TriggerEvent>,
     stack: ScriptStack,
+    blocking_delay: Option<Timer>,
 }
 
 impl ScriptState {
@@ -139,6 +153,7 @@ impl ScriptState {
         Self {
             event_queue: VecDeque::new(),
             stack: ScriptStack::new(),
+            blocking_delay: None,
         }
     }
 }

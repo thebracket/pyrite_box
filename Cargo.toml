@@ -3,8 +3,8 @@ name = "pyrite_box"
 version = "0.1.0"
 edition = "2018"
 
-[profile.dev]
-opt-level = 1
+#[profile.dev]
+#opt-level = 1
 
 [dependencies]
 bevy = "0.5"
