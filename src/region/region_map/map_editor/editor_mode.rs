@@ -5,4 +5,5 @@ pub enum MapEditorMode {
     Ceiling,
     Start,
     Opening,
+    Trigger,
 }

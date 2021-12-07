@@ -16,13 +16,15 @@ pub struct RegionMap {
     pub map_start_event: String,
 }
 
-#[derive(Clone, Copy, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct RegionTile {
     pub tile_type: RegionTileType,
     pub has_ceiling: bool,
     pub boundaries: [(RegionBoundaryType, u32); 4],
     pub floor_material: u32,
     pub ceiling_material: u32,
+    pub entry_trigger: Option<String>,
+    pub exit_trigger: Option<(Direction, String)>,
 }
 
 #[allow(dead_code)]
@@ -58,6 +60,8 @@ impl RegionMap {
                     ],
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 };
                 (SIZE.0 as usize) * (SIZE.1 as usize)
             ],

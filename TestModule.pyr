@@ -2,18 +2,7 @@
     name: "New Module",
     description: "",
     filename: "TestModule.pyr",
-    starting_map_idx: 0,
     materials: {
-        1: ("Gray", Color(
-            r: 128,
-            g: 128,
-            b: 128,
-        )),
-        2: ("Red", Color(
-            r: 255,
-            g: 13,
-            b: 13,
-        )),
         3: ("Stone Block Wall", Pbr(
             display_color: (255, 255, 255),
             albedo: "stone-block-wall_albedo.png",
@@ -34,13 +23,22 @@
             roughness: 0.089,
             metallic: 0,
         )),
+        1: ("Gray", Color(
+            r: 128,
+            g: 128,
+            b: 128,
+        )),
+        2: ("Red", Color(
+            r: 255,
+            g: 13,
+            b: 13,
+        )),
     },
     next_material_index: 4,
     maps: {
         0: (
             name: "Quiche Slums",
             size: (16, 16),
-            map_start_event: "SlumsStart",
             tiles: [
                 (
                     tile_type: Floor,
@@ -48,6 +46,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -55,6 +55,8 @@
                     boundaries: ((Wall, 3), (None, 3), (None, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -62,6 +64,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -69,6 +73,8 @@
                     boundaries: ((Wall, 3), (Opening, 3), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -76,6 +82,8 @@
                     boundaries: ((Wall, 3), (None, 3), (None, 1), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -83,6 +91,8 @@
                     boundaries: ((Wall, 3), (None, 3), (None, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -90,6 +100,8 @@
                     boundaries: ((Wall, 3), (None, 3), (Wall, 3), (None, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -97,6 +109,8 @@
                     boundaries: ((Wall, 3), (None, 3), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -104,6 +118,8 @@
                     boundaries: ((Wall, 3), (None, 3), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -111,6 +127,8 @@
                     boundaries: ((Wall, 3), (None, 3), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -118,6 +136,8 @@
                     boundaries: ((Wall, 3), (None, 3), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -125,6 +145,8 @@
                     boundaries: ((Wall, 3), (None, 3), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -132,6 +154,8 @@
                     boundaries: ((Wall, 3), (None, 3), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -139,6 +163,8 @@
                     boundaries: ((Wall, 3), (None, 3), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -146,6 +172,8 @@
                     boundaries: ((Wall, 3), (None, 3), (None, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -153,6 +181,8 @@
                     boundaries: ((Wall, 3), (None, 1), (Wall, 3), (None, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -160,6 +190,8 @@
                     boundaries: ((None, 1), (Opening, 3), (None, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -167,6 +199,8 @@
                     boundaries: ((None, 3), (Wall, 3), (Wall, 3), (None, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -174,6 +208,8 @@
                     boundaries: ((Wall, 3), (None, 1), (Wall, 3), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -181,6 +217,8 @@
                     boundaries: ((Opening, 3), (Wall, 3), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -188,6 +226,8 @@
                     boundaries: ((None, 3), (None, 1), (None, 3), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -195,6 +235,8 @@
                     boundaries: ((None, 3), (Wall, 3), (None, 1), (None, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -202,6 +244,8 @@
                     boundaries: ((None, 3), (Wall, 3), (Opening, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -209,6 +253,8 @@
                     boundaries: ((None, 3), (Wall, 3), (None, 3), (Opening, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -216,6 +262,8 @@
                     boundaries: ((None, 3), (Wall, 3), (Wall, 3), (None, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -223,6 +271,8 @@
                     boundaries: ((None, 3), (Wall, 3), (None, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -230,6 +280,8 @@
                     boundaries: ((None, 3), (Opening, 3), (Wall, 3), (None, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -237,6 +289,8 @@
                     boundaries: ((None, 3), (Wall, 3), (None, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -244,6 +298,8 @@
                     boundaries: ((None, 3), (Wall, 3), (None, 3), (None, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -251,6 +307,8 @@
                     boundaries: ((None, 3), (Wall, 3), (Opening, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -258,6 +316,8 @@
                     boundaries: ((None, 3), (None, 1), (None, 3), (Opening, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -265,6 +325,8 @@
                     boundaries: ((None, 1), (None, 1), (Wall, 3), (None, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -272,6 +334,8 @@
                     boundaries: ((Opening, 3), (None, 1), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -279,6 +343,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 1), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -286,6 +352,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -293,6 +361,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 3), (None, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -300,6 +370,8 @@
                     boundaries: ((None, 1), (Opening, 3), (Opening, 3), (None, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -307,6 +379,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 3), (Opening, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -314,6 +388,8 @@
                     boundaries: ((Wall, 3), (Opening, 3), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -321,6 +397,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 3), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -328,6 +406,8 @@
                     boundaries: ((Wall, 3), (None, 3), (Opening, 3), (None, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -335,6 +415,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 3), (Opening, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -342,6 +424,8 @@
                     boundaries: ((Opening, 3), (Opening, 3), (Opening, 3), (None, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -349,6 +433,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 3), (Opening, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -356,6 +442,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 3), (None, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -363,6 +451,8 @@
                     boundaries: ((Wall, 3), (None, 3), (Opening, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -370,6 +460,8 @@
                     boundaries: ((None, 1), (None, 1), (None, 1), (Opening, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -377,6 +469,8 @@
                     boundaries: ((None, 1), (None, 1), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -384,6 +478,8 @@
                     boundaries: ((None, 1), (Wall, 3), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -391,6 +487,8 @@
                     boundaries: ((None, 1), (None, 1), (Wall, 3), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -398,6 +496,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -405,6 +505,8 @@
                     boundaries: ((Wall, 3), (Opening, 3), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -412,6 +514,8 @@
                     boundaries: ((Opening, 3), (None, 1), (Wall, 3), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -419,6 +523,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -426,6 +532,8 @@
                     boundaries: ((Opening, 3), (None, 1), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -433,6 +541,8 @@
                     boundaries: ((None, 1), (None, 1), (None, 1), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -440,6 +550,8 @@
                     boundaries: ((None, 3), (None, 1), (Wall, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -447,6 +559,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 1), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -454,6 +568,8 @@
                     boundaries: ((Opening, 3), (None, 1), (None, 1), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -461,6 +577,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 1), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -468,6 +586,8 @@
                     boundaries: ((Wall, 3), (None, 1), (Wall, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -475,6 +595,8 @@
                     boundaries: ((None, 3), (None, 1), (Wall, 3), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -482,6 +604,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -489,6 +613,8 @@
                     boundaries: ((None, 1), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -496,6 +622,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 3), (Wall, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -503,6 +631,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 3), (None, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -510,6 +640,8 @@
                     boundaries: ((Wall, 3), (None, 1), (Wall, 3), (None, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -517,6 +649,8 @@
                     boundaries: ((Opening, 3), (Opening, 3), (None, 1), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -524,6 +658,8 @@
                     boundaries: ((None, 1), (None, 1), (Wall, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -531,6 +667,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -538,6 +676,8 @@
                     boundaries: ((None, 1), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -545,6 +685,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -552,6 +694,8 @@
                     boundaries: ((None, 1), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -559,6 +703,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -566,6 +712,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -573,6 +721,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -580,6 +730,8 @@
                     boundaries: ((None, 1), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -587,6 +739,8 @@
                     boundaries: ((None, 1), (Opening, 3), (Wall, 3), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -594,6 +748,8 @@
                     boundaries: ((Wall, 3), (Opening, 3), (None, 1), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -601,6 +757,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (Opening, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: Some("ApproachCivilized"),
+                    exit_trigger: Some((East, "GotoCivilized")),
                 ),
                 (
                     tile_type: Floor,
@@ -608,6 +766,8 @@
                     boundaries: ((Wall, 3), (None, 1), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -615,6 +775,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -622,6 +784,8 @@
                     boundaries: ((None, 1), (None, 1), (Wall, 3), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -629,6 +793,8 @@
                     boundaries: ((Opening, 3), (Wall, 3), (Wall, 3), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -636,6 +802,8 @@
                     boundaries: ((None, 1), (None, 0), (None, 0), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -643,6 +811,8 @@
                     boundaries: ((Wall, 3), (None, 2), (None, 1), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -650,6 +820,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -657,6 +829,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -664,6 +838,8 @@
                     boundaries: ((Wall, 3), (None, 0), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -671,6 +847,8 @@
                     boundaries: ((Wall, 3), (None, 0), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -678,6 +856,8 @@
                     boundaries: ((Wall, 3), (None, 0), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -685,6 +865,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 1), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -692,6 +874,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 1), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -699,6 +883,8 @@
                     boundaries: ((Opening, 3), (None, 1), (Wall, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -706,6 +892,8 @@
                     boundaries: ((Opening, 3), (None, 1), (None, 1), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -713,6 +901,8 @@
                     boundaries: ((Wall, 3), (None, 1), (Wall, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -720,6 +910,8 @@
                     boundaries: ((None, 1), (None, 1), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -727,6 +919,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -734,6 +928,8 @@
                     boundaries: ((None, 1), (Opening, 3), (Opening, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -741,6 +937,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (Opening, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -748,6 +946,8 @@
                     boundaries: ((None, 2), (None, 1), (None, 2), (None, 0)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -755,6 +955,8 @@
                     boundaries: ((None, 0), (None, 1), (Wall, 3), (None, 0)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -762,6 +964,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 0), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -769,6 +973,8 @@
                     boundaries: ((Wall, 3), (None, 1), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -776,6 +982,8 @@
                     boundaries: ((None, 2), (None, 1), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -783,6 +991,8 @@
                     boundaries: ((None, 2), (None, 1), (None, 0), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -790,6 +1000,8 @@
                     boundaries: ((None, 2), (None, 1), (Wall, 3), (None, 0)),
                     floor_material: 3,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -797,6 +1009,8 @@
                     boundaries: ((None, 1), (None, 1), (None, 1), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -804,6 +1018,8 @@
                     boundaries: ((None, 1), (None, 1), (None, 1), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -811,6 +1027,8 @@
                     boundaries: ((None, 1), (None, 1), (Wall, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -818,6 +1036,8 @@
                     boundaries: ((None, 1), (None, 1), (None, 1), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -825,6 +1045,8 @@
                     boundaries: ((None, 1), (None, 1), (Wall, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -832,6 +1054,8 @@
                     boundaries: ((None, 1), (Opening, 3), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -839,6 +1063,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -846,6 +1072,8 @@
                     boundaries: ((Opening, 3), (None, 1), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -853,6 +1081,8 @@
                     boundaries: ((Wall, 3), (None, 1), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -860,6 +1090,8 @@
                     boundaries: ((None, 1), (None, 1), (None, 1), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -867,6 +1099,8 @@
                     boundaries: ((None, 1), (None, 0), (Wall, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -874,6 +1108,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -881,6 +1117,8 @@
                     boundaries: ((None, 1), (None, 0), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -888,6 +1126,8 @@
                     boundaries: ((None, 1), (Wall, 3), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -895,6 +1135,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -902,6 +1144,8 @@
                     boundaries: ((None, 1), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -909,6 +1153,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -916,6 +1162,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -923,6 +1171,8 @@
                     boundaries: ((None, 1), (Wall, 3), (Opening, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -930,6 +1180,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (Opening, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -937,6 +1189,8 @@
                     boundaries: ((None, 1), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -944,6 +1198,8 @@
                     boundaries: ((Opening, 3), (None, 1), (Opening, 3), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -951,6 +1207,8 @@
                     boundaries: ((None, 1), (None, 1), (None, 1), (Opening, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -958,6 +1216,8 @@
                     boundaries: ((None, 1), (None, 1), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -965,6 +1225,8 @@
                     boundaries: ((None, 1), (None, 1), (Opening, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -972,6 +1234,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (Opening, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -979,6 +1243,8 @@
                     boundaries: ((None, 3), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -986,6 +1252,8 @@
                     boundaries: ((Wall, 3), (None, 1), (Wall, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -993,6 +1261,8 @@
                     boundaries: ((None, 3), (Wall, 3), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1000,6 +1270,8 @@
                     boundaries: ((Wall, 3), (None, 0), (Wall, 3), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1007,6 +1279,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 1), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1014,6 +1288,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 0), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1021,6 +1297,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (None, 0)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1028,6 +1306,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1035,6 +1315,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1042,6 +1324,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 1), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1049,6 +1333,8 @@
                     boundaries: ((Wall, 3), (None, 1), (Wall, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1056,6 +1342,8 @@
                     boundaries: ((None, 1), (None, 1), (Wall, 3), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1063,6 +1351,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1070,6 +1360,8 @@
                     boundaries: ((None, 1), (Opening, 3), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1077,6 +1369,8 @@
                     boundaries: ((None, 1), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1084,6 +1378,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 0), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1091,6 +1387,8 @@
                     boundaries: ((Wall, 3), (None, 1), (Wall, 3), (None, 2)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1098,6 +1396,8 @@
                     boundaries: ((None, 1), (None, 3), (None, 3), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1105,6 +1405,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 1), (None, 0)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1112,6 +1414,8 @@
                     boundaries: ((None, 3), (None, 1), (Wall, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1119,6 +1423,8 @@
                     boundaries: ((None, 1), (None, 1), (None, 1), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1126,6 +1432,8 @@
                     boundaries: ((None, 1), (None, 1), (Wall, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1133,6 +1441,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1140,6 +1450,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1147,6 +1459,8 @@
                     boundaries: ((Wall, 3), (None, 1), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1154,6 +1468,8 @@
                     boundaries: ((None, 1), (None, 1), (None, 1), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1161,6 +1477,8 @@
                     boundaries: ((None, 1), (None, 1), (Wall, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1168,6 +1486,8 @@
                     boundaries: ((None, 1), (None, 1), (None, 1), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1175,6 +1495,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 1), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1182,6 +1504,8 @@
                     boundaries: ((Opening, 3), (None, 1), (Wall, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1189,6 +1513,8 @@
                     boundaries: ((Wall, 3), (None, 1), (Opening, 3), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1196,6 +1522,8 @@
                     boundaries: ((None, 1), (None, 1), (None, 0), (Opening, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1203,6 +1531,8 @@
                     boundaries: ((None, 1), (None, 1), (Wall, 3), (None, 2)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1210,6 +1540,8 @@
                     boundaries: ((None, 0), (Opening, 3), (None, 1), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1217,6 +1549,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1224,6 +1558,8 @@
                     boundaries: ((None, 1), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1231,6 +1567,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (Wall, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1238,6 +1576,8 @@
                     boundaries: ((None, 1), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1245,6 +1585,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1252,6 +1594,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1259,6 +1603,8 @@
                     boundaries: ((None, 1), (Wall, 3), (Opening, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1266,6 +1612,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (Opening, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1273,6 +1621,8 @@
                     boundaries: ((None, 1), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1280,6 +1630,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 3), (None, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1287,6 +1639,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (None, 3)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1294,6 +1648,8 @@
                     boundaries: ((None, 1), (Wall, 3), (Opening, 3), (None, 1)),
                     floor_material: 0,
                     ceiling_material: 1,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1301,6 +1657,8 @@
                     boundaries: ((None, 1), (Wall, 3), (Wall, 3), (Opening, 3)),
                     floor_material: 0,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1308,6 +1666,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1315,6 +1675,8 @@
                     boundaries: ((None, 1), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1322,6 +1684,8 @@
                     boundaries: ((Opening, 3), (None, 1), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1329,6 +1693,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1336,6 +1702,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1343,6 +1711,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1350,6 +1720,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1357,6 +1729,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1364,6 +1738,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1371,6 +1747,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1378,6 +1756,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1385,6 +1765,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1392,6 +1774,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1399,6 +1783,8 @@
                     boundaries: ((Wall, 3), (None, 1), (Wall, 3), (None, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1406,6 +1792,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1413,6 +1801,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1420,6 +1810,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1427,6 +1819,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (None, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1434,6 +1828,8 @@
                     boundaries: ((None, 1), (None, 1), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1441,6 +1837,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1448,6 +1846,8 @@
                     boundaries: ((Wall, 3), (None, 1), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1455,6 +1855,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1462,6 +1864,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1469,6 +1873,8 @@
                     boundaries: ((Wall, 3), (None, 1), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1476,6 +1882,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1483,6 +1891,8 @@
                     boundaries: ((None, 1), (None, 1), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1490,6 +1900,8 @@
                     boundaries: ((None, 1), (None, 1), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1497,6 +1909,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1504,6 +1918,8 @@
                     boundaries: ((Wall, 3), (None, 1), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1511,6 +1927,8 @@
                     boundaries: ((None, 1), (Wall, 3), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1518,6 +1936,8 @@
                     boundaries: ((None, 1), (None, 1), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1525,6 +1945,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1532,6 +1954,8 @@
                     boundaries: ((Wall, 3), (None, 1), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1539,6 +1963,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1546,6 +1972,8 @@
                     boundaries: ((None, 1), (None, 1), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1553,6 +1981,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1560,6 +1990,8 @@
                     boundaries: ((None, 1), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1567,6 +1999,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1574,6 +2008,8 @@
                     boundaries: ((None, 1), (None, 1), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1581,6 +2017,8 @@
                     boundaries: ((None, 1), (None, 1), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1588,6 +2026,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1595,6 +2035,8 @@
                     boundaries: ((None, 1), (None, 1), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1602,6 +2044,8 @@
                     boundaries: ((None, 1), (None, 1), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1609,6 +2053,8 @@
                     boundaries: ((Wall, 3), (None, 1), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1616,6 +2062,8 @@
                     boundaries: ((None, 1), (Wall, 3), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1623,6 +2071,8 @@
                     boundaries: ((Wall, 3), (None, 3), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1630,6 +2080,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1637,6 +2089,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1644,6 +2098,8 @@
                     boundaries: ((None, 1), (None, 1), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1651,6 +2107,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1658,6 +2116,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1665,6 +2125,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1672,6 +2134,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1679,6 +2143,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1686,6 +2152,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1693,6 +2161,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1700,6 +2170,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1707,6 +2179,8 @@
                     boundaries: ((None, 1), (None, 1), (Wall, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1714,6 +2188,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 3), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1721,6 +2197,8 @@
                     boundaries: ((None, 1), (Wall, 3), (Wall, 3), (None, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1728,6 +2206,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1735,6 +2215,8 @@
                     boundaries: ((None, 3), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1742,6 +2224,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1749,6 +2233,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1756,6 +2242,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1763,6 +2251,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1770,6 +2260,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1777,6 +2269,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1784,6 +2278,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1791,6 +2287,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1798,6 +2296,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1805,6 +2305,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1812,6 +2314,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1819,6 +2323,8 @@
                     boundaries: ((None, 1), (Wall, 3), (None, 1), (Wall, 3)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1826,6 +2332,8 @@
                     boundaries: ((Wall, 3), (Wall, 3), (None, 1), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
                 (
                     tile_type: Floor,
@@ -1833,10 +2341,13 @@
                     boundaries: ((Wall, 3), (Wall, 3), (Wall, 3), (None, 1)),
                     floor_material: 3,
                     ceiling_material: 3,
+                    entry_trigger: None,
+                    exit_trigger: None,
                 ),
             ],
             starting_location: (15, 4, West),
             needs_rebuild: true,
+            map_start_event: "SlumsStart",
         ),
     },
     next_map_index: 1,
@@ -1856,12 +2367,13 @@
                 PauseMs(1000),
                 ClearLog,
                 LogText(
-                    text: "You have entered the monster-crawling slums of Quiche. Small, ugly things scurry from beneath your feet. In the distance, an alarm sounds."
+                    text: "You have entered the monster-crawling slums of Quiche. Small, ugly things scurry from beneath your feet. In the distance, an alarm sounds.",
+                    color: None,
                 ),
                 CallEvent("CallTest"),
                 LogText(
                     text: "Original sequence continued. Yay, script stacks work.",
-                    color: Some((0, 0, 255))
+                    color: Some((0, 0, 255)),
                 ),
             ],
         ),
@@ -1873,13 +2385,13 @@
                     color: Some((255, 0, 0)),
                 ),
                 LogText(
-                    text: "Let's go for a walk.",
+                    text: "Let\'s go for a walk.",
                     color: Some((255, 255, 0)),
                 ),
                 PauseMs(1000),
                 MovePlayer(Forwards, 1000),
                 LogText(
-                    text: "Here's a fine example of a wall.",
+                    text: "Here\'s a fine example of a wall.",
                     color: None,
                 ),
                 MovePlayer(TurnRight, 1000),
@@ -1893,6 +2405,19 @@
                 ),
             ],
         ),
+        (
+            tag: "ApproachCivilized",
+            steps: [
+                LogText(text: "This passageway leads to the civilized portion of Quiche."),
+            ],
+        ),
+        (
+            tag: "GotoCivilized",
+            steps: [
+                LogText(text: "When map transitions work, that would have happened."),
+            ],
+        ),
     ],
     module_start_event: "ModuleStart",
+    starting_map_idx: 0,
 )

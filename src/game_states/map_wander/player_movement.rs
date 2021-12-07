@@ -1,5 +1,5 @@
 use super::{WanderCamera, WanderLight, WanderResource, WanderingPlayer};
-use crate::region::region_map::geometry::GEOMETRY_SIZE;
+use crate::{module::game_events::TriggerEvent, region::region_map::geometry::GEOMETRY_SIZE};
 use bevy::prelude::*;
 use serde::{Deserialize, Serialize};
 
@@ -19,9 +19,13 @@ pub fn player_move(
         Query<(&WanderCamera, &mut Transform)>,
     )>,
     wander: Res<WanderResource>,
+    mut triggers: EventWriter<TriggerEvent>,
 ) {
     let mut moved = false;
+    let map_idx = wander.map_idx;
+    let mut previous_location = 0;
     player_query.iter_mut().for_each(|mut wp| {
+        previous_location = (wander.module.maps[&map_idx].size.0 * wp.y as u32) + wp.x as u32;
         for event in events.iter() {
             match event {
                 PlayerMoveRequest::TurnRight => {
@@ -48,7 +52,21 @@ pub fn player_move(
         }
 
         if moved {
-            let map_idx = wander.map_idx;
+            let new_location = (wander.module.maps[&map_idx].size.0 * wp.y as u32) + wp.x as u32;
+            if previous_location != new_location {
+                if let Some((direction, trigger)) =
+                    &wander.module.maps[&map_idx].tiles[previous_location as usize].exit_trigger
+                {
+                    if wp.facing == *direction {
+                        triggers.send(TriggerEvent(trigger.clone()));
+                    }
+                }
+                if let Some(trigger) =
+                    &wander.module.maps[&map_idx].tiles[new_location as usize].entry_trigger
+                {
+                    triggers.send(TriggerEvent(trigger.clone()));
+                }
+            }
             let (x, y) = wander.module.maps[&map_idx].tile_location(wp.x as f32, wp.y as f32);
             move_set.q0_mut().iter_mut().for_each(|(_, mut trans)| {
                 trans.translation.x = (x * GEOMETRY_SIZE) + (GEOMETRY_SIZE / 2.0);

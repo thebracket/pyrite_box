@@ -38,6 +38,7 @@ impl<'a> MapEditor<'a> {
                     ui.radio_value(&mut editor_settings.mode, MapEditorMode::Ceiling, "Ceiling");
                     ui.radio_value(&mut editor_settings.mode, MapEditorMode::Start, "Start");
                     ui.radio_value(&mut editor_settings.mode, MapEditorMode::Opening, "Opening");
+                    ui.radio_value(&mut editor_settings.mode, MapEditorMode::Trigger, "Trigger");
                 });
                 ui.checkbox(&mut editor_settings.fill_walls, "Double-Sided Walls");
 
@@ -85,6 +86,7 @@ impl<'a> MapEditor<'a> {
                 MapEditorMode::Floor => self.floor_interact(&scale, pointer_pos, &response),
                 MapEditorMode::Ceiling => self.ceiling_interact(&scale, pointer_pos, &response),
                 MapEditorMode::Start => self.start_interact(&scale, pointer_pos, &response),
+                MapEditorMode::Trigger => self.trigger_interact(&scale, pointer_pos, &response),
             }
         }
 
@@ -213,6 +215,14 @@ impl<'a> MapEditor<'a> {
                 self.map.starting_location.0 = pos.tile_x;
                 self.map.starting_location.1 = pos.tile_y;
             }
+        }
+    }
+
+    fn trigger_interact(&mut self, scale: &Scaling, pointer_pos: Pos2, response: &Response) {
+        if response.clicked_by(PointerButton::Primary) {
+            let pos = MapWallInteraction::new(scale, pointer_pos, &self.map);
+            let tile_idx = ((self.map.size.0 * pos.tile_y) + pos.tile_x) as usize;
+            self.map.tiles[tile_idx].entry_trigger = Some("NewTrigger".to_string());
         }
     }
 
