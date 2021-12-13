@@ -1,0 +1,24 @@
+(
+    [
+        (
+            index: 0,
+            filename: "grass.ron",
+            name: "Green",
+        ),
+        (
+            index: 1,
+            filename: "gray.ron",
+            name: "Gray",
+        ),
+        (
+            index: 2,
+            filename: "red.ron",
+            name: "Red",
+        ),
+        (
+            index: 3,
+            filename: "stone_wall.ron",
+            name: "Stone Block Wall",
+        ),
+    ]
+)

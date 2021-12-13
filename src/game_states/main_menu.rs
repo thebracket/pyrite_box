@@ -1,18 +1,16 @@
 use super::UiAssets;
-use crate::AppState;
+use crate::{AppState, modules::{list_available_modules, ModuleHeader}, module::Module};
 use bevy::{app::Events, prelude::*};
-use bevy_egui::{egui, egui::Pos2, EguiContext};
-use std::fs;
+use bevy_egui::{egui::{self, Color32}, egui::Pos2, EguiContext};
+use std::path::Path;
 
 pub struct MainMenuUi;
 
 pub struct AvailableModules {
-    modules: Vec<String>,
+    modules: Vec<ModuleHeader>,
 }
 
-pub struct ModuleSelector {
-    pub filename: Option<String>,
-}
+pub struct ModuleSelector(pub Option<Module>);
 
 pub fn main_menu(
     egui_context: ResMut<EguiContext>,
@@ -22,40 +20,48 @@ pub fn main_menu(
     mut selected_module: ResMut<ModuleSelector>,
 ) {
     egui::Window::new("Welcome to Pyrite Box")
-        .auto_sized()
         .resizable(false)
         .title_bar(true)
-        .fixed_pos(Pos2::new(500.0, 100.0))
+        .fixed_pos(Pos2::new(200.0, 100.0))
+        .fixed_size(bevy_egui::egui::Vec2::new(800.0, 500.0))
         .show(egui_context.ctx(), |ui| {
-            ui.label(
-                "Bracket's just-for-fun, kinda like the Gold Box games from SSI, test engine.",
-            );
 
-            if ui.button("New Module").clicked() {
-                state
-                    .set(AppState::ModuleEditor)
-                    .expect("Failed to change mode");
-            }
+            ui.separator();
 
             for module in available_modules.modules.iter() {
-                if ui.button(format!("Edit: {}", module)).clicked() {
-                    selected_module.filename = Some(module.clone());
+                ui.heading(&module.name);
+                ui.colored_label(Color32::LIGHT_GREEN, &module.description);
+                ui.colored_label(Color32::GREEN, format!("Author: {}", &module.author));
+                ui.horizontal(|ui| {
+                    if ui.button("Play").clicked() {
+                        selected_module.0 = Some(crate::modules::load_module(module.filename.as_ref().unwrap()).unwrap());
+                        state
+                            .set(AppState::MapWander)
+                            .expect("Failed to change mode");
+                    }
+                    if ui.button("Edit").clicked() {
+                        selected_module.0 = Some(crate::modules::load_module(module.filename.as_ref().unwrap()).unwrap());
+                        state
+                            .set(AppState::ModuleEditor)
+                            .expect("Failed to change mode");
+                    }
+                });
+                ui.separator();
+            }
+
+            ui.heading("Other Options");
+            ui.horizontal(|ui| {
+                if ui.button("New Module").clicked() {
                     state
                         .set(AppState::ModuleEditor)
                         .expect("Failed to change mode");
                 }
-                if ui.button(format!("Launch: {}", module)).clicked() {
-                    selected_module.filename = Some(module.clone());
-                    state
-                        .set(AppState::MapWander)
-                        .expect("Failed to change mode");
-                }
-            }
 
-            // Quit game option
-            if ui.button("Quit Program").clicked() {
-                app_exit_events.send(bevy::app::AppExit);
-            }
+                // Quit game option
+                if ui.button("Quit Program").clicked() {
+                    app_exit_events.send(bevy::app::AppExit);
+                }
+            });
         });
 }
 
@@ -71,19 +77,11 @@ pub fn resume_main_menu(mut commands: Commands, ui_assets: Res<UiAssets>) {
         .insert(MainMenuUi {});
 
     // Find available modules
-    let mut modules = Vec::new();
-    let paths = fs::read_dir("./").unwrap();
-    for path in paths {
-        if let Ok(path) = path {
-            if let Some(extension) = path.path().extension() {
-                if extension == "pyr" {
-                    modules.push(path.path().to_str().unwrap().to_string());
-                }
-            }
-        }
-    }
-    commands.insert_resource(AvailableModules { modules });
-    commands.insert_resource(ModuleSelector { filename: None });
+    commands.insert_resource(AvailableModules {
+        modules : list_available_modules()
+    });
+    commands.insert_resource(ModuleSelector(None));
+
 }
 
 pub fn exit_main_menu(mut commands: Commands, cleanup: Query<(Entity, &MainMenuUi)>) {

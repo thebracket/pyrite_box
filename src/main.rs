@@ -9,6 +9,7 @@ use game_states::{
 };
 use module::game_events::{event_runner, event_triggers, TriggerEvent};
 mod module;
+mod modules;
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, Copy)]
 pub enum AppState {

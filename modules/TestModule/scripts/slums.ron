@@ -1,0 +1,65 @@
+[
+    (
+        tag: "SlumsStart",
+        steps: [
+            PauseMs(1000),
+            ClearLog,
+            LogText(
+                text: "You have entered the monster-crawling slums of Quiche. Small, ugly things scurry from beneath your feet. In the distance, an alarm sounds.",
+                color: None,
+            ),
+            CallEvent("CallTest"),
+            LogText(
+                text: "Original sequence continued. Yay, script stacks work.",
+                color: Some((0, 0, 255)),
+            ),
+        ],
+    ),
+    (
+        tag: "CallTest",
+        steps: [
+            LogText(
+                text: "Jumped to CallTest and ran it.",
+                color: Some((255, 0, 0)),
+            ),
+            LogText(
+                text: "Let\'s go for a walk.",
+                color: Some((255, 255, 0)),
+            ),
+            PauseMs(1000),
+            MovePlayer(Forwards, 1000),
+            LogText(
+                text: "Here\'s a fine example of a wall.",
+                color: None,
+            ),
+            MovePlayer(TurnRight, 1000),
+            MovePlayer(TurnRight, 1000),
+            MovePlayer(Forwards, 1000),
+            MovePlayer(TurnRight, 1000),
+            MovePlayer(TurnRight, 1000),
+            LogText(
+                text: "Execution will go back now",
+                color: Some((255, 255, 0)),
+            ),
+        ],
+    ),
+    (
+        tag: "ApproachCivilized",
+        steps: [
+            LogText(
+                text: "This passageway leads to the civilized portion of Quiche.",
+                color: None,
+            ),
+        ],
+    ),
+    (
+        tag: "GotoCivilized",
+        steps: [
+            ChangeMap(
+                index: 1,
+                x: 0,
+                y: 4,
+            ),
+        ],
+    ),
+]

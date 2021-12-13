@@ -5,11 +5,10 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 /// Represents an adventure module, bundling all assets together.
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct Module {
     pub name: String,
     pub description: String,
-    pub filename: String,
     pub materials: HashMap<usize, (String, MaterialDefinition)>,
     pub next_material_index: usize,
     pub maps: HashMap<usize, RegionMap>,
@@ -44,7 +43,6 @@ impl Module {
         Self {
             name: "New Module".to_string(),
             description: String::new(),
-            filename: "TestModule.pyr".to_string(),
             materials,
             next_material_index: 2,
             maps: HashMap::new(),
@@ -63,6 +61,6 @@ impl Module {
     pub fn save(&self) {
         // We'll move to a concise format once the contents is stable
         let data = to_string_pretty(&self, PrettyConfig::default()).expect("Serialization fail");
-        std::fs::write(&self.filename, data).expect("Save fail");
+        //std::fs::write(&self.filename, data).expect("Save fail");
     }
 }

@@ -1,0 +1,10 @@
+Pbr(
+    display_color: (255, 255, 255),
+    albedo: "stone-block-wall_albedo.png",
+    normal_map: "",
+    occlusion: "",
+    metallic_roughness_texture: "",
+    emissive: "",
+    roughness: 0.089,
+    metallic: 0,
+)

@@ -1,0 +1,21 @@
+[
+    (
+        tag: "ApproachSlum",
+        steps: [
+            LogText(
+                text: "This passageway leads to the monster-infested slums.",
+                color: None,
+            ),
+        ],
+    ),
+    (
+        tag: "GotoSlum",
+        steps: [
+            ChangeMap(
+                index: 0,
+                x: 15,
+                y: 4,
+            ),
+        ],
+    ),
+]

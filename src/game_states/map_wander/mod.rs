@@ -97,7 +97,7 @@ pub fn resume_map_wander(
     mut triggers: EventWriter<TriggerEvent>,
 ) {
     commands.insert_resource(ScriptState::new());
-    let module = Module::load(startup.filename.as_ref().unwrap());
+    let module = startup.0.as_ref().unwrap().clone();
     let map_idx = module.starting_map_idx;
     let (start_x, start_y, start_z, facing, tile_x, tile_y) = {
         let (sx, sy, direction) = module.maps[&map_idx].starting_location;

@@ -63,8 +63,6 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
             .show(egui_context.ctx(), |ui| {
                 ui.label("Module Name");
                 ui.text_edit_singleline(&mut module_res.module.name);
-                ui.label("Module Filename");
-                ui.text_edit_singleline(&mut module_res.module.filename);
                 ui.label("Module Description");
                 ui.text_edit_multiline(&mut module_res.module.description);
                 ui.label("Event Tag - On Start");
@@ -337,9 +335,10 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
 }
 
 pub fn resume_module_editor(mut commands: Commands, startup: Res<ModuleSelector>) {
-    if let Some(filename) = &startup.filename {
+    if let Some(module) = &startup.0 {
         commands.insert_resource(ModuleResource {
-            module: Module::load(&filename),
+            //module: Module::load(&filename),
+            module: module.clone(),
             show_info: false,
             show_materials: false,
             current_material: 0,
