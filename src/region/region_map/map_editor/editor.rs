@@ -66,7 +66,7 @@ impl<'a> MapEditor<'a> {
     fn ui_content(
         &mut self,
         ui: &mut Ui,
-        mats: &HashMap<usize, (String, MaterialDefinition)>,
+        mats: &HashMap<usize, (String, MaterialDefinition, String)>,
     ) -> bevy_egui::egui::Response {
         let (response, painter) = ui.allocate_painter(
             ui.available_size_before_wrap(),

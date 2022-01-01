@@ -46,6 +46,7 @@ pub fn event_runner(
         if let Some(event) = wander
             .module
             .events
+            .events
             .iter()
             .find(|e| e.tag.eq(&stack_entry.tag))
         {

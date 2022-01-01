@@ -14,7 +14,8 @@ pub fn load_maps(path: &Path) -> Result<HashMap::<usize, RegionMap>> {
             return Err(Error::msg(format!("Map file does not exist: {:?}", map_path)));
         }
         let data = std::fs::read_to_string(map_path)?;
-        let map = ron::from_str(&data)?;
+        let mut map : RegionMap = ron::from_str(&data)?;
+        map.filename = path.join(&mi.filename).to_str().as_ref().unwrap().to_string().replace("\\", "/");
         maps.insert(mi.index, map);
     }
     Ok(maps)
@@ -27,7 +28,7 @@ pub struct MapIndexEntry {
 }
 
 #[derive(Clone, Serialize, Deserialize)]
-pub struct MapIndex(Vec<MapIndexEntry>);
+pub struct MapIndex(pub Vec<MapIndexEntry>);
 
 impl MapIndex {
     pub fn load(path: &Path) -> Result<Self> {

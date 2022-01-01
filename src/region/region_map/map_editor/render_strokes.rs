@@ -6,11 +6,11 @@ pub struct RenderStrokes<'a> {
     pub full: Stroke,
     pub none: Stroke,
     pub highlight: Stroke,
-    mats: &'a HashMap<usize, (String, MaterialDefinition)>,
+    mats: &'a HashMap<usize, (String, MaterialDefinition, String)>,
 }
 
 impl<'a> RenderStrokes<'a> {
-    pub fn default(mats: &'a HashMap<usize, (String, MaterialDefinition)>) -> Self {
+    pub fn default(mats: &'a HashMap<usize, (String, MaterialDefinition, String)>) -> Self {
         Self {
             full: Stroke::new(1.0, Color32::from_rgba_premultiplied(255, 255, 255, 255)),
             none: Stroke::new(1.0, Color32::from_rgba_premultiplied(32, 32, 32, 255)),
@@ -23,9 +23,9 @@ impl<'a> RenderStrokes<'a> {
         match wall.0 {
             RegionBoundaryType::Wall | RegionBoundaryType::Opening => {
                 let mat_idx = wall.1 as usize;
-                if let Some((_, MaterialDefinition::Color { r, g, b })) = self.mats.get(&mat_idx) {
+                if let Some((_, MaterialDefinition::Color { r, g, b }, _)) = self.mats.get(&mat_idx) {
                     Stroke::new(1.0, Color32::from_rgb(*r, *g, *b))
-                } else if let Some((_, MaterialDefinition::Pbr { display_color, .. })) =
+                } else if let Some((_, MaterialDefinition::Pbr { display_color, .. }, _)) =
                     self.mats.get(&mat_idx)
                 {
                     Stroke::new(
@@ -42,8 +42,8 @@ impl<'a> RenderStrokes<'a> {
 
     pub fn fill(&self, mat_idx: usize) -> Color32 {
         match self.mats.get(&mat_idx) {
-            Some((_, MaterialDefinition::Color { r, g, b })) => Color32::from_rgb(*r, *g, *b),
-            Some((_, MaterialDefinition::Pbr { display_color, .. })) => {
+            Some((_, MaterialDefinition::Color { r, g, b }, _)) => Color32::from_rgb(*r, *g, *b),
+            Some((_, MaterialDefinition::Pbr { display_color, .. }, _)) => {
                 Color32::from_rgb(display_color.0, display_color.1, display_color.2)
             }
             _ => Color32::from_rgb(64, 64, 64),

@@ -16,7 +16,7 @@ impl RegionAssets {
         map_idx: usize,
     ) -> Self {
         let mut mats = HashMap::new();
-        for (idx, (_name, mat)) in module.materials.iter() {
+        for (idx, (_name, mat, _)) in module.materials.iter() {
             match mat {
                 MaterialDefinition::Color { r, g, b } => {
                     let handle = materials.add(

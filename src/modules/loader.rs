@@ -1,6 +1,6 @@
 use std::path::Path;
 use anyhow::{Result, Error};
-use crate::{modules::{material_loader::load_materials, map_loader::load_maps, scripts_loader::load_scripts}, module::Module};
+use crate::{modules::{material_loader::load_materials, map_loader::load_maps, scripts_loader::load_scripts}, module::{Module, game_events::EventList}};
 use super::ModuleHeader;
 
 pub fn load_module(path: &Path) -> Result<Module> {
@@ -11,6 +11,7 @@ pub fn load_module(path: &Path) -> Result<Module> {
     if !path.is_dir() {
         return Err(Error::msg("Modules must be a directory"));
     }
+    let base_path = path.to_str().unwrap().to_string().replace("\\", "/");
 
     // Load the header
     let header_path = path.join("header.ron");
@@ -25,6 +26,10 @@ pub fn load_module(path: &Path) -> Result<Module> {
     check_directory(path, "scripts")?;
     let scripts_path = path.join("scripts");
     let scripts = load_scripts(&scripts_path)?;
+    let events = EventList { 
+        filename : "scripts.ron".to_string(),
+        events: scripts,
+    };
 
     // Materials directory
     check_directory(path, "materials")?;
@@ -37,13 +42,15 @@ pub fn load_module(path: &Path) -> Result<Module> {
     let module = Module {
         name : header.name,
         description: header.description,
+        author: header.author,
         module_start_event: header.module_start_event,
         starting_map_idx: header.starting_map_idx,
         materials,
         maps,
-        events: scripts,
+        events,
         next_material_index,
-        next_map_index
+        next_map_index,
+        base_path,
     };
 
     Ok(module)

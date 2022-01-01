@@ -3,10 +3,10 @@ use serde::{Serialize, Deserialize};
 use anyhow::{Result, Error};
 use crate::module::MaterialDefinition;
 
-pub fn load_materials(path: &Path) -> Result<HashMap::<usize, (String, MaterialDefinition)>> {
+pub fn load_materials(path: &Path) -> Result<HashMap::<usize, (String, MaterialDefinition, String)>> {
     let index_path = path.join("index.ron");
     let index = MaterialIndex::load(&index_path)?;
-    let mut materials = HashMap::<usize, (String, MaterialDefinition)>::new();
+    let mut materials = HashMap::<usize, (String, MaterialDefinition, String)>::new();
 
     for mi in index.0.iter() {
         let mat_path = path.join(&mi.filename);
@@ -15,7 +15,7 @@ pub fn load_materials(path: &Path) -> Result<HashMap::<usize, (String, MaterialD
         }
         let data = std::fs::read_to_string(mat_path)?;
         let material = ron::from_str(&data)?;
-        materials.insert(mi.index, (mi.name.clone(), material));
+        materials.insert(mi.index, (mi.name.clone(), material, mi.filename.clone()));
     }
 
     Ok(materials)

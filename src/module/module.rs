@@ -1,21 +1,21 @@
-use super::{game_events::GameEvent, MaterialDefinition};
+use super::{game_events::{GameEvent, EventList}, MaterialDefinition};
 use crate::region::region_map::RegionMap;
-use ron::ser::{to_string_pretty, PrettyConfig};
-use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 /// Represents an adventure module, bundling all assets together.
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Clone)]
 pub struct Module {
     pub name: String,
     pub description: String,
-    pub materials: HashMap<usize, (String, MaterialDefinition)>,
+    pub author: String,
+    pub materials: HashMap<usize, (String, MaterialDefinition, String)>,
     pub next_material_index: usize,
     pub maps: HashMap<usize, RegionMap>,
     pub next_map_index: usize,
-    pub events: Vec<GameEvent>,
+    pub events: EventList,
     pub module_start_event: String,
     pub starting_map_idx: usize,
+    pub base_path: String,
 }
 
 impl Module {
@@ -26,6 +26,7 @@ impl Module {
             (
                 "Green".to_string(),
                 MaterialDefinition::Color { r: 0, g: 255, b: 0 },
+                "green.ron".to_string(),
             ),
         );
         materials.insert(
@@ -37,30 +38,26 @@ impl Module {
                     g: 128,
                     b: 128,
                 },
+                "gray.ron".to_string()
             ),
         );
 
         Self {
             name: "New Module".to_string(),
             description: String::new(),
+            author: String::new(),
             materials,
             next_material_index: 2,
             maps: HashMap::new(),
             next_map_index: 0,
-            events: Vec::new(),
+            events: EventList{ filename: "scripts.ron".to_string(), events: Vec::new() },
             module_start_event: String::new(),
             starting_map_idx: 0,
+            base_path: "./modules/NewModule".to_string(),
         }
     }
 
-    pub fn load(filename: &str) -> Self {
-        let data = std::fs::read_to_string(filename).expect("Unable to read file");
-        ron::from_str(&data).expect("Deserialize fail")
-    }
-
     pub fn save(&self) {
-        // We'll move to a concise format once the contents is stable
-        let data = to_string_pretty(&self, PrettyConfig::default()).expect("Serialization fail");
-        //std::fs::write(&self.filename, data).expect("Save fail");
+        crate::modules::save_module(self).unwrap();
     }
 }

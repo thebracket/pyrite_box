@@ -2,7 +2,6 @@ use super::UiAssets;
 use crate::{AppState, modules::{list_available_modules, ModuleHeader}, module::Module};
 use bevy::{app::Events, prelude::*};
 use bevy_egui::{egui::{self, Color32}, egui::Pos2, EguiContext};
-use std::path::Path;
 
 pub struct MainMenuUi;
 

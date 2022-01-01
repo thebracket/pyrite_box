@@ -65,8 +65,12 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                 ui.text_edit_singleline(&mut module_res.module.name);
                 ui.label("Module Description");
                 ui.text_edit_multiline(&mut module_res.module.description);
+                ui.label("Author");
+                ui.text_edit_multiline(&mut module_res.module.author);
                 ui.label("Event Tag - On Start");
                 ui.text_edit_singleline(&mut module_res.module.module_start_event);
+                ui.label("Base Path");
+                ui.text_edit_singleline(&mut module_res.module.base_path);
             });
     }
 
@@ -83,7 +87,7 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                     module_res
                         .module
                         .materials
-                        .insert(id, (name, MaterialDefinition::Color { r: 0, g: 0, b: 0 }));
+                        .insert(id, (name, MaterialDefinition::Color { r: 0, g: 0, b: 0 }, "black.ron".to_string()));
                 }
                 ui.separator();
 
@@ -241,11 +245,11 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                         tag: module_res.new_event_tag.clone(),
                         steps: Vec::new(),
                     };
-                    module_res.module.events.push(new_event);
+                    module_res.module.events.events.push(new_event);
                 }
                 ui.separator();
                 let mut edit_event = None;
-                for e in module_res.module.events.iter() {
+                for e in module_res.module.events.events.iter() {
                     if ui.button(&e.tag).clicked() {
                         edit_event = Some(e.tag.clone());
                     }
@@ -259,7 +263,7 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
     if module_res.editing_event.is_some() {
         let tag = module_res.editing_event.clone().unwrap();
         let mut next_step = module_res.new_event_step;
-        if let Some(event) = module_res.module.events.iter_mut().find(|e| e.tag.eq(&tag)) {
+        if let Some(event) = module_res.module.events.events.iter_mut().find(|e| e.tag.eq(&tag)) {
             egui::Window::new(format!("Event: {}", tag))
                 .title_bar(true)
                 .resizable(true)

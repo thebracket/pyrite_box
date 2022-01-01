@@ -3,6 +3,12 @@ use serde::{Deserialize, Serialize};
 use crate::game_states::player_movement::PlayerMoveRequest;
 
 #[derive(Clone, Serialize, Deserialize)]
+pub struct EventList {
+    pub filename: String,
+    pub events: Vec<GameEvent>,
+}
+
+#[derive(Clone, Serialize, Deserialize)]
 pub struct GameEvent {
     pub tag: String,
     pub steps: Vec<GameEventStep>,

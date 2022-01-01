@@ -1,5 +1,6 @@
 (
     name: "Civilized Quiche",
+    filename: "./modules/TestModule/maps/civilized.ron",
     size: (16, 16),
     tiles: [
         (
