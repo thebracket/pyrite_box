@@ -1,7 +1,7 @@
-use std::path::Path;
-use std::fs;
-use anyhow::Result;
 use crate::module::game_events::GameEvent;
+use anyhow::Result;
+use std::fs;
+use std::path::Path;
 
 pub fn load_scripts(path: &Path) -> Result<Vec<GameEvent>> {
     let mut result = Vec::new();

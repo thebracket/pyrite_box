@@ -1,8 +1,12 @@
-use std::{path::Path, fs::create_dir};
-use anyhow::{Result, Error};
+use super::{
+    map_loader::{MapIndex, MapIndexEntry},
+    material_loader::{MaterialIndex, MaterialIndexEntry},
+    ModuleHeader,
+};
 use crate::module::Module;
-use super::{ModuleHeader, map_loader::{MapIndex, MapIndexEntry}, material_loader::{MaterialIndex, MaterialIndexEntry}};
+use anyhow::{Error, Result};
 use ron::ser::{to_string_pretty, PrettyConfig};
+use std::{fs::create_dir, path::Path};
 
 pub fn save_module(module: &Module) -> Result<()> {
     let base_path = Path::new(&module.base_path);
@@ -13,13 +17,15 @@ pub fn save_module(module: &Module) -> Result<()> {
         create_dir(base_path.join("scripts"))?;
     }
     if !base_path.is_dir() {
-        return Err(Error::msg("Module must be a directory. A file of the same name exists, so aborting."));
+        return Err(Error::msg(
+            "Module must be a directory. A file of the same name exists, so aborting.",
+        ));
     }
 
     // Save header
     let header_path = base_path.join("header.ron");
     let header = ModuleHeader {
-        name : module.name.clone(),
+        name: module.name.clone(),
         description: module.description.clone(),
         author: module.author.clone(),
         filename: None,
@@ -33,7 +39,7 @@ pub fn save_module(module: &Module) -> Result<()> {
     let maps_index_path = base_path.join("maps").join("index.ron");
     let mut map_index = MapIndex(Vec::new());
     for map in module.maps.iter() {
-        map_index.0.push(MapIndexEntry{
+        map_index.0.push(MapIndexEntry {
             index: *map.0,
             filename: map.1.filename.clone(),
         });
@@ -50,8 +56,8 @@ pub fn save_module(module: &Module) -> Result<()> {
     for mat in module.materials.iter() {
         mat_index.0.push(MaterialIndexEntry {
             index: *mat.0,
-            filename: mat.1.2.clone(),
-            name: mat.1.0.clone(),
+            filename: mat.1 .2.clone(),
+            name: mat.1 .0.clone(),
         });
     }
     let mat_index_ron = to_string_pretty(&mat_index, PrettyConfig::new())?;

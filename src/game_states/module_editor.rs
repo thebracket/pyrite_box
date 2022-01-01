@@ -84,10 +84,14 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                     let id = module_res.module.next_material_index;
                     module_res.module.next_material_index += 1;
                     let name = module_res.new_material_name.clone();
-                    module_res
-                        .module
-                        .materials
-                        .insert(id, (name, MaterialDefinition::Color { r: 0, g: 0, b: 0 }, "black.ron".to_string()));
+                    module_res.module.materials.insert(
+                        id,
+                        (
+                            name,
+                            MaterialDefinition::Color { r: 0, g: 0, b: 0 },
+                            "black.ron".to_string(),
+                        ),
+                    );
                 }
                 ui.separator();
 
@@ -263,7 +267,13 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
     if module_res.editing_event.is_some() {
         let tag = module_res.editing_event.clone().unwrap();
         let mut next_step = module_res.new_event_step;
-        if let Some(event) = module_res.module.events.events.iter_mut().find(|e| e.tag.eq(&tag)) {
+        if let Some(event) = module_res
+            .module
+            .events
+            .events
+            .iter_mut()
+            .find(|e| e.tag.eq(&tag))
+        {
             egui::Window::new(format!("Event: {}", tag))
                 .title_bar(true)
                 .resizable(true)
@@ -326,7 +336,7 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
                                 ui.label(format!("{} : Move Player", line));
                                 // TODO: Editor support
                             }
-                            GameEventStep::ChangeMap{..} => {
+                            GameEventStep::ChangeMap { .. } => {
                                 ui.label(format!("{} : Change Map", line));
                                 // TODO: Editor support
                             }

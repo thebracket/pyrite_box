@@ -1,4 +1,7 @@
-use super::{game_events::{GameEvent, EventList}, MaterialDefinition};
+use super::{
+    game_events::{EventList, GameEvent},
+    MaterialDefinition,
+};
 use crate::region::region_map::RegionMap;
 use std::collections::HashMap;
 
@@ -38,7 +41,7 @@ impl Module {
                     g: 128,
                     b: 128,
                 },
-                "gray.ron".to_string()
+                "gray.ron".to_string(),
             ),
         );
 
@@ -50,7 +53,10 @@ impl Module {
             next_material_index: 2,
             maps: HashMap::new(),
             next_map_index: 0,
-            events: EventList{ filename: "scripts.ron".to_string(), events: Vec::new() },
+            events: EventList {
+                filename: "scripts.ron".to_string(),
+                events: Vec::new(),
+            },
             module_start_event: String::new(),
             starting_map_idx: 0,
             base_path: "./modules/NewModule".to_string(),

@@ -1,7 +1,15 @@
 use super::UiAssets;
-use crate::{AppState, modules::{list_available_modules, ModuleHeader}, module::Module};
+use crate::{
+    module::Module,
+    modules::{list_available_modules, ModuleHeader},
+    AppState,
+};
 use bevy::{app::Events, prelude::*};
-use bevy_egui::{egui::{self, Color32}, egui::Pos2, EguiContext};
+use bevy_egui::{
+    egui::Pos2,
+    egui::{self, Color32},
+    EguiContext,
+};
 
 pub struct MainMenuUi;
 
@@ -24,7 +32,6 @@ pub fn main_menu(
         .fixed_pos(Pos2::new(200.0, 100.0))
         .fixed_size(bevy_egui::egui::Vec2::new(800.0, 500.0))
         .show(egui_context.ctx(), |ui| {
-
             ui.separator();
 
             for module in available_modules.modules.iter() {
@@ -33,13 +40,17 @@ pub fn main_menu(
                 ui.colored_label(Color32::GREEN, format!("Author: {}", &module.author));
                 ui.horizontal(|ui| {
                     if ui.button("Play").clicked() {
-                        selected_module.0 = Some(crate::modules::load_module(module.filename.as_ref().unwrap()).unwrap());
+                        selected_module.0 = Some(
+                            crate::modules::load_module(module.filename.as_ref().unwrap()).unwrap(),
+                        );
                         state
                             .set(AppState::MapWander)
                             .expect("Failed to change mode");
                     }
                     if ui.button("Edit").clicked() {
-                        selected_module.0 = Some(crate::modules::load_module(module.filename.as_ref().unwrap()).unwrap());
+                        selected_module.0 = Some(
+                            crate::modules::load_module(module.filename.as_ref().unwrap()).unwrap(),
+                        );
                         state
                             .set(AppState::ModuleEditor)
                             .expect("Failed to change mode");
@@ -77,10 +88,9 @@ pub fn resume_main_menu(mut commands: Commands, ui_assets: Res<UiAssets>) {
 
     // Find available modules
     commands.insert_resource(AvailableModules {
-        modules : list_available_modules()
+        modules: list_available_modules(),
     });
     commands.insert_resource(ModuleSelector(None));
-
 }
 
 pub fn exit_main_menu(mut commands: Commands, cleanup: Query<(Entity, &MainMenuUi)>) {

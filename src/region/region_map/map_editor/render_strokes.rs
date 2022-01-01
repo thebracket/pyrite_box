@@ -23,7 +23,8 @@ impl<'a> RenderStrokes<'a> {
         match wall.0 {
             RegionBoundaryType::Wall | RegionBoundaryType::Opening => {
                 let mat_idx = wall.1 as usize;
-                if let Some((_, MaterialDefinition::Color { r, g, b }, _)) = self.mats.get(&mat_idx) {
+                if let Some((_, MaterialDefinition::Color { r, g, b }, _)) = self.mats.get(&mat_idx)
+                {
                     Stroke::new(1.0, Color32::from_rgb(*r, *g, *b))
                 } else if let Some((_, MaterialDefinition::Pbr { display_color, .. }, _)) =
                     self.mats.get(&mat_idx)

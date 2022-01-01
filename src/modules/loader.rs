@@ -1,7 +1,12 @@
-use std::path::Path;
-use anyhow::{Result, Error};
-use crate::{modules::{material_loader::load_materials, map_loader::load_maps, scripts_loader::load_scripts}, module::{Module, game_events::EventList}};
 use super::ModuleHeader;
+use crate::{
+    module::{game_events::EventList, Module},
+    modules::{
+        map_loader::load_maps, material_loader::load_materials, scripts_loader::load_scripts,
+    },
+};
+use anyhow::{Error, Result};
+use std::path::Path;
 
 pub fn load_module(path: &Path) -> Result<Module> {
     println!("{:?}", path);
@@ -26,8 +31,8 @@ pub fn load_module(path: &Path) -> Result<Module> {
     check_directory(path, "scripts")?;
     let scripts_path = path.join("scripts");
     let scripts = load_scripts(&scripts_path)?;
-    let events = EventList { 
-        filename : "scripts.ron".to_string(),
+    let events = EventList {
+        filename: "scripts.ron".to_string(),
         events: scripts,
     };
 
@@ -36,11 +41,11 @@ pub fn load_module(path: &Path) -> Result<Module> {
     let mat_path = path.join("materials");
     let materials = load_materials(&mat_path)?;
 
-    let next_material_index = materials.keys().max().unwrap()+1;
-    let next_map_index = maps.keys().max().unwrap()+1;
+    let next_material_index = materials.keys().max().unwrap() + 1;
+    let next_map_index = maps.keys().max().unwrap() + 1;
 
     let module = Module {
-        name : header.name,
+        name: header.name,
         description: header.description,
         author: header.author,
         module_start_event: header.module_start_event,

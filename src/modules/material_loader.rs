@@ -1,9 +1,9 @@
-use std::{path::Path, collections::HashMap};
-use serde::{Serialize, Deserialize};
-use anyhow::{Result, Error};
 use crate::module::MaterialDefinition;
+use anyhow::{Error, Result};
+use serde::{Deserialize, Serialize};
+use std::{collections::HashMap, path::Path};
 
-pub fn load_materials(path: &Path) -> Result<HashMap::<usize, (String, MaterialDefinition, String)>> {
+pub fn load_materials(path: &Path) -> Result<HashMap<usize, (String, MaterialDefinition, String)>> {
     let index_path = path.join("index.ron");
     let index = MaterialIndex::load(&index_path)?;
     let mut materials = HashMap::<usize, (String, MaterialDefinition, String)>::new();
@@ -11,7 +11,10 @@ pub fn load_materials(path: &Path) -> Result<HashMap::<usize, (String, MaterialD
     for mi in index.0.iter() {
         let mat_path = path.join(&mi.filename);
         if !mat_path.exists() {
-            return Err(Error::msg(format!("Material file does not exist: {:?}", mat_path)));
+            return Err(Error::msg(format!(
+                "Material file does not exist: {:?}",
+                mat_path
+            )));
         }
         let data = std::fs::read_to_string(mat_path)?;
         let material = ron::from_str(&data)?;

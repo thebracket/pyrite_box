@@ -9,7 +9,7 @@ pub enum PlayerMoveRequest {
     Backwards,
     TurnLeft,
     TurnRight,
-    ChangeMap{index: usize, x: u32, y: u32},
+    ChangeMap { index: usize, x: u32, y: u32 },
 }
 
 pub fn player_move(
@@ -49,7 +49,7 @@ pub fn player_move(
                     wp.y += dy;
                     moved = true;
                 }
-                PlayerMoveRequest::ChangeMap{index, x, y} => {
+                PlayerMoveRequest::ChangeMap { index, x, y } => {
                     wp.x = *x as i32;
                     wp.y = *y as i32;
                     wander.map_idx = *index;

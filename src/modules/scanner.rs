@@ -1,14 +1,14 @@
 use anyhow::Result;
-use std::{fs, path::PathBuf};
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use std::path::Path;
+use std::{fs, path::PathBuf};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ModuleHeader {
-    pub name : String,
+    pub name: String,
     pub description: String,
-    pub author : String,
-    pub filename : Option<Box<Path>>,
+    pub author: String,
+    pub filename: Option<Box<Path>>,
     pub module_start_event: String,
     pub starting_map_idx: usize,
 }
