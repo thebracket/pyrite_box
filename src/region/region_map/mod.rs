@@ -10,6 +10,7 @@ use crate::module::Direction;
 pub struct RegionMap {
     pub name: String,
     pub filename: String,
+    pub index: usize,
     pub size: (u32, u32),
     pub tiles: Vec<RegionTile>,
     pub starting_location: (u32, u32, Direction),
@@ -49,6 +50,7 @@ impl RegionMap {
         let mut map = RegionMap {
             name: String::from("Test Map"),
             filename: String::from("new_map.ron"),
+            index: 0,
             size: (SIZE.0, SIZE.1),
             tiles: vec![
                 RegionTile {

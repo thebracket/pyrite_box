@@ -1,7 +1,4 @@
-use super::{
-    map_loader::{MapIndex, MapIndexEntry},
-    ModuleHeader, material_loader::MaterialFile,
-};
+use super::{material_loader::MaterialFile, ModuleHeader};
 use crate::module::Module;
 use anyhow::{Error, Result};
 use ron::ser::{to_string_pretty, PrettyConfig};
@@ -35,23 +32,15 @@ pub fn save_module(module: &Module) -> Result<()> {
     std::fs::write(header_path, header_ron)?;
 
     // Save maps
-    let maps_index_path = base_path.join("maps").join("index.ron");
-    let mut map_index = MapIndex(Vec::new());
-    for map in module.maps.iter() {
-        map_index.0.push(MapIndexEntry {
-            index: *map.0,
-            filename: map.1.filename.clone(),
-        });
-        let map_file = Path::new(&map.1.filename);
-        let map_ron = to_string_pretty(map.1, PrettyConfig::new())?;
-        std::fs::write(map_file, map_ron)?;
+    for (_index, map) in module.maps.iter() {
+        let filename = map.filename.clone();
+        let map_ron = to_string_pretty(map, PrettyConfig::new())?;
+        std::fs::write(Path::new(&filename), map_ron)?;
     }
-    let map_index_ron = to_string_pretty(&map_index, PrettyConfig::new())?;
-    std::fs::write(maps_index_path, map_index_ron)?;
 
     // Save materials
     for (index, (name, material, filename)) in module.materials.iter() {
-        let mf = MaterialFile{
+        let mf = MaterialFile {
             index: *index,
             name: name.clone(),
             material: material.clone(),

@@ -2,6 +2,7 @@
     name: "Quiche Slums",
     size: (16, 16),
     filename: "./modules/TestModule/maps/slums.ron",
+    index: 0,
     tiles: [
         (
             tile_type: Floor,

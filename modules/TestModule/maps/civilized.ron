@@ -2,6 +2,7 @@
     name: "Civilized Quiche",
     filename: "./modules/TestModule/maps/civilized.ron",
     size: (16, 16),
+    index: 1,
     tiles: [
         (
             tile_type: Floor,
