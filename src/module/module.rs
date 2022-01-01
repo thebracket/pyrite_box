@@ -1,7 +1,4 @@
-use super::{
-    game_events::{EventList, GameEvent},
-    MaterialDefinition,
-};
+use super::{game_events::EventList, MaterialDefinition};
 use crate::region::region_map::RegionMap;
 use std::collections::HashMap;
 
