@@ -1,7 +1,6 @@
 use super::{
     map_loader::{MapIndex, MapIndexEntry},
-    material_loader::{MaterialIndex, MaterialIndexEntry},
-    ModuleHeader,
+    ModuleHeader, material_loader::MaterialFile,
 };
 use crate::module::Module;
 use anyhow::{Error, Result};
@@ -51,20 +50,19 @@ pub fn save_module(module: &Module) -> Result<()> {
     std::fs::write(maps_index_path, map_index_ron)?;
 
     // Save materials
-    let mats_index_path = base_path.join("materials").join("index.ron");
-    let mut mat_index = MaterialIndex(Vec::new());
-    for mat in module.materials.iter() {
-        mat_index.0.push(MaterialIndexEntry {
-            index: *mat.0,
-            filename: mat.1 .2.clone(),
-            name: mat.1 .0.clone(),
-        });
+    for (index, (name, material, filename)) in module.materials.iter() {
+        let mf = MaterialFile{
+            index: *index,
+            name: name.clone(),
+            material: material.clone(),
+        };
+        let mat_ron = to_string_pretty(&mf, PrettyConfig::new())?;
+        std::fs::write(Path::new(filename), mat_ron)?;
     }
-    let mat_index_ron = to_string_pretty(&mat_index, PrettyConfig::new())?;
-    std::fs::write(mats_index_path, mat_index_ron)?;
 
     // Save scripts
     let scripts_path = base_path.join("scripts");
+    // TODO
 
     Ok(())
 }
