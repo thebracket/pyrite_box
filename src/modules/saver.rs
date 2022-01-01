@@ -50,8 +50,8 @@ pub fn save_module(module: &Module) -> Result<()> {
     }
 
     // Save scripts
-    let scripts_path = base_path.join("scripts");
-    // TODO
+    //let scripts_path = base_path.join("scripts");
+    // For now, scripts must be edited by hand
 
     Ok(())
 }
