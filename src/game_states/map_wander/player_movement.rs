@@ -73,7 +73,9 @@ pub fn player_move(
             if let Some(trigger) =
                 &wander.module.maps[&map_idx].tiles[new_location as usize].entry_trigger
             {
-                triggers.send(TriggerEvent(trigger.clone()));
+                if previous_location != new_location {
+                    triggers.send(TriggerEvent(trigger.clone()));
+                }
             }
             let (x, y) = wander.module.maps[&map_idx].tile_location(wp.x as f32, wp.y as f32);
             move_set.q0_mut().iter_mut().for_each(|(_, mut trans)| {
