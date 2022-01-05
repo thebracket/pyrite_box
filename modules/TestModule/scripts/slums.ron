@@ -8,10 +8,18 @@
                 text: "You have entered the monster-crawling slums of Quiche. Small, ugly things scurry from beneath your feet. In the distance, an alarm sounds.",
                 color: None,
             ),
-            CallEvent("CallTest"),
-            LogText(
-                text: "Original sequence continued. Yay, script stacks work.",
-                color: Some((0, 0, 255)),
+            InputBranch(
+                message: "Would you like to go for a walk?",
+                options: [
+                    (
+                        branch: "CallTest",
+                        message: "Yes, please!",
+                    ),
+                    (
+                        branch: "Abort",
+                        message: "No, thank you."
+                    )
+                ]
             ),
         ],
     ),
@@ -61,5 +69,9 @@
                 y: 4,
             ),
         ],
+    ),
+    (
+        tag: "Abort",
+        steps: [],
     ),
 ]

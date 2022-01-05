@@ -111,6 +111,9 @@ pub fn event_editor(egui_context: &EguiContext, module_res: &mut ModuleResource)
                                 ui.label(format!("{} : Change Map", line));
                                 // TODO: Editor support
                             }
+                            GameEventStep::InputBranch { .. } => {
+                                ui.label("Input branch");
+                            }
                         }
                     }
                 });

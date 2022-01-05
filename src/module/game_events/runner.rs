@@ -2,7 +2,7 @@ use super::GameEventStep;
 use crate::game_states::{
     gamelog::{GameLog, DEFAULT_TEXT_COLOR},
     player_movement::PlayerMoveRequest,
-    WanderResource,
+    WanderInput, WanderResource,
 };
 use bevy::prelude::*;
 use bevy_egui::egui::Color32;
@@ -32,6 +32,11 @@ pub fn event_runner(
     if log.blocking {
         return;
     }
+    if let Some(wi) = &wander.script_input {
+        if wi.blocked {
+            return;
+        }
+    }
     if let Some(timer) = &mut state.blocking_delay {
         timer.tick(time.delta());
         if !timer.finished() {
@@ -42,6 +47,7 @@ pub fn event_runner(
     // Walk the stack
     let mut new_stack_entries = Vec::new();
     let mut new_timer = None;
+    let mut clear_script_input = false;
     if let Some(stack_entry) = state.stack.pop() {
         if let Some(event) = wander
             .module
@@ -50,6 +56,17 @@ pub fn event_runner(
             .iter()
             .find(|e| e.tag.eq(&stack_entry.tag))
         {
+            if let Some(wi) = &wander.script_input {
+                if let Some(idx) = wi.result {
+                    let tag = &wi.options[idx].branch;
+                    new_stack_entries.push(ScriptPoint {
+                        tag: tag.clone(),
+                        line: 0,
+                    });
+                    clear_script_input = true;
+                }
+            }
+
             if stack_entry.line < event.steps.len() {
                 // Put the next event into the stack
                 new_stack_entries.push(ScriptPoint {
@@ -92,15 +109,27 @@ pub fn event_runner(
                             line: 0,
                         })
                     }
+                    GameEventStep::InputBranch { message, options } => {
+                        wander.script_input = Some(WanderInput {
+                            title: message.clone(),
+                            blocked: true,
+                            options: options.clone(),
+                            result: None,
+                        })
+                    }
                 }
             } else {
                 // We reached the end of the event without a jump
-                return;
+                //return;
             }
         } else {
             // The tag didn't exist
             println!("Script error: {} not found", stack_entry.tag);
             return;
+        }
+
+        if clear_script_input {
+            wander.script_input = None;
         }
 
         new_stack_entries

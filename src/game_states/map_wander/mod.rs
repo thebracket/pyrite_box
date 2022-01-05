@@ -1,6 +1,7 @@
 use self::gamelog::GameLog;
 use self::player_movement::PlayerMoveRequest;
 use super::ModuleSelector;
+use crate::module::game_events::InputChoice;
 use crate::module::game_events::ScriptState;
 use crate::module::game_events::TriggerEvent;
 use crate::module::Direction;
@@ -14,6 +15,7 @@ use bevy_egui::{
 };
 pub mod gamelog;
 pub mod player_movement;
+use bevy_egui::egui;
 
 pub struct MapWander {}
 pub struct WanderGeometry {}
@@ -32,6 +34,14 @@ pub struct WanderResource {
     pub editor_settings: MapEditorSettings,
     pub show_editor: bool,
     pub allow_movement: bool,
+    pub script_input: Option<WanderInput>,
+}
+
+pub struct WanderInput {
+    pub title: String,
+    pub blocked: bool,
+    pub options: Vec<InputChoice>,
+    pub result: Option<usize>,
 }
 
 pub fn map_wander(
@@ -41,6 +51,21 @@ pub fn map_wander(
     mut wander: ResMut<WanderResource>,
     mut move_request: EventWriter<PlayerMoveRequest>,
 ) {
+    if let Some(wi) = &mut wander.script_input {
+        egui::Window::new(&wi.title)
+            .title_bar(true)
+            .fixed_pos(Pos2::new(200.0, 200.0))
+            .auto_sized()
+            .show(egui_context.ctx(), |ui| {
+                for (i, opt) in wi.options.iter().enumerate() {
+                    if ui.button(&opt.message).clicked() {
+                        wi.result = Some(i);
+                        wi.blocked = false;
+                    }
+                }
+            });
+    }
+
     player_query.iter().for_each(|wp| {
         if wander.allow_movement {
             if keyboard_input.just_pressed(KeyCode::Right) {
@@ -185,6 +210,7 @@ pub fn resume_map_wander(
         editor_settings: MapEditorSettings::default(),
         show_editor: false,
         allow_movement: true,
+        script_input: None,
     });
 
     commands.insert_resource(GameLog::new());

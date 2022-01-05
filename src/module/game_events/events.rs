@@ -15,6 +15,12 @@ pub struct GameEvent {
 }
 
 #[derive(Clone, Serialize, Deserialize)]
+pub struct InputChoice {
+    pub branch: String,
+    pub message: String,
+}
+
+#[derive(Clone, Serialize, Deserialize)]
 pub enum GameEventStep {
     LogText {
         text: String,
@@ -24,6 +30,10 @@ pub enum GameEventStep {
     PauseMs(u64),
     CallEvent(String),
     MovePlayer(PlayerMoveRequest, u64),
+    InputBranch {
+        message: String,
+        options: Vec<InputChoice>,
+    },
     ChangeMap {
         index: usize,
         x: u32,
