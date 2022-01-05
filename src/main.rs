@@ -20,7 +20,7 @@ pub enum AppState {
 }
 
 fn main() {
-    App::build()
+    App::new()
         .insert_resource(WindowDescriptor {
             title: "Pyrite Box".to_string(),
             width: 1280.0,
@@ -35,53 +35,53 @@ fn main() {
         .add_plugins(DefaultPlugins)
         .add_plugin(EguiPlugin)
         .add_plugin(FrameTimeDiagnosticsPlugin::default())
-        .add_startup_system(setup_fps.system())
-        .add_startup_system(setup_ui.system())
-        .add_system(fps_update_system.system())
+        .add_startup_system(setup_fps)
+        .add_startup_system(setup_ui)
+        .add_system(fps_update_system)
         // Loading State
         .add_system_set(
-            SystemSet::on_update(AppState::Loading).with_system(loading_screen.system()),
+            SystemSet::on_update(AppState::Loading).with_system(loading_screen),
         )
         .add_system_set(
-            SystemSet::on_enter(AppState::Loading).with_system(resume_loading_screen.system()),
+            SystemSet::on_enter(AppState::Loading).with_system(resume_loading_screen),
         )
-        .add_system_set(SystemSet::on_exit(AppState::Loading).with_system(exit_loading.system()))
+        .add_system_set(SystemSet::on_exit(AppState::Loading).with_system(exit_loading))
         // Main Menu State
-        .add_system_set(SystemSet::on_update(AppState::MainMenu).with_system(main_menu.system()))
+        .add_system_set(SystemSet::on_update(AppState::MainMenu).with_system(main_menu))
         .add_system_set(
-            SystemSet::on_enter(AppState::MainMenu).with_system(resume_main_menu.system()),
+            SystemSet::on_enter(AppState::MainMenu).with_system(resume_main_menu),
         )
-        .add_system_set(SystemSet::on_exit(AppState::MainMenu).with_system(exit_main_menu.system()))
+        .add_system_set(SystemSet::on_exit(AppState::MainMenu).with_system(exit_main_menu))
         // Module Editor
         .add_system_set(
-            SystemSet::on_update(AppState::ModuleEditor).with_system(module_editor.system()), //.with_system(texture_mode_system.system())
+            SystemSet::on_update(AppState::ModuleEditor).with_system(module_editor), //.with_system(texture_mode_system)
         )
         .add_system_set(
-            SystemSet::on_enter(AppState::ModuleEditor).with_system(resume_module_editor.system()),
+            SystemSet::on_enter(AppState::ModuleEditor).with_system(resume_module_editor),
         )
         .add_system_set(
-            SystemSet::on_exit(AppState::ModuleEditor).with_system(exit_module_editor.system()),
+            SystemSet::on_exit(AppState::ModuleEditor).with_system(exit_module_editor),
         )
         // Map Wander
-        .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(map_wander.system()))
+        .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(map_wander))
         .add_system_set(
-            SystemSet::on_update(AppState::MapWander).with_system(map_wander_rebuild.system()),
+            SystemSet::on_update(AppState::MapWander).with_system(map_wander_rebuild),
         )
         .add_system_set(
-            SystemSet::on_update(AppState::MapWander).with_system(display_game_log.system()),
+            SystemSet::on_update(AppState::MapWander).with_system(display_game_log),
         )
         .add_system_set(
-            SystemSet::on_update(AppState::MapWander).with_system(event_triggers.system()),
+            SystemSet::on_update(AppState::MapWander).with_system(event_triggers),
         )
         .add_system_set(
-            SystemSet::on_update(AppState::MapWander).with_system(event_runner.system()),
+            SystemSet::on_update(AppState::MapWander).with_system(event_runner),
         )
-        .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(player_move.system()))
+        .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(player_move))
         .add_system_set(
-            SystemSet::on_enter(AppState::MapWander).with_system(resume_map_wander.system()),
+            SystemSet::on_enter(AppState::MapWander).with_system(resume_map_wander),
         )
         .add_system_set(
-            SystemSet::on_exit(AppState::MapWander).with_system(exit_map_wander.system()),
+            SystemSet::on_exit(AppState::MapWander).with_system(exit_map_wander),
         )
         .run();
 }

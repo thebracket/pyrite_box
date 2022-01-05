@@ -4,6 +4,7 @@ use bevy::{
 };
 
 // A unit struct to help identify the FPS UI component, since there may be many Text components
+#[derive(Component)]
 pub struct FpsText;
 
 pub fn setup_fps(mut commands: Commands, asset_server: Res<AssetServer>) {

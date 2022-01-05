@@ -2,7 +2,7 @@
 name = "pyrite_box"
 version = "0.1.0"
 edition = "2018"
-
+resolver = "2"
 #[profile.dev]
 #opt-level = 1
 
@@ -13,3 +13,7 @@ bracket-random = "0.8"
 serde = "1.0"
 ron = "0.7"
 anyhow = "1.0.51"
+
+[patch.crates-io]
+bevy = { git = "https://github.com/bevyengine/bevy.git", branch = "main" }
+bevy_egui = { git = "https://github.com/jakobhellermann/bevy_egui.git", branch = "bevy-main" }

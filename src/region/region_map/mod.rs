@@ -222,22 +222,22 @@ impl RegionMap {
         }
 
         for (material_id, bucket) in bucket.materials.drain() {
-            let mut mesh = Mesh::new(bevy::render::pipeline::PrimitiveTopology::TriangleList);
+            let mut mesh = Mesh::new(bevy::render::render_resource::PrimitiveTopology::TriangleList);
             mesh.set_attribute(
                 Mesh::ATTRIBUTE_POSITION,
-                VertexAttributeValues::Float3(bucket.vertices),
+                VertexAttributeValues::Float32x3(bucket.vertices),
             );
             mesh.set_attribute(
                 Mesh::ATTRIBUTE_NORMAL,
-                VertexAttributeValues::Float3(bucket.normals),
+                VertexAttributeValues::Float32x3(bucket.normals),
             );
             mesh.set_attribute(
                 Mesh::ATTRIBUTE_UV_0,
-                VertexAttributeValues::Float2(bucket.uv),
+                VertexAttributeValues::Float32x2(bucket.uv),
             );
             mesh.set_attribute(
                 Mesh::ATTRIBUTE_TANGENT,
-                VertexAttributeValues::Float3(bucket.tangents),
+                VertexAttributeValues::Float32x3(bucket.tangents),
             );
 
             result.push((material_id, meshes.add(mesh)));

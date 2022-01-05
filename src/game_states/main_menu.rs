@@ -4,13 +4,14 @@ use crate::{
     modules::{list_available_modules, ModuleHeader},
     AppState,
 };
-use bevy::{app::Events, prelude::*};
+use bevy::{app::Events, prelude::*, render::render_resource::Texture};
 use bevy_egui::{
     egui::Pos2,
     egui::{self, Color32},
     EguiContext,
 };
 
+#[derive(Component)]
 pub struct MainMenuUi;
 
 pub struct AvailableModules {
@@ -80,7 +81,8 @@ pub fn resume_main_menu(mut commands: Commands, ui_assets: Res<UiAssets>) {
         .spawn_bundle(OrthographicCameraBundle::new_2d())
         .insert(MainMenuUi {});
     commands
-        .spawn_bundle(SpriteBundle {
+        .spawn_bundle(
+            SpriteBundle {
             material: ui_assets.title_mat.clone(),
             ..Default::default()
         })

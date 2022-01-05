@@ -17,11 +17,16 @@ pub mod gamelog;
 pub mod player_movement;
 use bevy_egui::egui;
 
+#[derive(Component)]
 pub struct MapWander {}
+#[derive(Component)]
 pub struct WanderGeometry {}
+#[derive(Component)]
 pub struct WanderCamera {}
+#[derive(Component)]
 pub struct WanderLight {}
 
+#[derive(Component)]
 pub struct WanderingPlayer {
     pub x: i32,
     pub y: i32,
@@ -170,13 +175,15 @@ pub fn resume_map_wander(
 
     // light
     commands
-        .spawn_bundle(LightBundle {
-            light: Light {
+        .spawn_bundle(PointLightBundle {
+            point_light: PointLight {
                 color: Color::rgb(1.0, 1.0, 1.0),
-                depth: 0.1..100.0,
-                fov: f32::to_radians(60.0),
+                // depth: 0.1..100.0,
+                // fov: f32::to_radians(60.0),
                 intensity: 200.0,
                 range: 100.0,
+                radius: f32::to_radians(60.0),
+                ..Default::default()
             },
             transform: Transform::from_xyz(start_x, start_y, start_z),
             ..Default::default()
