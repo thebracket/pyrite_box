@@ -109,7 +109,12 @@ pub fn event_runner(
                             line: 0,
                         })
                     }
-                    GameEventStep::InputBranch { message, title, portrait, options } => {
+                    GameEventStep::InputBranch {
+                        message,
+                        title,
+                        portrait,
+                        options,
+                    } => {
                         wander.script_input = Some(WanderInput {
                             title: title.clone(),
                             message: message.clone(),

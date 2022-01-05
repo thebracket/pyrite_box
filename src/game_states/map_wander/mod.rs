@@ -146,7 +146,14 @@ pub fn resume_map_wander(
             sy,
         )
     };
-    let assets = RegionAssets::new(&mut materials, &mut meshes, &asset_server, &module, map_idx, &mut egui_context);
+    let assets = RegionAssets::new(
+        &mut materials,
+        &mut meshes,
+        &asset_server,
+        &module,
+        map_idx,
+        &mut egui_context,
+    );
     for m in assets.meshes.iter() {
         // TODO: m.0 tells you what material to use
         commands

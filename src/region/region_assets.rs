@@ -1,6 +1,6 @@
 use crate::module::{MaterialDefinition, Module};
 use bevy::prelude::*;
-use bevy_egui::{EguiContext, egui::TextureId};
+use bevy_egui::{egui::TextureId, EguiContext};
 use std::collections::HashMap;
 
 pub struct RegionAssets {
@@ -78,7 +78,7 @@ impl RegionAssets {
 
         // Load the UI images
         let mut ui_images = HashMap::new();
-        for (i,(key, file)) in module.ui_images.iter().enumerate() {
+        for (i, (key, file)) in module.ui_images.iter().enumerate() {
             println!("Loading {} {}", key, file);
             let image_id = asset_server.load(file.as_str());
             egui.set_egui_texture(i as u64, image_id);
