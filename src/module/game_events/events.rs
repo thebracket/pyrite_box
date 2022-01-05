@@ -31,7 +31,9 @@ pub enum GameEventStep {
     CallEvent(String),
     MovePlayer(PlayerMoveRequest, u64),
     InputBranch {
+        title: String,
         message: String,
+        portrait: Option<String>,
         options: Vec<InputChoice>,
     },
     ChangeMap {

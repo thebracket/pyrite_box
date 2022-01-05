@@ -56,6 +56,7 @@ pub fn load_module(path: &Path) -> Result<Module> {
         next_material_index,
         next_map_index,
         base_path,
+        ui_images: header.ui_images,
     };
 
     Ok(module)

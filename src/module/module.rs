@@ -1,6 +1,6 @@
 use super::{game_events::EventList, MaterialDefinition};
 use crate::region::region_map::RegionMap;
-use std::collections::HashMap;
+use std::collections::{HashMap};
 
 /// Represents an adventure module, bundling all assets together.
 #[derive(Clone)]
@@ -16,6 +16,7 @@ pub struct Module {
     pub module_start_event: String,
     pub starting_map_idx: usize,
     pub base_path: String,
+    pub ui_images: Vec<(String, String)>,
 }
 
 impl Module {
@@ -57,6 +58,7 @@ impl Module {
             module_start_event: String::new(),
             starting_map_idx: 0,
             base_path: "./modules/NewModule".to_string(),
+            ui_images: Vec::new(),
         }
     }
 

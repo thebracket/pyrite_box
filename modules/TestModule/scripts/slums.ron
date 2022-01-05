@@ -9,7 +9,9 @@
                 color: None,
             ),
             InputBranch(
-                message: "Would you like to go for a walk?",
+                title: "A well-dressed gentleman approaches you",
+                message: "Well met! I am Rolf. Would you like to go for a walk?",
+                portrait: Some("Rolf"),
                 options: [
                     (
                         branch: "CallTest",

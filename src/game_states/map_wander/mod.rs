@@ -39,9 +39,11 @@ pub struct WanderResource {
 
 pub struct WanderInput {
     pub title: String,
+    pub message: String,
     pub blocked: bool,
     pub options: Vec<InputChoice>,
     pub result: Option<usize>,
+    pub portrait: Option<String>,
 }
 
 pub fn map_wander(
@@ -50,6 +52,7 @@ pub fn map_wander(
     egui_context: ResMut<EguiContext>,
     mut wander: ResMut<WanderResource>,
     mut move_request: EventWriter<PlayerMoveRequest>,
+    assets: Res<RegionAssets>,
 ) {
     if let Some(wi) = &mut wander.script_input {
         egui::Window::new(&wi.title)
@@ -57,6 +60,12 @@ pub fn map_wander(
             .fixed_pos(Pos2::new(200.0, 200.0))
             .auto_sized()
             .show(egui_context.ctx(), |ui| {
+                if let Some(portrait_name) = &wi.portrait {
+                    if let Some(id) = assets.ui_images.get(portrait_name) {
+                        ui.image(*id, egui::Vec2::new(300.0, 300.0));
+                    }
+                }
+                ui.label(&wi.message);
                 for (i, opt) in wi.options.iter().enumerate() {
                     if ui.button(&opt.message).clicked() {
                         wi.result = Some(i);
@@ -120,9 +129,10 @@ pub fn resume_map_wander(
     asset_server: Res<AssetServer>,
     startup: Res<ModuleSelector>,
     mut triggers: EventWriter<TriggerEvent>,
+    mut egui_context: ResMut<EguiContext>,
 ) {
     commands.insert_resource(ScriptState::new());
-    let module = startup.0.as_ref().unwrap().clone();
+    let mut module = startup.0.as_ref().unwrap().clone();
     let map_idx = module.starting_map_idx;
     let (start_x, start_y, start_z, facing, tile_x, tile_y) = {
         let (sx, sy, direction) = module.maps[&map_idx].starting_location;
@@ -136,7 +146,7 @@ pub fn resume_map_wander(
             sy,
         )
     };
-    let assets = RegionAssets::new(&mut materials, &mut meshes, &asset_server, &module, map_idx);
+    let assets = RegionAssets::new(&mut materials, &mut meshes, &asset_server, &module, map_idx, &mut egui_context);
     for m in assets.meshes.iter() {
         // TODO: m.0 tells you what material to use
         commands

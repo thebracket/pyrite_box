@@ -11,6 +11,7 @@ pub struct ModuleHeader {
     pub filename: Option<Box<Path>>,
     pub module_start_event: String,
     pub starting_map_idx: usize,
+    pub ui_images: Vec<(String, String)>,
 }
 
 impl ModuleHeader {
