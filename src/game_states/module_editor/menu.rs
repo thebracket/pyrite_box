@@ -5,7 +5,7 @@ use bevy_egui::EguiContext;
 pub fn editor_menu(egui_context: &EguiContext, module_res: &mut ModuleResource) {
     egui::TopBottomPanel::top("menu_bar").show(egui_context.ctx(), |ui| {
         egui::menu::bar(ui, |ui| {
-            egui::menu::menu(ui, "Module Editor", |ui| {
+            ui.menu_button("Module Editor", |ui| {
                 if ui.button("Module Info").clicked() {
                     module_res.show_info = !module_res.show_info;
                 }

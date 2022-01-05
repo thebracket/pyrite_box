@@ -75,7 +75,8 @@ impl RegionMap {
         };
 
         for x in 0..SIZE.0 {
-            map.tiles[((0 * SIZE.0) + x) as usize].boundaries
+            // map.tiles[((0 * SIZE.0) + x) as usize].boundaries
+            map.tiles[(0 + x) as usize].boundaries
                 [Direction::North.to_exit_index() as usize]
                 .0 = RegionBoundaryType::Wall;
             map.tiles[(((SIZE.1 - 1) * SIZE.0) + x) as usize].boundaries

@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use bevy_egui::{
-    egui::{FontDefinitions, FontFamily},
+    egui::{FontDefinitions, FontFamily, FontData},
     EguiContext,
 };
 
@@ -20,10 +20,10 @@ pub fn setup_ui(
     };
     fd.font_data.insert(
         "Olde".to_owned(),
-        std::borrow::Cow::Borrowed(include_bytes!(
+        FontData::from_static(include_bytes!(
             "../../assets/fonts/SdThoseGoodTimesOfLife-B1An.ttf"
-        )),
-    );
+        ),
+    ));
     let ff = fd
         .fonts_for_family
         .get_mut(&FontFamily::Proportional)

@@ -186,7 +186,7 @@ pub fn resume_map_wander(
 
     // camera
     let perspective = PerspectiveProjection {
-        fov: 1.5708,
+        fov: std::f32::consts::FRAC_PI_2, //1.5708,
         aspect_ratio: 1280.0 / 1024.0,
         near: 0.1,
         far: 1000.0,
