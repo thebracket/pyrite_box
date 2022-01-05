@@ -78,9 +78,9 @@ pub fn event_runner(
                 match &event.steps[stack_entry.line] {
                     GameEventStep::LogText { text, color } => {
                         if let Some(color) = color {
-                            log.add_line(&text, Color32::from_rgb(color.0, color.1, color.2));
+                            log.add_line(text, Color32::from_rgb(color.0, color.1, color.2));
                         } else {
-                            log.add_line(&text, DEFAULT_TEXT_COLOR);
+                            log.add_line(text, DEFAULT_TEXT_COLOR);
                         }
                     }
                     GameEventStep::ClearLog => {

@@ -1,7 +1,7 @@
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
+use std::fs;
 use std::path::Path;
-use std::{fs, path::PathBuf};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ModuleHeader {
@@ -15,33 +15,38 @@ pub struct ModuleHeader {
 }
 
 impl ModuleHeader {
-    pub fn load(path: &PathBuf) -> Result<Self> {
+    pub fn load(path: &Path) -> Result<Self> {
         let data = std::fs::read_to_string(path)?;
         Ok(ron::from_str(&data)?)
     }
 }
 
 pub fn list_available_modules() -> Vec<ModuleHeader> {
-    let mut result = Vec::new();
-
     let paths = fs::read_dir("./modules").unwrap();
-    for path in paths {
-        if let Ok(path) = path {
-            if path.path().is_dir() {
-                let header = path.path().join("header.ron");
-                if header.exists() {
-                    let header_data = ModuleHeader::load(&header);
-                    if let Ok(mut header_unwrap) = header_data {
-                        header_unwrap.filename = Some(path.path().into_boxed_path());
-                        result.push(header_unwrap);
+    paths
+        .flatten()
+        .flat_map(|path| {
+            {
+                if path.path().is_dir() {
+                    let header = path.path().join("header.ron");
+                    if header.exists() {
+                        let header_data = ModuleHeader::load(&header);
+                        if let Ok(mut header_unwrap) = header_data {
+                            header_unwrap.filename = Some(path.path().into_boxed_path());
+                            Some(header_unwrap)
+                        } else {
+                            println!("While loading {:?}:", path.path());
+                            println!("{:#?}", header_data);
+                            //FIXME: is this an error?
+                            None
+                        }
                     } else {
-                        println!("While loading {:?}:", path.path());
-                        println!("{:#?}", header_data);
+                        None
                     }
+                } else {
+                    None
                 }
             }
-        }
-    }
-
-    result
+        })
+        .collect()
 }

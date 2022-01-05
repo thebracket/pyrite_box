@@ -74,7 +74,7 @@ impl<'a> MapEditor<'a> {
         );
 
         let strokes = RenderStrokes::default(mats);
-        let scale = Scaling::new(&response, &self.map);
+        let scale = Scaling::new(&response, self.map);
 
         self.draw_base_map(&painter, &scale, &strokes);
 
@@ -206,7 +206,7 @@ impl<'a> MapEditor<'a> {
 
     fn start_interact(&mut self, scale: &Scaling, pointer_pos: Pos2, response: &Response) {
         if response.clicked_by(PointerButton::Primary) {
-            let pos = MapWallInteraction::new(scale, pointer_pos, &self.map);
+            let pos = MapWallInteraction::new(scale, pointer_pos, self.map);
             if self.map.starting_location.0 == pos.tile_x
                 && self.map.starting_location.1 == pos.tile_y
             {
@@ -220,7 +220,7 @@ impl<'a> MapEditor<'a> {
 
     fn trigger_interact(&mut self, scale: &Scaling, pointer_pos: Pos2, response: &Response) {
         if response.clicked_by(PointerButton::Primary) {
-            let pos = MapWallInteraction::new(scale, pointer_pos, &self.map);
+            let pos = MapWallInteraction::new(scale, pointer_pos, self.map);
             let tile_idx = ((self.map.size.0 * pos.tile_y) + pos.tile_x) as usize;
             self.map.tiles[tile_idx].entry_trigger = Some("NewTrigger".to_string());
         }
@@ -228,14 +228,14 @@ impl<'a> MapEditor<'a> {
 
     fn floor_interact(&mut self, scale: &Scaling, pointer_pos: Pos2, response: &Response) {
         if response.clicked_by(PointerButton::Primary) {
-            let pos = MapWallInteraction::new(scale, pointer_pos, &self.map);
+            let pos = MapWallInteraction::new(scale, pointer_pos, self.map);
             let tile_idx = ((self.map.size.0 * pos.tile_y) + pos.tile_x) as usize;
             self.map.tiles[tile_idx].floor_material = self.settings.material as u32;
             self.map.tiles[tile_idx].tile_type = RegionTileType::Floor;
             self.map.needs_rebuild = true;
         }
         if response.clicked_by(PointerButton::Secondary) {
-            let pos = MapWallInteraction::new(scale, pointer_pos, &self.map);
+            let pos = MapWallInteraction::new(scale, pointer_pos, self.map);
             let tile_idx = ((self.map.size.0 * pos.tile_y) + pos.tile_x) as usize;
             self.map.tiles[tile_idx].tile_type = RegionTileType::Empty;
             self.map.needs_rebuild = true;
@@ -244,14 +244,14 @@ impl<'a> MapEditor<'a> {
 
     fn ceiling_interact(&mut self, scale: &Scaling, pointer_pos: Pos2, response: &Response) {
         if response.clicked_by(PointerButton::Primary) {
-            let pos = MapWallInteraction::new(scale, pointer_pos, &self.map);
+            let pos = MapWallInteraction::new(scale, pointer_pos, self.map);
             let tile_idx = ((self.map.size.0 * pos.tile_y) + pos.tile_x) as usize;
             self.map.tiles[tile_idx].ceiling_material = self.settings.material as u32;
             self.map.tiles[tile_idx].has_ceiling = true;
             self.map.needs_rebuild = true;
         }
         if response.clicked_by(PointerButton::Secondary) {
-            let pos = MapWallInteraction::new(scale, pointer_pos, &self.map);
+            let pos = MapWallInteraction::new(scale, pointer_pos, self.map);
             let tile_idx = ((self.map.size.0 * pos.tile_y) + pos.tile_x) as usize;
             self.map.tiles[tile_idx].has_ceiling = false;
             self.map.needs_rebuild = true;
@@ -266,10 +266,10 @@ impl<'a> MapEditor<'a> {
         painter: &Painter,
         response: &Response,
     ) {
-        let wall = MapWallInteraction::new(scale, pointer_pos, &self.map);
+        let wall = MapWallInteraction::new(scale, pointer_pos, self.map);
         if let Some(direction) = wall.selected_wall {
             painter.line_segment(
-                wall_line(direction, wall.tile_x, wall.tile_y, &scale),
+                wall_line(direction, wall.tile_x, wall.tile_y, scale),
                 strokes.highlight,
             );
             self.wall_interact_click(

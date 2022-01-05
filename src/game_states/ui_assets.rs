@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use bevy_egui::{
-    egui::{FontDefinitions, FontFamily, FontData},
+    egui::{FontData, FontDefinitions, FontFamily},
     EguiContext,
 };
 
@@ -22,8 +22,8 @@ pub fn setup_ui(
         "Olde".to_owned(),
         FontData::from_static(include_bytes!(
             "../../assets/fonts/SdThoseGoodTimesOfLife-B1An.ttf"
-        ),
-    ));
+        )),
+    );
     let ff = fd
         .fonts_for_family
         .get_mut(&FontFamily::Proportional)
@@ -33,8 +33,5 @@ pub fn setup_ui(
     egui_context.ctx().set_fonts(fd);
     let title = asset_server.load("images/pyrite.png");
     let title_mat = materials.add(title.clone().into());
-    commands.insert_resource(UiAssets {
-        title: title.clone(),
-        title_mat: title_mat.clone(),
-    });
+    commands.insert_resource(UiAssets { title, title_mat });
 }
