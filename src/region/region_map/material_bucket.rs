@@ -26,10 +26,7 @@ impl MaterialBucket {
         match feature {
             FeatureType::Floor => {
                 add_floor_geometry(
-                    &mut bucket.vertices,
-                    &mut bucket.normals,
-                    &mut bucket.uv,
-                    &mut bucket.tangents,
+                    bucket,
                     x,
                     y,
                     0.0,

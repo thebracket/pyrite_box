@@ -4,15 +4,9 @@ use bevy_egui::{
     EguiContext,
 };
 
-pub struct UiAssets {
-    pub title: Handle<Texture>,
-    pub title_mat: Handle<ColorMaterial>,
-}
-
 pub fn setup_ui(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
-    mut materials: ResMut<Assets<ColorMaterial>>,
     egui_context: ResMut<EguiContext>,
 ) {
     let mut fd = FontDefinitions {
@@ -31,7 +25,4 @@ pub fn setup_ui(
     ff.clear();
     ff.push("Olde".to_string());
     egui_context.ctx().set_fonts(fd);
-    let title = asset_server.load("images/pyrite.png");
-    let title_mat = materials.add(title.clone().into());
-    commands.insert_resource(UiAssets { title, title_mat });
 }

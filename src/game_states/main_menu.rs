@@ -1,10 +1,9 @@
-use super::UiAssets;
 use crate::{
     module::Module,
     modules::{list_available_modules, ModuleHeader},
     AppState,
 };
-use bevy::{app::Events, prelude::*, render::render_resource::Texture};
+use bevy::{app::Events, prelude::*};
 use bevy_egui::{
     egui::Pos2,
     egui::{self, Color32},
@@ -76,14 +75,17 @@ pub fn main_menu(
         });
 }
 
-pub fn resume_main_menu(mut commands: Commands, ui_assets: Res<UiAssets>) {
+pub fn resume_main_menu(
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+) {
     commands
         .spawn_bundle(OrthographicCameraBundle::new_2d())
         .insert(MainMenuUi {});
     commands
         .spawn_bundle(
             SpriteBundle {
-            material: ui_assets.title_mat.clone(),
+            texture: asset_server.load("images/pyrite.png"),
             ..Default::default()
         })
         .insert(MainMenuUi {});

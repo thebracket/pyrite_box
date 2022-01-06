@@ -44,9 +44,9 @@ impl RegionAssets {
                         } else {
                             Some(asset_server.load(albedo.as_str()))
                         },
-                        roughness: *roughness,
+                        perceptual_roughness: *roughness,
                         metallic: *metallic,
-                        normal_map: if normal_map.is_empty() {
+                        normal_map_texture: if normal_map.is_empty() {
                             None
                         } else {
                             Some(asset_server.load(normal_map.as_str()))

@@ -180,9 +180,10 @@ pub fn resume_map_wander(
                 color: Color::rgb(1.0, 1.0, 1.0),
                 // depth: 0.1..100.0,
                 // fov: f32::to_radians(60.0),
-                intensity: 200.0,
+                intensity: 1600.0,
                 range: 100.0,
-                radius: f32::to_radians(60.0),
+                //radius: f32::to_radians(360.0),
+                shadows_enabled: false,
                 ..Default::default()
             },
             transform: Transform::from_xyz(start_x, start_y, start_z),

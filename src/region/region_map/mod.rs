@@ -2,7 +2,7 @@ pub mod geometry;
 use serde::{Deserialize, Serialize};
 mod material_bucket;
 use self::material_bucket::{FeatureType, MaterialBucket};
-use bevy::{prelude::*, render::mesh::VertexAttributeValues};
+use bevy::{prelude::*, render::mesh::{VertexAttributeValues, Indices}};
 pub mod map_editor;
 use crate::module::Direction;
 
@@ -235,10 +235,11 @@ impl RegionMap {
                 Mesh::ATTRIBUTE_UV_0,
                 VertexAttributeValues::Float32x2(bucket.uv),
             );
-            mesh.set_attribute(
+            // Bevy 0.6 tangent support is horribly broken right now
+            /*mesh.set_attribute(
                 Mesh::ATTRIBUTE_TANGENT,
                 VertexAttributeValues::Float32x3(bucket.tangents),
-            );
+            );*/
 
             result.push((material_id, meshes.add(mesh)));
         }
