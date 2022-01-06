@@ -183,7 +183,7 @@ pub fn resume_map_wander(
                 intensity: 1600.0,
                 range: 100.0,
                 //radius: f32::to_radians(360.0),
-                shadows_enabled: false,
+                shadows_enabled: true,
                 ..Default::default()
             },
             transform: Transform::from_xyz(start_x, start_y, start_z),

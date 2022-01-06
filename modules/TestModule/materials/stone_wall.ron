@@ -4,11 +4,11 @@
     material: Pbr(
         display_color: (255, 255, 255),
         albedo: "stone-block-wall_albedo.png",
-        normal_map: "",
-        occlusion: "",
-        metallic_roughness_texture: "",
+        normal_map: "stone-block-wall_normal-ogl.png",
+        occlusion: "stone-block-wall_ao.png",
+        metallic_roughness_texture: "stone-block-wall_roughness.png",
         emissive: "",
-        roughness: 0.089,
+        roughness: 1.0,
         metallic: 0,
     )
 )
