@@ -98,7 +98,7 @@ impl RegionAssets {
             let image_handle = asset_server.load(file.as_str());
             let material_handle = materials.add(StandardMaterial {
                 base_color_texture: Some(image_handle),
-                alpha_mode: AlphaMode::Blend,
+                alpha_mode: AlphaMode::Mask(0.9),
                 ..Default::default()
             });
             sprites.insert(key.clone(), material_handle.clone());
