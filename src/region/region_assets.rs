@@ -99,6 +99,7 @@ impl RegionAssets {
             let material_handle = materials.add(StandardMaterial {
                 base_color_texture: Some(image_handle),
                 alpha_mode: AlphaMode::Mask(0.9),
+                double_sided: true,
                 ..Default::default()
             });
             sprites.insert(key.clone(), material_handle.clone());
@@ -107,7 +108,7 @@ impl RegionAssets {
         // Reusable Sprite Mesh
         let mut mesh = Mesh::new(PrimitiveTopology::TriangleList);
         const HALF: f32 = GEOMETRY_SIZE / 2.0;
-        let x1 = HALF;
+        let x1 = 0.0;
         let y0 = -HALF;
         let y1 = HALF;
         let z0 = -HALF;

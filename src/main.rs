@@ -4,8 +4,8 @@ mod game_states;
 mod region;
 use game_states::{
     gamelog::display_game_log,
-    player_movement::{player_move, PlayerMoveRequest},
-    sprites::{region_sprites, SpriteRequest},
+    player_movement::{player_move, PlayerMoveRequest, MoveOccurred},
+    sprites::{region_sprites, SpriteRequest, billboarding},
     *,
 };
 use module::game_events::{event_runner, event_triggers, TriggerEvent};
@@ -34,6 +34,7 @@ fn main() {
         .add_event::<TriggerEvent>()
         .add_event::<PlayerMoveRequest>()
         .add_event::<SpriteRequest>()
+        .add_event::<MoveOccurred>()
         .add_plugins(DefaultPlugins)
         .add_plugin(EguiPlugin)
         .add_plugin(FrameTimeDiagnosticsPlugin::default())
@@ -64,6 +65,7 @@ fn main() {
         .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(event_runner))
         .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(player_move))
         .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(region_sprites))
+        .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(billboarding))
         .add_system_set(SystemSet::on_enter(AppState::MapWander).with_system(resume_map_wander))
         .add_system_set(SystemSet::on_exit(AppState::MapWander).with_system(exit_map_wander))
         .run();

@@ -3,6 +3,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::region::{region_assets::RegionAssets, region_map::geometry::GEOMETRY_SIZE};
 
+use super::{player_movement::MoveOccurred, WanderingPlayer};
+
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum SpriteRequest {
     Spawn {
@@ -40,7 +42,7 @@ pub fn region_sprites(
                         mesh: assets.sprite_mesh.clone(),
                         material: assets.sprites[image].clone(),
                         transform: Transform::from_xyz(
-                            0.0 - ((position.0 as f32) * GEOMETRY_SIZE),
+                            0.0 - ((position.0 as f32 - 0.5) * GEOMETRY_SIZE),
                             (position.1 as f32 + 0.5) * GEOMETRY_SIZE,
                             GEOMETRY_SIZE / 2.0,
                         ),
@@ -51,7 +53,7 @@ pub fn region_sprites(
             SpriteRequest::Move { id, position } => {
                 move_query.iter_mut().for_each(|(_, tag, mut pos)| {
                     if tag.0.as_str() == id.as_str() {
-                        pos.translation.x = 0.0 - ((position.0 as f32) * GEOMETRY_SIZE);
+                        pos.translation.x = 0.0 - ((position.0 as f32 - 0.5) * GEOMETRY_SIZE);
                         pos.translation.y = (position.1 as f32 + 0.5) * GEOMETRY_SIZE;
                     }
                 });
@@ -64,5 +66,25 @@ pub fn region_sprites(
                 });
             }
         }
+    }
+}
+
+pub fn billboarding(
+    mut move_occurred: EventReader<MoveOccurred>,
+    player_query: Query<&WanderingPlayer>,
+    mut move_query: Query<(&RegionSprite, &mut Transform)>,
+) {
+    use crate::module::Direction;
+
+    for _ in move_occurred.iter() {
+        let player_facing = player_query.iter().nth(0).unwrap().facing;
+        move_query.iter_mut().for_each(|(_, mut pos)| {
+            match player_facing {
+                Direction::West => pos.rotation = Quat::from_rotation_z(f32::to_radians(0.0)),
+                Direction::East => pos.rotation = Quat::from_rotation_z(f32::to_radians(180.0)),
+                Direction::North => pos.rotation = Quat::from_rotation_z(f32::to_radians(270.0)),
+                Direction::South => pos.rotation = Quat::from_rotation_z(f32::to_radians(90.0)),
+            }
+        });
     }
 }

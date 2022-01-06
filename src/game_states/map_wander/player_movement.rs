@@ -3,6 +3,8 @@ use crate::{module::game_events::TriggerEvent, region::region_map::geometry::GEO
 use bevy::prelude::*;
 use serde::{Deserialize, Serialize};
 
+pub struct MoveOccurred;
+
 #[derive(Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum PlayerMoveRequest {
     Forwards,
@@ -21,6 +23,7 @@ pub fn player_move(
     )>,
     mut wander: ResMut<WanderResource>,
     mut triggers: EventWriter<TriggerEvent>,
+    mut move_occurred: EventWriter<MoveOccurred>,
 ) {
     let mut moved = false;
     let map_idx = wander.map_idx;
@@ -88,6 +91,7 @@ pub fn player_move(
                 let target = wp.facing.camera_look_at(&trans.translation);
                 trans.look_at(target, Vec3::new(0.0, 0.0, 1.0));
             });
+            move_occurred.send(MoveOccurred{});
         }
     });
 }
