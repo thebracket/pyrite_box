@@ -5,8 +5,6 @@ use bevy_egui::{
 };
 
 pub fn setup_ui(
-    mut commands: Commands,
-    asset_server: Res<AssetServer>,
     egui_context: ResMut<EguiContext>,
 ) {
     let mut fd = FontDefinitions {
