@@ -1,18 +1,12 @@
 use bevy::prelude::*;
 use bevy_egui::{
-    egui::{FontDefinitions, FontFamily},
+    egui::{FontData, FontDefinitions, FontFamily},
     EguiContext,
 };
-
-pub struct UiAssets {
-    pub title: Handle<Texture>,
-    pub title_mat: Handle<ColorMaterial>,
-}
 
 pub fn setup_ui(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
-    mut materials: ResMut<Assets<ColorMaterial>>,
     egui_context: ResMut<EguiContext>,
 ) {
     let mut fd = FontDefinitions {
@@ -20,7 +14,7 @@ pub fn setup_ui(
     };
     fd.font_data.insert(
         "Olde".to_owned(),
-        std::borrow::Cow::Borrowed(include_bytes!(
+        FontData::from_static(include_bytes!(
             "../../assets/fonts/SdThoseGoodTimesOfLife-B1An.ttf"
         )),
     );
@@ -31,10 +25,4 @@ pub fn setup_ui(
     ff.clear();
     ff.push("Olde".to_string());
     egui_context.ctx().set_fonts(fd);
-    let title = asset_server.load("images/pyrite.png");
-    let title_mat = materials.add(title.clone().into());
-    commands.insert_resource(UiAssets {
-        title: title.clone(),
-        title_mat: title_mat.clone(),
-    });
 }

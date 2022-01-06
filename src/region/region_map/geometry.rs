@@ -1,3 +1,5 @@
+use super::material_bucket::Bucket;
+
 pub const GEOMETRY_SIZE: f32 = 10.0;
 
 pub(crate) const CUBE_NORMALS: [[f32; 3]; 6] = [
@@ -19,10 +21,7 @@ pub(crate) const CUBE_TANGENTS: [[f32; 3]; 6] = [
 ];
 
 pub fn add_floor_geometry(
-    vertices: &mut Vec<[f32; 3]>,
-    normals: &mut Vec<[f32; 3]>,
-    uv: &mut Vec<[f32; 2]>,
-    tangents: &mut Vec<[f32; 3]>,
+    bucket: &mut Bucket,
     x: f32,
     y: f32,
     z: f32,
@@ -44,7 +43,7 @@ pub fn add_floor_geometry(
         [x0, y1, z0,],
         [x0, y0, z0,],
     ];
-    vertices.extend_from_slice(&cube_geometry);
+    bucket.vertices.extend_from_slice(&cube_geometry);
 
     #[rustfmt::skip]
     const NORMAL_GEOMETRY: [[f32; 3]; 6] = [
@@ -55,7 +54,7 @@ pub fn add_floor_geometry(
         CUBE_NORMALS[1],
         CUBE_NORMALS[1],
     ];
-    normals.extend_from_slice(&NORMAL_GEOMETRY);
+    bucket.normals.extend_from_slice(&NORMAL_GEOMETRY);
 
     #[rustfmt::skip]
     const TANGENT_GEOMETRY: [[f32; 3]; 6] = [
@@ -66,7 +65,7 @@ pub fn add_floor_geometry(
         CUBE_TANGENTS[1],
         CUBE_TANGENTS[1],
     ];
-    tangents.extend_from_slice(&TANGENT_GEOMETRY);
+    bucket.tangents.extend_from_slice(&TANGENT_GEOMETRY);
 
     let tw = w;
     let th = h;
@@ -80,7 +79,7 @@ pub fn add_floor_geometry(
         [0.0, 0.0],
     ];
 
-    uv.extend_from_slice(&uv_base);
+    bucket.uv.extend_from_slice(&uv_base);
 
     //calculate_tangent(&cube_geometry, &uv_base);
     //println!("{:?}", CUBE_TANGENTS[1]);

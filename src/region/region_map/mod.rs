@@ -2,7 +2,7 @@ pub mod geometry;
 use serde::{Deserialize, Serialize};
 mod material_bucket;
 use self::material_bucket::{FeatureType, MaterialBucket};
-use bevy::{prelude::*, render::mesh::VertexAttributeValues};
+use bevy::{prelude::*, render::mesh::{VertexAttributeValues, Indices}};
 pub mod map_editor;
 use crate::module::Direction;
 
@@ -75,15 +75,17 @@ impl RegionMap {
         };
 
         for x in 0..SIZE.0 {
-            map.tiles[((0 * SIZE.0) + x) as usize].boundaries
-                [Direction::North.to_exit_index() as usize]
-                .0 = RegionBoundaryType::Wall;
+            // map.tiles[((0 * SIZE.0) + x) as usize].boundaries
+            // map.tiles[(0 + x) as usize].boundaries[Direction::North.to_exit_index() as usize].0 =
+            map.tiles[x as usize].boundaries[Direction::North.to_exit_index() as usize].0 =
+                RegionBoundaryType::Wall;
             map.tiles[(((SIZE.1 - 1) * SIZE.0) + x) as usize].boundaries
                 [Direction::South.to_exit_index()]
             .0 = RegionBoundaryType::Wall;
         }
         for y in 0..SIZE.1 {
-            map.tiles[((y * SIZE.0) + 0) as usize].boundaries[Direction::West.to_exit_index()].0 =
+            // map.tiles[((y * SIZE.0) + 0) as usize].boundaries[Direction::West.to_exit_index()].0 =
+            map.tiles[(y * SIZE.0) as usize].boundaries[Direction::West.to_exit_index()].0 =
                 RegionBoundaryType::Wall;
             map.tiles[((y * SIZE.0) + (SIZE.0 - 1)) as usize].boundaries
                 [Direction::East.to_exit_index()]
@@ -220,23 +222,24 @@ impl RegionMap {
         }
 
         for (material_id, bucket) in bucket.materials.drain() {
-            let mut mesh = Mesh::new(bevy::render::pipeline::PrimitiveTopology::TriangleList);
+            let mut mesh = Mesh::new(bevy::render::render_resource::PrimitiveTopology::TriangleList);
             mesh.set_attribute(
                 Mesh::ATTRIBUTE_POSITION,
-                VertexAttributeValues::Float3(bucket.vertices),
+                VertexAttributeValues::Float32x3(bucket.vertices),
             );
             mesh.set_attribute(
                 Mesh::ATTRIBUTE_NORMAL,
-                VertexAttributeValues::Float3(bucket.normals),
+                VertexAttributeValues::Float32x3(bucket.normals),
             );
             mesh.set_attribute(
                 Mesh::ATTRIBUTE_UV_0,
-                VertexAttributeValues::Float2(bucket.uv),
+                VertexAttributeValues::Float32x2(bucket.uv),
             );
-            mesh.set_attribute(
+            // Bevy 0.6 tangent support is horribly broken right now
+            /*mesh.set_attribute(
                 Mesh::ATTRIBUTE_TANGENT,
-                VertexAttributeValues::Float3(bucket.tangents),
-            );
+                VertexAttributeValues::Float32x3(bucket.tangents),
+            );*/
 
             result.push((material_id, meshes.add(mesh)));
         }

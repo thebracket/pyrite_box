@@ -17,11 +17,16 @@ pub mod gamelog;
 pub mod player_movement;
 use bevy_egui::egui;
 
+#[derive(Component)]
 pub struct MapWander {}
+#[derive(Component)]
 pub struct WanderGeometry {}
+#[derive(Component)]
 pub struct WanderCamera {}
+#[derive(Component)]
 pub struct WanderLight {}
 
+#[derive(Component)]
 pub struct WanderingPlayer {
     pub x: i32,
     pub y: i32,
@@ -132,7 +137,7 @@ pub fn resume_map_wander(
     mut egui_context: ResMut<EguiContext>,
 ) {
     commands.insert_resource(ScriptState::new());
-    let mut module = startup.0.as_ref().unwrap().clone();
+    let module = startup.0.as_ref().unwrap().clone();
     let map_idx = module.starting_map_idx;
     let (start_x, start_y, start_z, facing, tile_x, tile_y) = {
         let (sx, sy, direction) = module.maps[&map_idx].starting_location;
@@ -146,7 +151,14 @@ pub fn resume_map_wander(
             sy,
         )
     };
-    let assets = RegionAssets::new(&mut materials, &mut meshes, &asset_server, &module, map_idx, &mut egui_context);
+    let assets = RegionAssets::new(
+        &mut materials,
+        &mut meshes,
+        &asset_server,
+        &module,
+        map_idx,
+        &mut egui_context,
+    );
     for m in assets.meshes.iter() {
         // TODO: m.0 tells you what material to use
         commands
@@ -163,13 +175,16 @@ pub fn resume_map_wander(
 
     // light
     commands
-        .spawn_bundle(LightBundle {
-            light: Light {
+        .spawn_bundle(PointLightBundle {
+            point_light: PointLight {
                 color: Color::rgb(1.0, 1.0, 1.0),
-                depth: 0.1..100.0,
-                fov: f32::to_radians(60.0),
-                intensity: 200.0,
+                // depth: 0.1..100.0,
+                // fov: f32::to_radians(60.0),
+                intensity: 1600.0,
                 range: 100.0,
+                //radius: f32::to_radians(360.0),
+                shadows_enabled: false,
+                ..Default::default()
             },
             transform: Transform::from_xyz(start_x, start_y, start_z),
             ..Default::default()
@@ -179,7 +194,7 @@ pub fn resume_map_wander(
 
     // camera
     let perspective = PerspectiveProjection {
-        fov: 1.5708,
+        fov: std::f32::consts::FRAC_PI_2, //1.5708,
         aspect_ratio: 1280.0 / 1024.0,
         near: 0.1,
         far: 1000.0,

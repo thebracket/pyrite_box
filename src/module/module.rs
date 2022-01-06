@@ -1,6 +1,6 @@
 use super::{game_events::EventList, MaterialDefinition};
 use crate::region::region_map::RegionMap;
-use std::collections::{HashMap};
+use std::collections::HashMap;
 
 /// Represents an adventure module, bundling all assets together.
 #[derive(Clone)]

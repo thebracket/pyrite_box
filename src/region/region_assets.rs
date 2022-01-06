@@ -1,6 +1,6 @@
 use crate::module::{MaterialDefinition, Module};
 use bevy::prelude::*;
-use bevy_egui::{EguiContext, egui::TextureId};
+use bevy_egui::{egui::TextureId, EguiContext};
 use std::collections::HashMap;
 
 pub struct RegionAssets {
@@ -44,9 +44,9 @@ impl RegionAssets {
                         } else {
                             Some(asset_server.load(albedo.as_str()))
                         },
-                        roughness: *roughness,
+                        perceptual_roughness: *roughness,
                         metallic: *metallic,
-                        normal_map: if normal_map.is_empty() {
+                        normal_map_texture: if normal_map.is_empty() {
                             None
                         } else {
                             Some(asset_server.load(normal_map.as_str()))
@@ -78,7 +78,7 @@ impl RegionAssets {
 
         // Load the UI images
         let mut ui_images = HashMap::new();
-        for (i,(key, file)) in module.ui_images.iter().enumerate() {
+        for (i, (key, file)) in module.ui_images.iter().enumerate() {
             println!("Loading {} {}", key, file);
             let image_id = asset_server.load(file.as_str());
             egui.set_egui_texture(i as u64, image_id);
