@@ -1,5 +1,11 @@
-use crate::{module::{MaterialDefinition, Module}, region::region_map::geometry::GEOMETRY_SIZE};
-use bevy::{prelude::*, render::{render_resource::PrimitiveTopology, mesh::VertexAttributeValues}};
+use crate::{
+    module::{MaterialDefinition, Module},
+    region::region_map::geometry::GEOMETRY_SIZE,
+};
+use bevy::{
+    prelude::*,
+    render::{mesh::VertexAttributeValues, render_resource::PrimitiveTopology},
+};
 use bevy_egui::{egui::TextureId, EguiContext};
 use std::collections::HashMap;
 
@@ -90,7 +96,7 @@ impl RegionAssets {
         let mut sprites = HashMap::new();
         for (key, file) in module.sprites.iter() {
             let image_handle = asset_server.load(file.as_str());
-            let material_handle = materials.add(StandardMaterial{
+            let material_handle = materials.add(StandardMaterial {
                 base_color_texture: Some(image_handle),
                 alpha_mode: AlphaMode::Blend,
                 ..Default::default()
@@ -100,7 +106,7 @@ impl RegionAssets {
 
         // Reusable Sprite Mesh
         let mut mesh = Mesh::new(PrimitiveTopology::TriangleList);
-        const HALF : f32 = GEOMETRY_SIZE / 2.0;
+        const HALF: f32 = GEOMETRY_SIZE / 2.0;
         let x1 = HALF;
         let y0 = -HALF;
         let y1 = HALF;
@@ -109,12 +115,12 @@ impl RegionAssets {
         mesh.set_attribute(
             Mesh::ATTRIBUTE_POSITION,
             VertexAttributeValues::Float32x3(vec![
-                [x1, y1, z1,],
-                [x1, y1, z0,],
-                [x1, y0, z0,],
-                [x1, y0, z0,],
-                [x1, y0, z1,],
-                [x1, y1, z1,],
+                [x1, y1, z1],
+                [x1, y1, z0],
+                [x1, y0, z0],
+                [x1, y0, z0],
+                [x1, y0, z1],
+                [x1, y1, z1],
             ]),
         );
         mesh.set_attribute(

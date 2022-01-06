@@ -2,7 +2,8 @@ use super::GameEventStep;
 use crate::game_states::{
     gamelog::{GameLog, DEFAULT_TEXT_COLOR},
     player_movement::PlayerMoveRequest,
-    WanderInput, WanderResource, sprites::SpriteRequest,
+    sprites::SpriteRequest,
+    WanderInput, WanderResource,
 };
 use bevy::prelude::*;
 use bevy_egui::egui::Color32;

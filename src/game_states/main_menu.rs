@@ -75,16 +75,12 @@ pub fn main_menu(
         });
 }
 
-pub fn resume_main_menu(
-    mut commands: Commands,
-    asset_server: Res<AssetServer>,
-) {
+pub fn resume_main_menu(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands
         .spawn_bundle(OrthographicCameraBundle::new_2d())
         .insert(MainMenuUi {});
     commands
-        .spawn_bundle(
-            SpriteBundle {
+        .spawn_bundle(SpriteBundle {
             texture: asset_server.load("images/pyrite.png"),
             ..Default::default()
         })

@@ -20,14 +20,7 @@ pub(crate) const CUBE_TANGENTS: [[f32; 3]; 6] = [
     [-1.0, 0.0, 0.0],
 ];
 
-pub fn add_floor_geometry(
-    bucket: &mut Bucket,
-    x: f32,
-    y: f32,
-    z: f32,
-    w: f32,
-    h: f32,
-) {
+pub fn add_floor_geometry(bucket: &mut Bucket, x: f32, y: f32, z: f32, w: f32, h: f32) {
     let x0 = x * GEOMETRY_SIZE;
     let x1 = (x + w) * GEOMETRY_SIZE;
     let y0 = y * GEOMETRY_SIZE;

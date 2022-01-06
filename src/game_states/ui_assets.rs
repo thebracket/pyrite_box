@@ -4,9 +4,7 @@ use bevy_egui::{
     EguiContext,
 };
 
-pub fn setup_ui(
-    egui_context: ResMut<EguiContext>,
-) {
+pub fn setup_ui(egui_context: ResMut<EguiContext>) {
     let mut fd = FontDefinitions {
         ..Default::default()
     };

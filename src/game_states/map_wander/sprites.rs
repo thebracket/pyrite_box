@@ -1,22 +1,22 @@
 use bevy::prelude::*;
 use serde::{Deserialize, Serialize};
 
-use crate::region::{region_map::geometry::GEOMETRY_SIZE, region_assets::RegionAssets};
+use crate::region::{region_assets::RegionAssets, region_map::geometry::GEOMETRY_SIZE};
 
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum SpriteRequest {
-    Spawn{
+    Spawn {
         id: String,
         position: (u32, u32),
         image: String,
     },
-    Remove{
+    Remove {
         id: String,
     },
-    Move{
+    Move {
         id: String,
         position: (u32, u32),
-    }
+    },
 }
 
 #[derive(Component)]
@@ -30,15 +30,19 @@ pub fn region_sprites(
 ) {
     for event in events.iter() {
         match event {
-            SpriteRequest::Spawn { id, position, image } => {
+            SpriteRequest::Spawn {
+                id,
+                position,
+                image,
+            } => {
                 commands
                     .spawn_bundle(PbrBundle {
                         mesh: assets.sprite_mesh.clone(),
                         material: assets.sprites[image].clone(),
                         transform: Transform::from_xyz(
-                            0.0 - ((position.0 as f32) * GEOMETRY_SIZE), 
-                            (position.1 as f32 + 0.5) * GEOMETRY_SIZE, 
-                            GEOMETRY_SIZE / 2.0
+                            0.0 - ((position.0 as f32) * GEOMETRY_SIZE),
+                            (position.1 as f32 + 0.5) * GEOMETRY_SIZE,
+                            GEOMETRY_SIZE / 2.0,
                         ),
                         ..Default::default()
                     })

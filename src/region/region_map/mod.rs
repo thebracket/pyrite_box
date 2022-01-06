@@ -2,7 +2,7 @@ pub mod geometry;
 use serde::{Deserialize, Serialize};
 mod material_bucket;
 use self::material_bucket::{FeatureType, MaterialBucket};
-use bevy::{prelude::*, render::mesh::{VertexAttributeValues}};
+use bevy::{prelude::*, render::mesh::VertexAttributeValues};
 pub mod map_editor;
 use crate::module::Direction;
 
@@ -222,7 +222,8 @@ impl RegionMap {
         }
 
         for (material_id, bucket) in bucket.materials.drain() {
-            let mut mesh = Mesh::new(bevy::render::render_resource::PrimitiveTopology::TriangleList);
+            let mut mesh =
+                Mesh::new(bevy::render::render_resource::PrimitiveTopology::TriangleList);
             mesh.set_attribute(
                 Mesh::ATTRIBUTE_POSITION,
                 VertexAttributeValues::Float32x3(bucket.vertices),

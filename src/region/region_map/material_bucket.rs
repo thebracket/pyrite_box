@@ -25,14 +25,7 @@ impl MaterialBucket {
     fn add_feature_to_bucket(bucket: &mut Bucket, feature: FeatureType, x: f32, y: f32) {
         match feature {
             FeatureType::Floor => {
-                add_floor_geometry(
-                    bucket,
-                    x,
-                    y,
-                    0.0,
-                    1.0,
-                    1.0,
-                );
+                add_floor_geometry(bucket, x, y, 0.0, 1.0, 1.0);
             }
             FeatureType::Ceiling => {
                 add_ceiling_geometry(

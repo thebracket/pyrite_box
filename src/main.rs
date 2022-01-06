@@ -5,7 +5,8 @@ mod region;
 use game_states::{
     gamelog::display_game_log,
     player_movement::{player_move, PlayerMoveRequest},
-    *, sprites::{SpriteRequest, region_sprites},
+    sprites::{region_sprites, SpriteRequest},
+    *,
 };
 use module::game_events::{event_runner, event_triggers, TriggerEvent};
 mod module;
@@ -40,18 +41,12 @@ fn main() {
         .add_startup_system(setup_ui)
         .add_system(fps_update_system)
         // Loading State
-        .add_system_set(
-            SystemSet::on_update(AppState::Loading).with_system(loading_screen),
-        )
-        .add_system_set(
-            SystemSet::on_enter(AppState::Loading).with_system(resume_loading_screen),
-        )
+        .add_system_set(SystemSet::on_update(AppState::Loading).with_system(loading_screen))
+        .add_system_set(SystemSet::on_enter(AppState::Loading).with_system(resume_loading_screen))
         .add_system_set(SystemSet::on_exit(AppState::Loading).with_system(exit_loading))
         // Main Menu State
         .add_system_set(SystemSet::on_update(AppState::MainMenu).with_system(main_menu))
-        .add_system_set(
-            SystemSet::on_enter(AppState::MainMenu).with_system(resume_main_menu),
-        )
+        .add_system_set(SystemSet::on_enter(AppState::MainMenu).with_system(resume_main_menu))
         .add_system_set(SystemSet::on_exit(AppState::MainMenu).with_system(exit_main_menu))
         // Module Editor
         .add_system_set(
@@ -60,30 +55,16 @@ fn main() {
         .add_system_set(
             SystemSet::on_enter(AppState::ModuleEditor).with_system(resume_module_editor),
         )
-        .add_system_set(
-            SystemSet::on_exit(AppState::ModuleEditor).with_system(exit_module_editor),
-        )
+        .add_system_set(SystemSet::on_exit(AppState::ModuleEditor).with_system(exit_module_editor))
         // Map Wander
         .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(map_wander))
-        .add_system_set(
-            SystemSet::on_update(AppState::MapWander).with_system(map_wander_rebuild),
-        )
-        .add_system_set(
-            SystemSet::on_update(AppState::MapWander).with_system(display_game_log),
-        )
-        .add_system_set(
-            SystemSet::on_update(AppState::MapWander).with_system(event_triggers),
-        )
-        .add_system_set(
-            SystemSet::on_update(AppState::MapWander).with_system(event_runner),
-        )
+        .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(map_wander_rebuild))
+        .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(display_game_log))
+        .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(event_triggers))
+        .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(event_runner))
         .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(player_move))
         .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(region_sprites))
-        .add_system_set(
-            SystemSet::on_enter(AppState::MapWander).with_system(resume_map_wander),
-        )
-        .add_system_set(
-            SystemSet::on_exit(AppState::MapWander).with_system(exit_map_wander),
-        )
+        .add_system_set(SystemSet::on_enter(AppState::MapWander).with_system(resume_map_wander))
+        .add_system_set(SystemSet::on_exit(AppState::MapWander).with_system(exit_map_wander))
         .run();
 }
