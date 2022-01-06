@@ -114,6 +114,9 @@ pub fn event_editor(egui_context: &EguiContext, module_res: &mut ModuleResource)
                             GameEventStep::InputBranch { .. } => {
                                 ui.label("Input branch");
                             }
+                            GameEventStep::Sprite(..) => {
+                                ui.label("Sprite Action");
+                            }
                         }
                     }
                 });

@@ -15,6 +15,7 @@ use bevy_egui::{
 };
 pub mod gamelog;
 pub mod player_movement;
+pub mod sprites;
 use bevy_egui::egui;
 
 #[derive(Component)]

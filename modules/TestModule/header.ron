@@ -6,5 +6,8 @@
     starting_map_idx: 0,
     ui_images: [
         ("Rolf", "rolf.png"),
+    ],
+    sprites: [
+        ("Rolf", "rolf-sprite.png"),
     ]
 )

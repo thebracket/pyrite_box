@@ -12,6 +12,7 @@ pub struct ModuleHeader {
     pub module_start_event: String,
     pub starting_map_idx: usize,
     pub ui_images: Vec<(String, String)>,
+    pub sprites: Vec<(String, String)>,
 }
 
 impl ModuleHeader {

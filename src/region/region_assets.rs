@@ -1,5 +1,5 @@
-use crate::module::{MaterialDefinition, Module};
-use bevy::prelude::*;
+use crate::{module::{MaterialDefinition, Module}, region::region_map::geometry::GEOMETRY_SIZE};
+use bevy::{prelude::*, render::{render_resource::PrimitiveTopology, mesh::VertexAttributeValues}};
 use bevy_egui::{egui::TextureId, EguiContext};
 use std::collections::HashMap;
 
@@ -7,6 +7,8 @@ pub struct RegionAssets {
     pub materials: HashMap<usize, Handle<StandardMaterial>>,
     pub meshes: Vec<(u32, Handle<Mesh>)>,
     pub ui_images: HashMap<String, TextureId>,
+    pub sprites: HashMap<String, Handle<StandardMaterial>>,
+    pub sprite_mesh: Handle<Mesh>,
 }
 
 impl RegionAssets {
@@ -74,21 +76,77 @@ impl RegionAssets {
             }
         }
 
-        let meshes = module.maps[&map_idx].create_geometry(meshes);
+        let map_meshes = module.maps[&map_idx].create_geometry(meshes);
 
         // Load the UI images
         let mut ui_images = HashMap::new();
         for (i, (key, file)) in module.ui_images.iter().enumerate() {
-            println!("Loading {} {}", key, file);
             let image_id = asset_server.load(file.as_str());
             egui.set_egui_texture(i as u64, image_id);
             ui_images.insert(key.clone(), bevy_egui::egui::TextureId::User(i as u64));
         }
 
+        // Load sprites
+        let mut sprites = HashMap::new();
+        for (key, file) in module.sprites.iter() {
+            let image_handle = asset_server.load(file.as_str());
+            let material_handle = materials.add(StandardMaterial{
+                base_color_texture: Some(image_handle),
+                alpha_mode: AlphaMode::Blend,
+                ..Default::default()
+            });
+            sprites.insert(key.clone(), material_handle.clone());
+        }
+
+        // Reusable Sprite Mesh
+        let mut mesh = Mesh::new(PrimitiveTopology::TriangleList);
+        const HALF : f32 = GEOMETRY_SIZE / 2.0;
+        let x1 = HALF;
+        let y0 = -HALF;
+        let y1 = HALF;
+        let z0 = -HALF;
+        let z1 = HALF;
+        mesh.set_attribute(
+            Mesh::ATTRIBUTE_POSITION,
+            VertexAttributeValues::Float32x3(vec![
+                [x1, y1, z1,],
+                [x1, y1, z0,],
+                [x1, y0, z0,],
+                [x1, y0, z0,],
+                [x1, y0, z1,],
+                [x1, y1, z1,],
+            ]),
+        );
+        mesh.set_attribute(
+            Mesh::ATTRIBUTE_NORMAL,
+            VertexAttributeValues::Float32x3(vec![
+                [-1.0, 0.0, 0.0],
+                [-1.0, 0.0, 0.0],
+                [-1.0, 0.0, 0.0],
+                [-1.0, 0.0, 0.0],
+                [-1.0, 0.0, 0.0],
+                [-1.0, 0.0, 0.0],
+            ]),
+        );
+        mesh.set_attribute(
+            Mesh::ATTRIBUTE_UV_0,
+            VertexAttributeValues::Float32x2(vec![
+                [0.0, 0.0],
+                [0.0, 1.0],
+                [1.0, 1.0],
+                [1.0, 1.0],
+                [1.0, 0.0],
+                [0.0, 0.0],
+            ]),
+        );
+        let sprite_mesh = meshes.add(mesh);
+
         Self {
             materials: mats,
-            meshes,
+            meshes: map_meshes,
             ui_images,
+            sprites,
+            sprite_mesh,
         }
     }
 

@@ -2,7 +2,7 @@ use super::GameEventStep;
 use crate::game_states::{
     gamelog::{GameLog, DEFAULT_TEXT_COLOR},
     player_movement::PlayerMoveRequest,
-    WanderInput, WanderResource,
+    WanderInput, WanderResource, sprites::SpriteRequest,
 };
 use bevy::prelude::*;
 use bevy_egui::egui::Color32;
@@ -23,6 +23,7 @@ pub fn event_runner(
     mut log: ResMut<GameLog>,
     time: Res<Time>,
     mut move_request: EventWriter<PlayerMoveRequest>,
+    mut sprite_request: EventWriter<SpriteRequest>,
 ) {
     wander.allow_movement = false;
 
@@ -123,6 +124,9 @@ pub fn event_runner(
                             result: None,
                             portrait: portrait.clone(),
                         })
+                    }
+                    GameEventStep::Sprite(s) => {
+                        sprite_request.send(s.clone());
                     }
                 }
             } else {

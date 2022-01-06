@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::game_states::player_movement::PlayerMoveRequest;
+use crate::game_states::{player_movement::PlayerMoveRequest, sprites::SpriteRequest};
 
 #[derive(Clone, Serialize, Deserialize)]
 pub struct EventList {
@@ -41,6 +41,7 @@ pub enum GameEventStep {
         x: u32,
         y: u32,
     },
+    Sprite(SpriteRequest),
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]

@@ -28,6 +28,7 @@ pub fn save_module(module: &Module) -> Result<()> {
         module_start_event: module.module_start_event.clone(),
         starting_map_idx: module.starting_map_idx,
         ui_images: module.ui_images.clone(),
+        sprites: module.sprites.clone(),
     };
     let header_ron = to_string_pretty(&header, PrettyConfig::new())?;
     std::fs::write(header_path, header_ron)?;

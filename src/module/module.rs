@@ -17,6 +17,7 @@ pub struct Module {
     pub starting_map_idx: usize,
     pub base_path: String,
     pub ui_images: Vec<(String, String)>,
+    pub sprites: Vec<(String, String)>,
 }
 
 impl Module {
@@ -59,6 +60,7 @@ impl Module {
             starting_map_idx: 0,
             base_path: "./modules/NewModule".to_string(),
             ui_images: Vec::new(),
+            sprites: Vec::new(),
         }
     }
 

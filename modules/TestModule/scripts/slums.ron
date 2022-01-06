@@ -2,7 +2,9 @@
     (
         tag: "SlumsStart",
         steps: [
+            Sprite(Spawn(id: "RolfSprite", image: "Rolf", position: (14, 5))),
             PauseMs(1000),
+            Sprite(Move(id: "RolfSprite", position: (14, 4))),
             ClearLog,
             LogText(
                 text: "You have entered the monster-crawling slums of Quiche. Small, ugly things scurry from beneath your feet. In the distance, an alarm sounds.",
@@ -23,6 +25,7 @@
                     )
                 ]
             ),
+            Sprite(Remove(id: "RolfSprite")),
         ],
     ),
     (
