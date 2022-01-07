@@ -44,7 +44,7 @@ pub fn main_menu(
                             crate::modules::load_module(module.filename.as_ref().unwrap()).unwrap(),
                         );
                         state
-                            .set(AppState::MapWander)
+                            .set(AppState::MapWanderLoader)
                             .expect("Failed to change mode");
                     }
                     if ui.button("Edit").clicked() {

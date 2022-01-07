@@ -25,6 +25,7 @@ impl RegionAssets {
         module: &Module,
         map_idx: usize,
         egui: &mut EguiContext,
+        handles: &mut Vec<HandleUntyped>, // Used for tracking image loading
     ) -> Self {
         let mut mats = HashMap::new();
         for (idx, (_name, mat, _)) in module.materials.iter() {
@@ -50,29 +51,39 @@ impl RegionAssets {
                         base_color_texture: if albedo.is_empty() {
                             None
                         } else {
-                            Some(asset_server.load(albedo.as_str()))
+                            let handle = asset_server.load(albedo.as_str());
+                            handles.push(handle.clone_untyped());
+                            Some(handle)
                         },
                         perceptual_roughness: *roughness,
                         metallic: *metallic,
                         normal_map_texture: if normal_map.is_empty() {
                             None
                         } else {
-                            Some(asset_server.load(normal_map.as_str()))
+                            let handle = asset_server.load(normal_map.as_str());
+                            handles.push(handle.clone_untyped());
+                            Some(handle)
                         },
                         occlusion_texture: if occlusion.is_empty() {
                             None
                         } else {
-                            Some(asset_server.load(occlusion.as_str()))
+                            let handle = asset_server.load(normal_map.as_str());
+                            handles.push(handle.clone_untyped());
+                            Some(handle)
                         },
                         metallic_roughness_texture: if metallic_roughness_texture.is_empty() {
                             None
                         } else {
-                            Some(asset_server.load(metallic_roughness_texture.as_str()))
+                            let handle = asset_server.load(normal_map.as_str());
+                            handles.push(handle.clone_untyped());
+                            Some(handle)
                         },
                         emissive_texture: if emissive.is_empty() {
                             None
                         } else {
-                            Some(asset_server.load(emissive.as_str()))
+                            let handle = asset_server.load(normal_map.as_str());
+                            handles.push(handle.clone_untyped());
+                            Some(handle)
                         },
                         ..Default::default()
                     };
@@ -96,6 +107,7 @@ impl RegionAssets {
         let mut sprites = HashMap::new();
         for (key, file) in module.sprites.iter() {
             let image_handle = asset_server.load(file.as_str());
+            handles.push(image_handle.clone_untyped());
             let material_handle = materials.add(StandardMaterial {
                 base_color_texture: Some(image_handle),
                 alpha_mode: AlphaMode::Mask(0.9),

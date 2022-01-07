@@ -91,7 +91,7 @@ pub fn player_move(
                 let target = wp.facing.camera_look_at(&trans.translation);
                 trans.look_at(target, Vec3::new(0.0, 0.0, 1.0));
             });
-            move_occurred.send(MoveOccurred{});
+            move_occurred.send(MoveOccurred {});
         }
     });
 }

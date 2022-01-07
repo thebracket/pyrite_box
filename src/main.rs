@@ -3,9 +3,10 @@ use bevy_egui::EguiPlugin;
 mod game_states;
 mod region;
 use game_states::{
+    asset_loader::*,
     gamelog::display_game_log,
-    player_movement::{player_move, PlayerMoveRequest, MoveOccurred},
-    sprites::{region_sprites, SpriteRequest, billboarding},
+    player_movement::{player_move, MoveOccurred, PlayerMoveRequest},
+    sprites::{billboarding, region_sprites, SpriteRequest},
     *,
 };
 use module::game_events::{event_runner, event_triggers, TriggerEvent};
@@ -17,7 +18,8 @@ pub enum AppState {
     Loading,
     MainMenu,
     ModuleEditor,
-    MapWander, // Test mode for the map
+    MapWanderLoader, // Loading screen for the map module
+    MapWander,       // Test mode for the map
 }
 
 fn main() {
@@ -57,6 +59,14 @@ fn main() {
             SystemSet::on_enter(AppState::ModuleEditor).with_system(resume_module_editor),
         )
         .add_system_set(SystemSet::on_exit(AppState::ModuleEditor).with_system(exit_module_editor))
+        // Map Wander Loader
+        .add_system_set(
+            SystemSet::on_enter(AppState::MapWanderLoader).with_system(start_asset_loader),
+        )
+        .add_system_set(SystemSet::on_update(AppState::MapWanderLoader).with_system(asset_loader))
+        .add_system_set(
+            SystemSet::on_exit(AppState::MapWanderLoader).with_system(finish_asset_loader),
+        )
         // Map Wander
         .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(map_wander))
         .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(map_wander_rebuild))

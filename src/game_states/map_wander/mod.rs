@@ -1,8 +1,6 @@
-use self::gamelog::GameLog;
 use self::player_movement::PlayerMoveRequest;
 use super::ModuleSelector;
 use crate::module::game_events::InputChoice;
-use crate::module::game_events::ScriptState;
 use crate::module::game_events::TriggerEvent;
 use crate::module::Direction;
 use crate::module::Module;
@@ -13,6 +11,7 @@ use bevy_egui::{
     egui::{Pos2, Window},
     EguiContext,
 };
+pub mod asset_loader;
 pub mod gamelog;
 pub mod player_movement;
 pub mod sprites;
@@ -130,14 +129,10 @@ pub fn map_wander(
 
 pub fn resume_map_wander(
     mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<StandardMaterial>>,
-    asset_server: Res<AssetServer>,
     startup: Res<ModuleSelector>,
     mut triggers: EventWriter<TriggerEvent>,
-    mut egui_context: ResMut<EguiContext>,
+    assets: Res<RegionAssets>,
 ) {
-    commands.insert_resource(ScriptState::new());
     let module = startup.0.as_ref().unwrap().clone();
     let map_idx = module.starting_map_idx;
     let (start_x, start_y, start_z, facing, tile_x, tile_y) = {
@@ -152,14 +147,6 @@ pub fn resume_map_wander(
             sy,
         )
     };
-    let assets = RegionAssets::new(
-        &mut materials,
-        &mut meshes,
-        &asset_server,
-        &module,
-        map_idx,
-        &mut egui_context,
-    );
     for m in assets.meshes.iter() {
         // TODO: m.0 tells you what material to use
         commands
@@ -172,7 +159,6 @@ pub fn resume_map_wander(
             .insert(MapWander {})
             .insert(WanderGeometry {});
     }
-    commands.insert_resource(assets);
 
     // light
     commands
@@ -238,8 +224,6 @@ pub fn resume_map_wander(
         allow_movement: true,
         script_input: None,
     });
-
-    commands.insert_resource(GameLog::new());
 }
 
 pub fn exit_map_wander(mut commands: Commands, cleanup: Query<(Entity, &MapWander)>) {

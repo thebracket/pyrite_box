@@ -78,13 +78,13 @@ pub fn billboarding(
 
     for _ in move_occurred.iter() {
         let player_facing = player_query.iter().nth(0).unwrap().facing;
-        move_query.iter_mut().for_each(|(_, mut pos)| {
-            match player_facing {
+        move_query
+            .iter_mut()
+            .for_each(|(_, mut pos)| match player_facing {
                 Direction::West => pos.rotation = Quat::from_rotation_z(f32::to_radians(0.0)),
                 Direction::East => pos.rotation = Quat::from_rotation_z(f32::to_radians(180.0)),
                 Direction::North => pos.rotation = Quat::from_rotation_z(f32::to_radians(270.0)),
                 Direction::South => pos.rotation = Quat::from_rotation_z(f32::to_radians(90.0)),
-            }
-        });
+            });
     }
 }
