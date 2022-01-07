@@ -217,7 +217,7 @@ pub fn resume_map_wander(
 
     // Resource
     commands.insert_resource(WanderResource {
-        map_idx, // TODO: Change to starting map from module
+        map_idx,
         module,
         editor_settings: MapEditorSettings::default(),
         show_editor: false,
