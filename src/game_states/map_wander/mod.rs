@@ -127,26 +127,30 @@ pub fn map_wander(
     });
 }
 
+fn get_starting_position(module: &Module, map_idx: usize) -> (f32, f32, f32, Direction, u32, u32) {
+    let (sx, sy, direction) = module.maps[&map_idx].starting_location;
+    let (x, y) = module.maps[&map_idx].tile_location(sx as f32, sy as f32);
+    (
+        (x + 0.5) * GEOMETRY_SIZE,
+        (y + 0.5) * GEOMETRY_SIZE,
+        0.5 * GEOMETRY_SIZE,
+        direction,
+        sx,
+        sy,
+    )
+}
+
 pub fn resume_map_wander(
     mut commands: Commands,
     startup: Res<ModuleSelector>,
     mut triggers: EventWriter<TriggerEvent>,
     assets: Res<RegionAssets>,
+    wander: Option<ResMut<WanderResource>>,
 ) {
     let module = startup.0.as_ref().unwrap().clone();
     let map_idx = module.starting_map_idx;
-    let (start_x, start_y, start_z, facing, tile_x, tile_y) = {
-        let (sx, sy, direction) = module.maps[&map_idx].starting_location;
-        let (x, y) = module.maps[&map_idx].tile_location(sx as f32, sy as f32);
-        (
-            (x + 0.5) * GEOMETRY_SIZE,
-            (y + 0.5) * GEOMETRY_SIZE,
-            0.5 * GEOMETRY_SIZE,
-            direction,
-            sx,
-            sy,
-        )
-    };
+
+    // Spawn the meshes for the map
     for m in assets.meshes.iter() {
         // TODO: m.0 tells you what material to use
         commands
@@ -160,70 +164,84 @@ pub fn resume_map_wander(
             .insert(WanderGeometry {});
     }
 
-    // light
-    commands
-        .spawn_bundle(PointLightBundle {
-            point_light: PointLight {
-                color: Color::rgb(1.0, 1.0, 1.0),
-                // depth: 0.1..100.0,
-                // fov: f32::to_radians(60.0),
-                intensity: 1600.0,
-                range: 100.0,
-                //radius: f32::to_radians(360.0),
-                shadows_enabled: false,
+    if wander.is_some() {
+        // We're resuming from another state
+        // We need to generate the camera & light - the player already exists, so we
+        // can query it for location information.
+    } else {
+        // New game
+        let (start_x, start_y, start_z, facing, tile_x, tile_y) =
+            get_starting_position(&module, map_idx);
+
+        // Wander player - start by running module/map initialization events
+        if !module.module_start_event.is_empty() {
+            triggers.send(TriggerEvent(module.module_start_event.clone()));
+        }
+        if !module.maps[&map_idx].map_start_event.is_empty() {
+            triggers.send(TriggerEvent(module.maps[&map_idx].map_start_event.clone()));
+        }
+
+        // Resource
+        commands.insert_resource(WanderResource {
+            map_idx,
+            module,
+            editor_settings: MapEditorSettings::default(),
+            show_editor: false,
+            allow_movement: true,
+            script_input: None,
+        });
+
+        // Entity for the light and camera
+
+        // light
+        commands
+            .spawn_bundle(PointLightBundle {
+                point_light: PointLight {
+                    color: Color::rgb(1.0, 1.0, 1.0),
+                    // depth: 0.1..100.0,
+                    // fov: f32::to_radians(60.0),
+                    intensity: 1600.0,
+                    range: 100.0,
+                    //radius: f32::to_radians(360.0),
+                    shadows_enabled: false,
+                    ..Default::default()
+                },
+                transform: Transform::from_xyz(start_x, start_y, start_z),
                 ..Default::default()
-            },
-            transform: Transform::from_xyz(start_x, start_y, start_z),
-            ..Default::default()
-        })
-        .insert(MapWander {})
-        .insert(WanderLight {});
+            })
+            .insert(MapWander {})
+            .insert(WanderLight {});
 
-    // camera
-    let perspective = PerspectiveProjection {
-        fov: std::f32::consts::FRAC_PI_2, //1.5708,
-        aspect_ratio: 1280.0 / 1024.0,
-        near: 0.1,
-        far: 1000.0,
-    };
+        // camera
+        let perspective = PerspectiveProjection {
+            fov: std::f32::consts::FRAC_PI_2, //1.5708,
+            aspect_ratio: 1280.0 / 1024.0,
+            near: 0.1,
+            far: 1000.0,
+        };
 
-    commands
-        .spawn_bundle(PerspectiveCameraBundle {
-            perspective_projection: perspective,
-            transform: Transform::from_xyz(start_x, start_y, start_z).looking_at(
-                facing.camera_look_at(&Vec3::new(start_x, start_y, start_z)),
-                Vec3::new(0.0, 0.0, 1.0),
-            ),
-            ..Default::default()
-        })
-        .insert(MapWander {})
-        .insert(WanderCamera {});
+        commands
+            .spawn_bundle(PerspectiveCameraBundle {
+                perspective_projection: perspective,
+                transform: Transform::from_xyz(start_x, start_y, start_z).looking_at(
+                    facing.camera_look_at(&Vec3::new(start_x, start_y, start_z)),
+                    Vec3::new(0.0, 0.0, 1.0),
+                ),
+                ..Default::default()
+            })
+            .insert(MapWander {})
+            .insert(WanderCamera {});
 
-    // Wander player - start by running module/map initialization events
-    if !module.module_start_event.is_empty() {
-        triggers.send(TriggerEvent(module.module_start_event.clone()));
+        // Setup the player
+        commands
+            .spawn()
+            .insert(WanderingPlayer {
+                x: tile_x as i32,
+                y: tile_y as i32,
+                facing,
+            })
+            .insert(MapWander {}); // TODO: Remove MapWander and make sure deletion is explicit when game ends
     }
-    if !module.maps[&map_idx].map_start_event.is_empty() {
-        triggers.send(TriggerEvent(module.maps[&map_idx].map_start_event.clone()));
-    }
-    commands
-        .spawn()
-        .insert(WanderingPlayer {
-            x: tile_x as i32,
-            y: tile_y as i32,
-            facing,
-        })
-        .insert(MapWander {});
-
-    // Resource
-    commands.insert_resource(WanderResource {
-        map_idx,
-        module,
-        editor_settings: MapEditorSettings::default(),
-        show_editor: false,
-        allow_movement: true,
-        script_input: None,
-    });
 }
 
 pub fn exit_map_wander(mut commands: Commands, cleanup: Query<(Entity, &MapWander)>) {
