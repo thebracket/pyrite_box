@@ -1,8 +1,14 @@
 use crate::{
     game_states::WanderingPlayer,
     module::Direction,
-    region::region_map::{RegionBoundaryType, RegionMap, RegionTileType},
+    region::{
+        region_assets::RegionAssets,
+        region_map::{RegionBoundaryType, RegionMap, RegionTileType},
+    },
 };
+use bevy::prelude::*;
+
+use super::BattleComponent;
 
 pub const BATTLE_WIDTH: usize = 32;
 pub const BATTLE_HEIGHT: usize = 32;
@@ -63,6 +69,40 @@ impl BattleMap {
         }
 
         result
+    }
+
+    pub fn spawn_map_tiles(&self, commands: &mut Commands, assets: &RegionAssets) {
+        commands
+            .spawn_bundle(OrthographicCameraBundle::new_2d())
+            .insert(BattleComponent {});
+        let mut i = 0;
+        for y in 0..BATTLE_HEIGHT {
+            for x in 0..BATTLE_WIDTH {
+                let sprite = {
+                    if self.tiles[i] == BattleTile::Open {
+                        0
+                    } else {
+                        1
+                    }
+                };
+                commands
+                    .spawn_bundle(SpriteSheetBundle {
+                        texture_atlas: assets.battle_tile_atlas.clone(),
+                        transform: Transform::from_xyz(
+                            (x as f32 - BATTLE_WIDTH as f32 / 2.0) * 32.0,
+                            ((y as f32 - BATTLE_HEIGHT as f32 / 2.0) * 32.0) + 16.0,
+                            1.0,
+                        ),
+                        sprite: TextureAtlasSprite {
+                            index: sprite,
+                            ..Default::default()
+                        },
+                        ..Default::default()
+                    })
+                    .insert(BattleComponent {});
+                i += 1;
+            }
+        }
     }
 }
 
