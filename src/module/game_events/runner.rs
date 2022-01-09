@@ -1,9 +1,12 @@
 use super::GameEventStep;
-use crate::game_states::{
-    gamelog::{GameLog, DEFAULT_TEXT_COLOR},
-    player_movement::PlayerMoveRequest,
-    sprites::SpriteRequest,
-    WanderInput, WanderResource,
+use crate::{
+    game_states::{
+        gamelog::{GameLog, DEFAULT_TEXT_COLOR},
+        player_movement::PlayerMoveRequest,
+        sprites::SpriteRequest,
+        WanderInput, WanderResource,
+    },
+    AppState,
 };
 use bevy::prelude::*;
 use bevy_egui::egui::Color32;
@@ -25,6 +28,7 @@ pub fn event_runner(
     time: Res<Time>,
     mut move_request: EventWriter<PlayerMoveRequest>,
     mut sprite_request: EventWriter<SpriteRequest>,
+    mut app_state: ResMut<State<AppState>>,
 ) {
     wander.allow_movement = false;
 
@@ -128,6 +132,11 @@ pub fn event_runner(
                     }
                     GameEventStep::Sprite(s) => {
                         sprite_request.send(s.clone());
+                    }
+                    GameEventStep::Battle => {
+                        app_state
+                            .set(AppState::Battle)
+                            .expect("Failed to change mode");
                     }
                 }
             } else {

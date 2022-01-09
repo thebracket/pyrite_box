@@ -15,6 +15,7 @@ pub struct RegionAssets {
     pub ui_images: HashMap<String, TextureId>,
     pub sprites: HashMap<String, Handle<StandardMaterial>>,
     pub sprite_mesh: Handle<Mesh>,
+    pub battle_tile_atlas: Handle<TextureAtlas>,
 }
 
 impl RegionAssets {
@@ -26,6 +27,7 @@ impl RegionAssets {
         map_idx: usize,
         egui: &mut EguiContext,
         handles: &mut Vec<HandleUntyped>, // Used for tracking image loading
+        texture_atlases: &mut Assets<TextureAtlas>,
     ) -> Self {
         let mut mats = HashMap::new();
         for (idx, (_name, mat, _)) in module.materials.iter() {
@@ -160,12 +162,20 @@ impl RegionAssets {
         );
         let sprite_mesh = meshes.add(mesh);
 
+        // Battle tile atlas - TODO: make this data-driven
+        let tile_handle = asset_server.load("battle-sprites.png");
+        handles.push(tile_handle.clone_untyped());
+        let texture_atlas =
+            TextureAtlas::from_grid(tile_handle.clone(), Vec2::new(32.0, 32.0), 2, 1);
+        let texture_atlas_handle = texture_atlases.add(texture_atlas);
+
         Self {
             materials: mats,
             meshes: map_meshes,
             ui_images,
             sprites,
             sprite_mesh,
+            battle_tile_atlas: texture_atlas_handle,
         }
     }
 

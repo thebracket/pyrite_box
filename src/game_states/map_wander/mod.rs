@@ -26,7 +26,7 @@ pub struct WanderCamera {}
 #[derive(Component)]
 pub struct WanderLight {}
 
-#[derive(Component)]
+#[derive(Component, Debug)]
 pub struct WanderingPlayer {
     pub x: i32,
     pub y: i32,
@@ -233,14 +233,11 @@ pub fn resume_map_wander(
             .insert(WanderCamera {});
 
         // Setup the player
-        commands
-            .spawn()
-            .insert(WanderingPlayer {
-                x: tile_x as i32,
-                y: tile_y as i32,
-                facing,
-            })
-            .insert(MapWander {}); // TODO: Remove MapWander and make sure deletion is explicit when game ends
+        commands.spawn().insert(WanderingPlayer {
+            x: tile_x as i32,
+            y: tile_y as i32,
+            facing,
+        });
     }
 }
 

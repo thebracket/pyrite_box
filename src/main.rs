@@ -20,6 +20,7 @@ pub enum AppState {
     ModuleEditor,
     MapWanderLoader, // Loading screen for the map module
     MapWander,       // Test mode for the map
+    Battle,
 }
 
 fn main() {
@@ -68,6 +69,7 @@ fn main() {
             SystemSet::on_exit(AppState::MapWanderLoader).with_system(finish_asset_loader),
         )
         // Map Wander
+        .add_system_set(SystemSet::on_enter(AppState::MapWander).with_system(resume_map_wander))
         .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(map_wander))
         .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(map_wander_rebuild))
         .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(display_game_log))
@@ -76,7 +78,8 @@ fn main() {
         .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(player_move))
         .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(region_sprites))
         .add_system_set(SystemSet::on_update(AppState::MapWander).with_system(billboarding))
-        .add_system_set(SystemSet::on_enter(AppState::MapWander).with_system(resume_map_wander))
         .add_system_set(SystemSet::on_exit(AppState::MapWander).with_system(exit_map_wander))
+        // Battle Mode
+        .add_system_set(SystemSet::on_enter(AppState::Battle).with_system(start_battle))
         .run();
 }

@@ -19,6 +19,7 @@ pub fn start_asset_loader(
     mut materials: ResMut<Assets<StandardMaterial>>,
     asset_server: Res<AssetServer>,
     mut egui_context: ResMut<EguiContext>,
+    mut texture_atlases: ResMut<Assets<TextureAtlas>>,
 ) {
     // Create an empty ScriptState to hold the current scripting engine state.
     // Create an empty GameLog
@@ -43,6 +44,7 @@ pub fn start_asset_loader(
         map_idx,
         &mut egui_context,
         &mut handles,
+        &mut texture_atlases,
     );
 
     // Now we pack all of the materials we requested into a MaterialLoader

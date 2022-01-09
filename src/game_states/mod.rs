@@ -10,3 +10,5 @@ mod map_wander;
 pub use map_wander::*;
 mod module_editor;
 pub use module_editor::*;
+mod battle;
+pub use battle::*;

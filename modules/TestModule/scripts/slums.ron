@@ -22,7 +22,11 @@
                     (
                         branch: "Abort",
                         message: "No, thank you."
-                    )
+                    ),
+                    (
+                        branch: "TestBattle",
+                        message: "Have at thee, knave!"
+                    ),
                 ]
             ),
             Sprite(Remove(id: "RolfSprite")),
@@ -78,5 +82,11 @@
     (
         tag: "Abort",
         steps: [],
+    ),
+    (
+        tag: "TestBattle",
+        steps: [
+            Battle,
+        ],
     ),
 ]

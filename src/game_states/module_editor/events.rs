@@ -117,6 +117,7 @@ pub fn event_editor(egui_context: &EguiContext, module_res: &mut ModuleResource)
                             GameEventStep::Sprite(..) => {
                                 ui.label("Sprite Action");
                             }
+                            _ => {}
                         }
                     }
                 });

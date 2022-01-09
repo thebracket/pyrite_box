@@ -42,6 +42,7 @@ pub enum GameEventStep {
         y: u32,
     },
     Sprite(SpriteRequest),
+    Battle,
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]
