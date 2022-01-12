@@ -47,7 +47,7 @@ pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<M
 }
 
 pub fn resume_module_editor(mut commands: Commands, startup: Res<ModuleSelector>) {
-    if let Some(module) = &startup.0 {
+    if let Some(module) = &startup.module {
         commands.insert_resource(ModuleResource {
             //module: Module::load(&filename),
             module: module.clone(),

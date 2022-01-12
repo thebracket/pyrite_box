@@ -21,6 +21,7 @@ pub enum AppState {
     MapWanderLoader, // Loading screen for the map module
     MapWander,       // Test mode for the map
     Battle,
+    CharacterGeneration,
 }
 
 fn main() {

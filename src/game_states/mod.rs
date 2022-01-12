@@ -12,3 +12,5 @@ mod module_editor;
 pub use module_editor::*;
 mod battle;
 pub use battle::*;
+mod chargen;
+pub use chargen::*;

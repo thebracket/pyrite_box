@@ -1,3 +1,4 @@
+use super::BattleComponent;
 use crate::{
     game_states::WanderingPlayer,
     module::Direction,
@@ -7,7 +8,6 @@ use crate::{
     },
 };
 use bevy::prelude::*;
-use super::BattleComponent;
 
 pub const BATTLE_WIDTH: usize = 24;
 pub const BATTLE_HEIGHT: usize = 24;
@@ -22,7 +22,7 @@ pub enum BattleTile {
 
 pub struct BattleMap {
     pub tiles: Vec<BattleTile>,
-    pub region_coords: (i32, i32)
+    pub region_coords: (i32, i32),
 }
 
 impl BattleMap {
@@ -31,7 +31,7 @@ impl BattleMap {
     pub fn new() -> Self {
         Self {
             tiles: vec![BattleTile::Open; BATTLE_WIDTH * BATTLE_HEIGHT],
-            region_coords: (0, 0)
+            region_coords: (0, 0),
         }
     }
 
@@ -47,8 +47,8 @@ impl BattleMap {
     }
 
     pub fn build_from_region(mut self, map: &RegionMap) -> Self {
-        for y in self.region_coords.1 .. self.region_coords.1 + 3 {
-            for x in self.region_coords.0 .. self.region_coords.0 + 3 {
+        for y in self.region_coords.1..self.region_coords.1 + 3 {
+            for x in self.region_coords.0..self.region_coords.0 + 3 {
                 if x < map.size.0 as i32 && y < map.size.1 as i32 && x >= 0 && y >= 0 {
                     let region_idx = ((y * map.size.1 as i32) + x) as usize;
                     match map.tiles[region_idx].tile_type {
@@ -84,8 +84,8 @@ impl BattleMap {
     }
 
     fn make_region_tile_open(&mut self, x: i32, y: i32) {
-        for by in 1..TILE_HEIGHT-1 {
-            for bx in 1..TILE_WIDTH-1 {
+        for by in 1..TILE_HEIGHT - 1 {
+            for bx in 1..TILE_WIDTH - 1 {
                 let idx = self.battle_tile_idx(
                     bx + ((x - self.region_coords.0) as usize * TILE_WIDTH),
                     by + ((y - self.region_coords.1) as usize * TILE_HEIGHT),
@@ -104,13 +104,13 @@ impl BattleMap {
         // North
         match map.tiles[idx].boundaries[Direction::North.to_exit_index()].0 {
             RegionBoundaryType::None => {
-                for x in 1..TILE_WIDTH-1 {
+                for x in 1..TILE_WIDTH - 1 {
                     self.tiles[top_left + x] = BattleTile::Open;
                 }
             }
             RegionBoundaryType::Opening => {
-                for x in 1..TILE_WIDTH-1 {
-                    let distance = (TILE_WIDTH as i32/2 - x as i32).abs();
+                for x in 1..TILE_WIDTH - 1 {
+                    let distance = (TILE_WIDTH as i32 / 2 - x as i32).abs();
                     if distance < 2 {
                         self.tiles[top_left + x] = BattleTile::Open;
                     }
@@ -120,16 +120,16 @@ impl BattleMap {
         }
 
         // South
-        let bottom_left = top_left + (BATTLE_WIDTH * (TILE_HEIGHT-1));
+        let bottom_left = top_left + (BATTLE_WIDTH * (TILE_HEIGHT - 1));
         match map.tiles[idx].boundaries[Direction::South.to_exit_index()].0 {
             RegionBoundaryType::None => {
-                for x in 1..TILE_WIDTH-1 {
+                for x in 1..TILE_WIDTH - 1 {
                     self.tiles[bottom_left + x] = BattleTile::Open;
                 }
             }
             RegionBoundaryType::Opening => {
-                for x in 1..TILE_WIDTH-1 {
-                    let distance = (TILE_WIDTH as i32/2 - x as i32).abs();
+                for x in 1..TILE_WIDTH - 1 {
+                    let distance = (TILE_WIDTH as i32 / 2 - x as i32).abs();
                     if distance < 2 {
                         self.tiles[bottom_left + x] = BattleTile::Open;
                     }
@@ -141,13 +141,13 @@ impl BattleMap {
         // West
         match map.tiles[idx].boundaries[Direction::West.to_exit_index()].0 {
             RegionBoundaryType::None => {
-                for y in 1..TILE_HEIGHT-1 {
+                for y in 1..TILE_HEIGHT - 1 {
                     self.tiles[top_left + (y * BATTLE_WIDTH)] = BattleTile::Open;
                 }
             }
             RegionBoundaryType::Opening => {
-                for y in 1..TILE_HEIGHT-1 {
-                    let distance = (TILE_HEIGHT as i32/2 - y as i32).abs();
+                for y in 1..TILE_HEIGHT - 1 {
+                    let distance = (TILE_HEIGHT as i32 / 2 - y as i32).abs();
                     if distance < 2 {
                         self.tiles[top_left + (y * BATTLE_WIDTH)] = BattleTile::Open;
                     }
@@ -159,15 +159,16 @@ impl BattleMap {
         // East
         match map.tiles[idx].boundaries[Direction::East.to_exit_index()].0 {
             RegionBoundaryType::None => {
-                for y in 1..TILE_HEIGHT-1 {
-                    self.tiles[top_left + (y * BATTLE_WIDTH) + (TILE_WIDTH-1)] = BattleTile::Open;
+                for y in 1..TILE_HEIGHT - 1 {
+                    self.tiles[top_left + (y * BATTLE_WIDTH) + (TILE_WIDTH - 1)] = BattleTile::Open;
                 }
             }
             RegionBoundaryType::Opening => {
-                for y in 1..TILE_HEIGHT-1 {
-                    let distance = (TILE_HEIGHT as i32/2 - y as i32).abs();
+                for y in 1..TILE_HEIGHT - 1 {
+                    let distance = (TILE_HEIGHT as i32 / 2 - y as i32).abs();
                     if distance < 2 {
-                        self.tiles[top_left + (y * BATTLE_WIDTH) + (TILE_WIDTH-1)] = BattleTile::Open;
+                        self.tiles[top_left + (y * BATTLE_WIDTH) + (TILE_WIDTH - 1)] =
+                            BattleTile::Open;
                     }
                 }
             }
@@ -176,10 +177,11 @@ impl BattleMap {
     }
 
     fn tile_to_screen(&self, x: usize, y: usize) -> Vec2 {
-        let mut result = Vec2::new(
-            x as f32 * 32.0,
-            y as f32 * 32.0,
-        ) - Vec2::new((BATTLE_WIDTH as f32 / 2.0) * 32.0, (BATTLE_HEIGHT as f32 / 2.0) * 32.0);
+        let mut result = Vec2::new(x as f32 * 32.0, y as f32 * 32.0)
+            - Vec2::new(
+                (BATTLE_WIDTH as f32 / 2.0) * 32.0,
+                (BATTLE_HEIGHT as f32 / 2.0) * 32.0,
+            );
         result.y = 0.0 - result.y;
         result
     }
@@ -196,10 +198,13 @@ impl BattleMap {
                     .spawn_bundle(SpriteSheetBundle {
                         texture_atlas: assets.battle_tile_atlas.clone(),
                         transform: Transform::from_xyz(coords.x, coords.y, 0.0),
-                        sprite: TextureAtlasSprite{ index, ..Default::default() },
+                        sprite: TextureAtlasSprite {
+                            index,
+                            ..Default::default()
+                        },
                         ..Default::default()
                     })
-                    .insert(BattleComponent{});
+                    .insert(BattleComponent {});
             }
         }
     }

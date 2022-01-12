@@ -27,7 +27,7 @@ pub fn start_asset_loader(
     commands.insert_resource(GameLog::new());
 
     // Select the module
-    let module = startup.0.as_ref().unwrap().clone();
+    let module = startup.module.as_ref().unwrap().clone();
 
     // Determine player starting location
     let map_idx = module.starting_map_idx;

@@ -10,14 +10,20 @@ use bevy_egui::{
     EguiContext,
 };
 
+use super::CharacterHeader;
+
 #[derive(Component)]
 pub struct MainMenuUi;
 
 pub struct AvailableModules {
     modules: Vec<ModuleHeader>,
+    characters: Vec<CharacterHeader>,
 }
 
-pub struct ModuleSelector(pub Option<Module>);
+pub struct ModuleSelector {
+    pub module: Option<Module>,
+    pub party: Vec<usize>,
+}
 
 pub fn main_menu(
     egui_context: ResMut<EguiContext>,
@@ -30,7 +36,7 @@ pub fn main_menu(
         .resizable(false)
         .title_bar(true)
         .fixed_pos(Pos2::new(200.0, 100.0))
-        .fixed_size(bevy_egui::egui::Vec2::new(800.0, 500.0))
+        .fixed_size(bevy_egui::egui::Vec2::new(800.0, 300.0))
         .show(egui_context.ctx(), |ui| {
             ui.separator();
 
@@ -39,8 +45,8 @@ pub fn main_menu(
                 ui.colored_label(Color32::LIGHT_GREEN, &module.description);
                 ui.colored_label(Color32::GREEN, format!("Author: {}", &module.author));
                 ui.horizontal(|ui| {
-                    if ui.button("Play").clicked() {
-                        selected_module.0 = Some(
+                    if selected_module.party.is_empty() && ui.button("Play").clicked() {
+                        selected_module.module = Some(
                             crate::modules::load_module(module.filename.as_ref().unwrap()).unwrap(),
                         );
                         state
@@ -48,7 +54,7 @@ pub fn main_menu(
                             .expect("Failed to change mode");
                     }
                     if ui.button("Edit").clicked() {
-                        selected_module.0 = Some(
+                        selected_module.module = Some(
                             crate::modules::load_module(module.filename.as_ref().unwrap()).unwrap(),
                         );
                         state
@@ -73,6 +79,37 @@ pub fn main_menu(
                 }
             });
         });
+
+    egui::Window::new("Assemble Your Party")
+        .resizable(false)
+        .title_bar(true)
+        .fixed_pos(Pos2::new(200.0, 400.0))
+        .fixed_size(bevy_egui::egui::Vec2::new(800.0, 200.0))
+        .show(egui_context.ctx(), |ui| {
+            ui.horizontal_top(|ui| {
+                ui.vertical(|ui| {
+                    ui.colored_label(Color32::WHITE, "Your Party");
+                    if selected_module.party.is_empty() {
+                        ui.colored_label(Color32::RED, "Please add 1-6 characters to your party.");
+                    } else {
+                        // List party
+                    }
+                });
+                ui.vertical(|ui| {
+                    ui.colored_label(Color32::WHITE, "Available Characters");
+                    if available_modules.characters.is_empty() {
+                        ui.colored_label(Color32::RED, "There are no available characters.");
+                    }
+
+                    /*
+                    ui.button("<");
+                    ui.button(">");
+                    ui.button("Create New Character");
+                    ui.button("Delete Character");
+                    */
+                });
+            });
+        });
 }
 
 pub fn resume_main_menu(mut commands: Commands, asset_server: Res<AssetServer>) {
@@ -89,8 +126,12 @@ pub fn resume_main_menu(mut commands: Commands, asset_server: Res<AssetServer>) 
     // Find available modules
     commands.insert_resource(AvailableModules {
         modules: list_available_modules(),
+        characters: CharacterHeader::scan_available(),
     });
-    commands.insert_resource(ModuleSelector(None));
+    commands.insert_resource(ModuleSelector {
+        module: None,
+        party: Vec::new(),
+    });
 }
 
 pub fn exit_main_menu(mut commands: Commands, cleanup: Query<(Entity, &MainMenuUi)>) {

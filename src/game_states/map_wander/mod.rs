@@ -147,7 +147,7 @@ pub fn resume_map_wander(
     assets: Res<RegionAssets>,
     wander: Option<ResMut<WanderResource>>,
 ) {
-    let module = startup.0.as_ref().unwrap().clone();
+    let module = startup.module.as_ref().unwrap().clone();
     let map_idx = module.starting_map_idx;
 
     // Spawn the meshes for the map

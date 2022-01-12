@@ -14,8 +14,7 @@ pub fn start_battle(
     player_query: Query<&WanderingPlayer>,
     assets: Res<RegionAssets>,
 ) {
-    commands
-        .spawn_bundle(OrthographicCameraBundle::new_2d());
+    commands.spawn_bundle(OrthographicCameraBundle::new_2d());
 
     // Obtain the player's map location
     let player_pos = player_query.iter().nth(0).unwrap();
