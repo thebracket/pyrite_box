@@ -53,6 +53,14 @@ fn main() {
         .add_system_set(SystemSet::on_update(AppState::MainMenu).with_system(main_menu))
         .add_system_set(SystemSet::on_enter(AppState::MainMenu).with_system(resume_main_menu))
         .add_system_set(SystemSet::on_exit(AppState::MainMenu).with_system(exit_main_menu))
+        // Character Generation State
+        .add_system_set(
+            SystemSet::on_update(AppState::CharacterGeneration).with_system(run_chargen),
+        )
+        .add_system_set(
+            SystemSet::on_enter(AppState::CharacterGeneration).with_system(start_chargen),
+        )
+        .add_system_set(SystemSet::on_exit(AppState::CharacterGeneration).with_system(exit_chargen))
         // Module Editor
         .add_system_set(
             SystemSet::on_update(AppState::ModuleEditor).with_system(module_editor), //.with_system(texture_mode_system)

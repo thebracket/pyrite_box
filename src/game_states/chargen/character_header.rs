@@ -16,7 +16,8 @@ impl CharacterHeader {
     }
 
     pub fn save(&self) -> Result<()> {
-        let path = Path::new("characters").join(&self.name).join(".chr");
+        let path = Path::new("characters").join(&format!("{}.chr", &self.name));
+        println!("{:?}", path);
         let header_ron = to_string_pretty(&self, PrettyConfig::new())?;
         std::fs::write(path, header_ron)?;
         Ok(())

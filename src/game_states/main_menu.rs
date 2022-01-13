@@ -10,7 +10,7 @@ use bevy_egui::{
     EguiContext,
 };
 
-use super::CharacterHeader;
+use super::{CharacterHeader, ChargenResource};
 
 #[derive(Component)]
 pub struct MainMenuUi;
@@ -22,7 +22,7 @@ pub struct AvailableModules {
 
 pub struct ModuleSelector {
     pub module: Option<Module>,
-    pub party: Vec<usize>,
+    pub party: Vec<String>,
 }
 
 pub fn main_menu(
@@ -31,6 +31,7 @@ pub fn main_menu(
     mut state: ResMut<State<AppState>>,
     available_modules: Res<AvailableModules>,
     mut selected_module: ResMut<ModuleSelector>,
+    mut commands: Commands,
 ) {
     egui::Window::new("Welcome to Pyrite Box")
         .resizable(false)
@@ -92,19 +93,67 @@ pub fn main_menu(
                     if selected_module.party.is_empty() {
                         ui.colored_label(Color32::RED, "Please add 1-6 characters to your party.");
                     } else {
-                        // List party
+                        let mut to_remove = None;
+                        for (i, name) in selected_module.party.iter().enumerate() {
+                            ui.colored_label(Color32::LIGHT_GREEN, name);
+                            if ui.button("Remove").clicked() {
+                                to_remove = Some(i);
+                            }
+                        }
+                        if let Some(i) = to_remove {
+                            selected_module.party.remove(i);
+                        }
                     }
                 });
                 ui.vertical(|ui| {
                     ui.colored_label(Color32::WHITE, "Available Characters");
-                    if available_modules.characters.is_empty() {
+                    let available_characters: Vec<CharacterHeader> = available_modules
+                        .characters
+                        .iter()
+                        .filter(|chr| {
+                            selected_module
+                                .party
+                                .iter()
+                                .find(|c| **c == chr.name)
+                                .is_none()
+                        })
+                        .map(|chr| chr.clone())
+                        .collect();
+                    if available_characters.is_empty() {
                         ui.colored_label(Color32::RED, "There are no available characters.");
+                    } else {
+                        for chr in available_characters.iter() {
+                            ui.horizontal_top(|ui| {
+                                ui.colored_label(Color32::LIGHT_GREEN, &chr.name);
+                                if selected_module.party.len() < 6 {
+                                    if ui.button("Add to Party").clicked() {
+                                        selected_module.party.push(chr.name.clone());
+                                    }
+                                }
+                                if ui.button("Edit").clicked() {
+                                    commands.insert_resource(ChargenResource {
+                                        character: chr.clone(),
+                                    });
+                                    state
+                                        .set(AppState::CharacterGeneration)
+                                        .expect("Failed to change mode");
+                                }
+                            });
+                        }
+                    }
+
+                    if ui.button("Create New Character").clicked() {
+                        commands.insert_resource(ChargenResource {
+                            character: CharacterHeader::new(),
+                        });
+                        state
+                            .set(AppState::CharacterGeneration)
+                            .expect("Failed to change mode");
                     }
 
                     /*
                     ui.button("<");
                     ui.button(">");
-                    ui.button("Create New Character");
                     ui.button("Delete Character");
                     */
                 });
