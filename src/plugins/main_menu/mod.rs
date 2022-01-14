@@ -1,8 +1,9 @@
 mod main_menu;
 use bevy::prelude::{Plugin, SystemSet};
 pub use main_menu::*;
-
+mod components;
 use crate::AppState;
+pub use components::*;
 
 pub struct MainMenuPlugin;
 

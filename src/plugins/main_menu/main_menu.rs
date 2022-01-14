@@ -1,8 +1,9 @@
+use super::MainMenuUi;
 use crate::{
-    modules::{list_available_modules, ModuleHeader},
+    modules::load_module,
     plugins::CharacterHeader,
     state::ChargenResource,
-    state::ModuleSelector,
+    state::{AvailableModules, ModuleSelector},
     AppState,
 };
 use bevy::{app::Events, prelude::*};
@@ -11,14 +12,6 @@ use bevy_egui::{
     egui::{self, Color32},
     EguiContext,
 };
-
-#[derive(Component)]
-pub struct MainMenuUi;
-
-pub struct AvailableModules {
-    modules: Vec<ModuleHeader>,
-    characters: Vec<CharacterHeader>,
-}
 
 pub fn main_menu(
     egui_context: ResMut<EguiContext>,
@@ -36,30 +29,7 @@ pub fn main_menu(
         .show(egui_context.ctx(), |ui| {
             ui.separator();
 
-            for module in available_modules.modules.iter() {
-                ui.heading(&module.name);
-                ui.colored_label(Color32::LIGHT_GREEN, &module.description);
-                ui.colored_label(Color32::GREEN, format!("Author: {}", &module.author));
-                ui.horizontal(|ui| {
-                    if selected_module.party.is_empty() && ui.button("Play").clicked() {
-                        selected_module.module = Some(
-                            crate::modules::load_module(module.filename.as_ref().unwrap()).unwrap(),
-                        );
-                        state
-                            .set(AppState::MapWanderLoader)
-                            .expect("Failed to change mode");
-                    }
-                    if ui.button("Edit").clicked() {
-                        selected_module.module = Some(
-                            crate::modules::load_module(module.filename.as_ref().unwrap()).unwrap(),
-                        );
-                        state
-                            .set(AppState::ModuleEditor)
-                            .expect("Failed to change mode");
-                    }
-                });
-                ui.separator();
-            }
+            show_modules(&available_modules, ui, &mut selected_module, &mut state);
 
             ui.heading("Other Options");
             ui.horizontal(|ui| {
@@ -83,77 +53,124 @@ pub fn main_menu(
         .fixed_size(bevy_egui::egui::Vec2::new(800.0, 200.0))
         .show(egui_context.ctx(), |ui| {
             ui.horizontal_top(|ui| {
-                ui.vertical(|ui| {
-                    ui.colored_label(Color32::WHITE, "Your Party");
-                    if selected_module.party.is_empty() {
-                        ui.colored_label(Color32::RED, "Please add 1-6 characters to your party.");
-                    } else {
-                        let mut to_remove = None;
-                        for (i, name) in selected_module.party.iter().enumerate() {
-                            ui.colored_label(Color32::LIGHT_GREEN, name);
-                            if ui.button("Remove").clicked() {
-                                to_remove = Some(i);
-                            }
-                        }
-                        if let Some(i) = to_remove {
-                            selected_module.party.remove(i);
-                        }
-                    }
-                });
-                ui.vertical(|ui| {
-                    ui.colored_label(Color32::WHITE, "Available Characters");
-                    let available_characters: Vec<CharacterHeader> = available_modules
-                        .characters
-                        .iter()
-                        .filter(|chr| {
-                            selected_module
-                                .party
-                                .iter()
-                                .find(|c| **c == chr.name)
-                                .is_none()
-                        })
-                        .map(|chr| chr.clone())
-                        .collect();
-                    if available_characters.is_empty() {
-                        ui.colored_label(Color32::RED, "There are no available characters.");
-                    } else {
-                        for chr in available_characters.iter() {
-                            ui.horizontal_top(|ui| {
-                                ui.colored_label(Color32::LIGHT_GREEN, &chr.name);
-                                if selected_module.party.len() < 6 {
-                                    if ui.button("Add to Party").clicked() {
-                                        selected_module.party.push(chr.name.clone());
-                                    }
-                                }
-                                if ui.button("Edit").clicked() {
-                                    commands.insert_resource(ChargenResource {
-                                        character: chr.clone(),
-                                    });
-                                    state
-                                        .set(AppState::CharacterGeneration)
-                                        .expect("Failed to change mode");
-                                }
-                            });
-                        }
-                    }
+                show_party(ui, &mut selected_module);
+                show_characters(
+                    ui,
+                    &available_modules,
+                    &mut selected_module,
+                    &mut commands,
+                    &mut state,
+                );
+            });
+        });
+}
 
-                    if ui.button("Create New Character").clicked() {
+fn show_modules(
+    available_modules: &AvailableModules,
+    ui: &mut egui::Ui,
+    selected_module: &mut ModuleSelector,
+    state: &mut bevy::prelude::State<AppState>,
+) {
+    for module in available_modules.modules.iter() {
+        ui.heading(&module.name);
+        ui.colored_label(Color32::LIGHT_GREEN, &module.description);
+        ui.colored_label(Color32::GREEN, format!("Author: {}", &module.author));
+        ui.horizontal(|ui| {
+            if !selected_module.party.is_empty() && ui.button("Play").clicked() {
+                selected_module.module =
+                    Some(load_module(module.filename.as_ref().unwrap()).unwrap());
+                state
+                    .set(AppState::MapWanderLoader)
+                    .expect("Failed to change mode");
+            }
+            if ui.button("Edit").clicked() {
+                selected_module.module =
+                    Some(load_module(module.filename.as_ref().unwrap()).unwrap());
+                state
+                    .set(AppState::ModuleEditor)
+                    .expect("Failed to change mode");
+            }
+        });
+        ui.separator();
+    }
+}
+
+fn show_party(ui: &mut egui::Ui, selected_module: &mut ModuleSelector) {
+    ui.vertical(|ui| {
+        ui.colored_label(Color32::WHITE, "Your Party");
+        if selected_module.party.is_empty() {
+            ui.colored_label(Color32::RED, "Please add 1-6 characters to your party.");
+        } else {
+            let mut to_remove = None;
+            for (i, name) in selected_module.party.iter().enumerate() {
+                ui.colored_label(Color32::LIGHT_GREEN, name);
+                if ui.button("Remove").clicked() {
+                    to_remove = Some(i);
+                }
+            }
+            if let Some(i) = to_remove {
+                selected_module.party.remove(i);
+            }
+        }
+    });
+}
+
+pub fn show_characters(
+    ui: &mut egui::Ui,
+    available_modules: &AvailableModules,
+    selected_module: &mut ModuleSelector,
+    commands: &mut Commands,
+    state: &mut bevy::prelude::State<AppState>,
+) {
+    ui.vertical(|ui| {
+        ui.colored_label(Color32::WHITE, "Available Characters");
+        let available_characters: Vec<CharacterHeader> = available_modules
+            .characters
+            .iter()
+            .filter(|chr| {
+                selected_module
+                    .party
+                    .iter()
+                    .find(|c| **c == chr.name)
+                    .is_none()
+            })
+            .map(|chr| chr.clone())
+            .collect();
+
+        // If no characters are available, warn - otherwise iterate the characters
+        if available_characters.is_empty() {
+            ui.colored_label(Color32::RED, "There are no available characters.");
+        } else {
+            for chr in available_characters.iter() {
+                ui.horizontal_top(|ui| {
+                    ui.colored_label(Color32::LIGHT_GREEN, &chr.name);
+                    if selected_module.party.len() < 6 {
+                        if ui.button("Add to Party").clicked() {
+                            selected_module.party.push(chr.name.clone());
+                        }
+                    }
+                    if ui.button("Edit").clicked() {
                         commands.insert_resource(ChargenResource {
-                            character: CharacterHeader::new(),
+                            character: chr.clone(),
                         });
                         state
                             .set(AppState::CharacterGeneration)
                             .expect("Failed to change mode");
                     }
-
-                    /*
-                    ui.button("<");
-                    ui.button(">");
-                    ui.button("Delete Character");
-                    */
                 });
+            }
+        }
+
+        // Link to character creation
+        if ui.button("Create New Character").clicked() {
+            commands.insert_resource(ChargenResource {
+                character: CharacterHeader::new(),
             });
-        });
+            state
+                .set(AppState::CharacterGeneration)
+                .expect("Failed to change mode");
+        }
+    });
 }
 
 pub fn resume_main_menu(mut commands: Commands, asset_server: Res<AssetServer>) {
@@ -168,14 +185,8 @@ pub fn resume_main_menu(mut commands: Commands, asset_server: Res<AssetServer>) 
         .insert(MainMenuUi {});
 
     // Find available modules
-    commands.insert_resource(AvailableModules {
-        modules: list_available_modules(),
-        characters: CharacterHeader::scan_available(),
-    });
-    commands.insert_resource(ModuleSelector {
-        module: None,
-        party: Vec::new(),
-    });
+    commands.insert_resource(AvailableModules::new());
+    commands.insert_resource(ModuleSelector::new());
 }
 
 pub fn exit_main_menu(mut commands: Commands, cleanup: Query<(Entity, &MainMenuUi)>) {

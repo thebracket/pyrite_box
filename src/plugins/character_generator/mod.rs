@@ -2,9 +2,8 @@ mod generator;
 use bevy::prelude::{Plugin, SystemSet};
 pub use generator::*;
 mod character_header;
-pub use character_header::*;
-
 use crate::AppState;
+pub use character_header::*;
 
 pub struct CharacterGeneratorPlugin;
 

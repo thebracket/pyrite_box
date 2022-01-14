@@ -10,3 +10,5 @@ mod wander_input;
 pub use wander_input::*;
 mod map_editor_settings;
 pub use map_editor_settings::*;
+mod available_modules;
+pub use available_modules::*;
