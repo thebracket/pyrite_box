@@ -12,9 +12,9 @@ mod module_editor;
 pub use module_editor::*;
 mod battle;
 pub use battle::*;
-mod map_wander;
+mod play_region;
 use crate::{modules::game_events::TriggerEvent, AppState};
-pub use map_wander::*;
+pub use play_region::*;
 
 pub struct PyritePlugin;
 

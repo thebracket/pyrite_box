@@ -1,6 +1,6 @@
 use super::{battle_tile::BattleTile, BattleComponent};
 use crate::{
-    plugins::map_wander::WanderingPlayer,
+    plugins::play_region::WanderingPlayer,
     region::{
         region_assets::RegionAssets,
         region_map::{RegionBoundaryType, RegionMap, RegionTileType},

@@ -80,7 +80,7 @@ fn show_modules(
                 selected_module.module =
                     Some(load_module(module.filename.as_ref().unwrap()).unwrap());
                 state
-                    .set(AppState::MapWanderLoader)
+                    .set(AppState::ModuleAssetLoader)
                     .expect("Failed to change mode");
             }
             if ui.button("Edit").clicked() {
@@ -150,9 +150,7 @@ pub fn show_characters(
                         }
                     }
                     if ui.button("Edit").clicked() {
-                        commands.insert_resource(ChargenResource {
-                            character: chr.clone(),
-                        });
+                        commands.insert_resource(ChargenResource::with_character(chr.clone()));
                         state
                             .set(AppState::CharacterGeneration)
                             .expect("Failed to change mode");

@@ -93,7 +93,7 @@ pub fn asset_loader(
     if materials.remaining.is_empty() {
         // Switch state
         state
-            .set(AppState::MapWander)
+            .set(AppState::PlayRegion)
             .expect("Failed to change mode");
     }
 }
