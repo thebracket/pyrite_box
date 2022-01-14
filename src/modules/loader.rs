@@ -1,6 +1,6 @@
 use super::ModuleHeader;
 use crate::{
-    module::{game_events::EventList, Module},
+    modules::{game_events::EventList, Module},
     modules::{
         map_loader::load_maps, material_loader::load_materials, scripts_loader::load_scripts,
     },

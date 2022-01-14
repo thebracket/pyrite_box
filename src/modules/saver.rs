@@ -1,5 +1,5 @@
 use super::{material_loader::MaterialFile, ModuleHeader};
-use crate::module::Module;
+use crate::modules::Module;
 use anyhow::{Error, Result};
 use ron::ser::{to_string_pretty, PrettyConfig};
 use std::{fs::create_dir, path::Path};

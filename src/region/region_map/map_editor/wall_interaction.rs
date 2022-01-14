@@ -1,5 +1,5 @@
 use super::scaling::Scaling;
-use crate::{module::Direction, region::region_map::RegionMap};
+use crate::{region::region_map::RegionMap, utils::Direction};
 use bevy_egui::egui::Pos2;
 
 pub struct MapWallInteraction {

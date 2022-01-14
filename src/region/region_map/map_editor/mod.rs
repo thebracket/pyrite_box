@@ -1,7 +1,5 @@
 mod editor_mode;
 pub use editor_mode::MapEditorMode;
-mod editor_settings;
-pub use editor_settings::MapEditorSettings;
 mod editor;
 mod render_strokes;
 mod scaling;

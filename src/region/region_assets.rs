@@ -1,5 +1,5 @@
 use crate::{
-    module::{MaterialDefinition, Module},
+    modules::{MaterialDefinition, Module},
     region::region_map::geometry::GEOMETRY_SIZE,
 };
 use bevy::{

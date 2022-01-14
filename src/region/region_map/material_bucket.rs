@@ -1,4 +1,4 @@
-use crate::module::Direction;
+use crate::utils::Direction;
 use std::collections::HashMap;
 
 use super::geometry::*;

@@ -3,11 +3,13 @@ use super::{
     scaling::Scaling,
     wall_interaction::MapWallInteraction,
     wall_lines::{wall_line, wall_opening},
-    MapEditorMode, MapEditorSettings,
+    MapEditorMode,
 };
 use crate::{
-    module::{Direction, MaterialDefinition, Module},
+    modules::{MaterialDefinition, Module},
     region::region_map::{RegionBoundaryType, RegionMap, RegionTileType},
+    state::MapEditorSettings,
+    utils::Direction,
 };
 use bevy_egui::egui::{
     Color32, CtxRef, Frame, Painter, PointerButton, Pos2, Response, Sense, Stroke, Ui, Window,

@@ -1,4 +1,4 @@
-use crate::module::game_events::GameEvent;
+use crate::modules::game_events::GameEvent;
 use anyhow::Result;
 use std::fs;
 use std::path::Path;

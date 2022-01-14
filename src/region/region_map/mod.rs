@@ -4,7 +4,7 @@ mod material_bucket;
 use self::material_bucket::{FeatureType, MaterialBucket};
 use bevy::{prelude::*, render::mesh::VertexAttributeValues};
 pub mod map_editor;
-use crate::module::Direction;
+use crate::utils::Direction;
 
 #[derive(Clone, Serialize, Deserialize)]
 pub struct RegionMap {

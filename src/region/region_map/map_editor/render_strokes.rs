@@ -1,4 +1,4 @@
-use crate::{module::MaterialDefinition, region::region_map::RegionBoundaryType};
+use crate::{modules::MaterialDefinition, region::region_map::RegionBoundaryType};
 use bevy_egui::egui::{Color32, Stroke};
 use std::collections::HashMap;
 

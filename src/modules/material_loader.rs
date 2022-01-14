@@ -1,4 +1,4 @@
-use crate::module::MaterialDefinition;
+use crate::modules::MaterialDefinition;
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, fs, path::Path};

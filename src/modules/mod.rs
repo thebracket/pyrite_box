@@ -7,3 +7,5 @@ mod material_loader;
 mod saver;
 mod scripts_loader;
 pub use saver::*;
+mod module;
+pub use module::*;
