@@ -13,6 +13,8 @@ pub use game_log::*;
 pub use map_wander::*;
 pub use player_movement::*;
 pub use sprites::*;
+mod components;
+pub use components::*;
 
 pub struct MapWanderPlugin;
 
@@ -30,10 +32,10 @@ impl Plugin for MapWanderPlugin {
                 SystemSet::on_exit(AppState::ModuleAssetLoader).with_system(finish_asset_loader),
             )
             // Map Wander
-            .add_system_set(SystemSet::on_enter(AppState::PlayRegion).with_system(resume_map_wander))
-            .add_system_set(SystemSet::on_update(AppState::PlayRegion).with_system(map_wander))
+            .add_system_set(SystemSet::on_enter(AppState::PlayRegion).with_system(resume_play_region))
+            .add_system_set(SystemSet::on_update(AppState::PlayRegion).with_system(play_region))
             .add_system_set(
-                SystemSet::on_update(AppState::PlayRegion).with_system(map_wander_rebuild),
+                SystemSet::on_update(AppState::PlayRegion).with_system(rebuild_region_map),
             )
             .add_system_set(SystemSet::on_update(AppState::PlayRegion).with_system(display_game_log))
             .add_system_set(SystemSet::on_update(AppState::PlayRegion).with_system(event_triggers))
@@ -41,6 +43,6 @@ impl Plugin for MapWanderPlugin {
             .add_system_set(SystemSet::on_update(AppState::PlayRegion).with_system(player_move))
             .add_system_set(SystemSet::on_update(AppState::PlayRegion).with_system(region_sprites))
             .add_system_set(SystemSet::on_update(AppState::PlayRegion).with_system(billboarding))
-            .add_system_set(SystemSet::on_exit(AppState::PlayRegion).with_system(exit_map_wander));
+            .add_system_set(SystemSet::on_exit(AppState::PlayRegion).with_system(exit_play_region));
     }
 }

@@ -1,4 +1,4 @@
-use super::{map_wander::WanderingPlayer, player_movement::MoveOccurred};
+use super::{player_movement::MoveOccurred, WanderingPlayer};
 use crate::region::{region_assets::RegionAssets, region_map::geometry::GEOMETRY_SIZE};
 use bevy::prelude::*;
 use serde::{Deserialize, Serialize};

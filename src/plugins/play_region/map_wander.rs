@@ -12,26 +12,10 @@ use bevy_egui::{
     egui::{Pos2, Window},
     EguiContext,
 };
-
+use super::{WanderingPlayer, MapWander, WanderLight, WanderGeometry, WanderCamera};
 use super::player_movement::PlayerMoveRequest;
 
-#[derive(Component)]
-pub struct MapWander {}
-#[derive(Component)]
-pub struct WanderGeometry {}
-#[derive(Component)]
-pub struct WanderCamera {}
-#[derive(Component)]
-pub struct WanderLight {}
-
-#[derive(Component, Debug)]
-pub struct WanderingPlayer {
-    pub x: i32,
-    pub y: i32,
-    pub facing: Direction,
-}
-
-pub fn map_wander(
+pub fn play_region(
     keyboard_input: Res<Input<KeyCode>>,
     player_query: Query<&WanderingPlayer>,
     egui_context: ResMut<EguiContext>,
@@ -120,7 +104,7 @@ fn get_starting_position(module: &Module, map_idx: usize) -> (f32, f32, f32, Dir
     )
 }
 
-pub fn resume_map_wander(
+pub fn resume_play_region(
     mut commands: Commands,
     startup: Res<ModuleSelector>,
     mut triggers: EventWriter<TriggerEvent>,
@@ -221,13 +205,13 @@ pub fn resume_map_wander(
     }
 }
 
-pub fn exit_map_wander(mut commands: Commands, cleanup: Query<(Entity, &MapWander)>) {
+pub fn exit_play_region(mut commands: Commands, cleanup: Query<(Entity, &MapWander)>) {
     cleanup
         .iter()
         .for_each(|(e, _)| commands.entity(e).despawn());
 }
 
-pub fn map_wander_rebuild(
+pub fn rebuild_region_map(
     mut wander: ResMut<WanderResource>,
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
