@@ -1,3 +1,5 @@
+use super::player_movement::PlayerMoveRequest;
+use super::{MapWander, WanderCamera, WanderGeometry, WanderLight, WanderingPlayer};
 use crate::modules::game_events::TriggerEvent;
 use crate::modules::Module;
 use crate::region::region_map::map_editor::MapEditor;
@@ -12,8 +14,6 @@ use bevy_egui::{
     egui::{Pos2, Window},
     EguiContext,
 };
-use super::{WanderingPlayer, MapWander, WanderLight, WanderGeometry, WanderCamera};
-use super::player_movement::PlayerMoveRequest;
 
 pub fn play_region(
     keyboard_input: Res<Input<KeyCode>>,
@@ -114,6 +114,32 @@ pub fn resume_play_region(
     let module = startup.module.as_ref().unwrap().clone();
     let map_idx = module.starting_map_idx;
 
+    // Spawn Bevy UI nodes for the regions of the screen
+    commands
+        .spawn_bundle(UiCameraBundle::default())
+        .insert(MapWander {});
+
+    // main viewport
+    // Not rendered because the camera viewport isn't
+    // associated with the UI viewport system.
+
+    // Party
+    commands.spawn_bundle(NodeBundle {
+        style: Style {
+            size: Size::new(Val::Percent(25.0), Val::Percent(75.0)),
+            border: Rect::all(Val::Px(2.0)),
+            position_type: PositionType::Absolute,
+            position: Rect {
+                left: Val::Percent(75.0),
+                bottom: Val::Percent(25.0),
+                ..Default::default()
+            },
+            ..Default::default()
+        },
+        color: Color::rgb(0.65, 0.65, 0.95).into(),
+        ..Default::default()
+    });
+
     // Spawn the meshes for the map
     for m in assets.meshes.iter() {
         // TODO: m.0 tells you what material to use
@@ -184,6 +210,18 @@ pub fn resume_play_region(
             far: 1000.0,
         };
 
+        let camera = Camera {
+            name: Some("camera_3d".to_string()),
+            near: perspective.near,
+            far: perspective.far,
+            viewport: Some(bevy::render::camera::Viewport {
+                w: 0.75,
+                h: 0.75,
+                ..Default::default()
+            }),
+            ..Default::default()
+        };
+
         commands
             .spawn_bundle(PerspectiveCameraBundle {
                 perspective_projection: perspective,
@@ -191,6 +229,7 @@ pub fn resume_play_region(
                     facing.camera_look_at(&Vec3::new(start_x, start_y, start_z)),
                     Vec3::new(0.0, 0.0, 1.0),
                 ),
+                camera,
                 ..Default::default()
             })
             .insert(MapWander {})

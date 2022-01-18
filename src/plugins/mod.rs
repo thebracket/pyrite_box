@@ -15,6 +15,8 @@ pub use battle::*;
 mod play_region;
 use crate::{modules::game_events::TriggerEvent, AppState};
 pub use play_region::*;
+mod game_log;
+pub use game_log::*;
 
 pub struct PyritePlugin;
 
@@ -33,6 +35,7 @@ impl Plugin for PyritePlugin {
             .add_plugin(CharacterGeneratorPlugin)
             .add_plugin(ModuleEditorPlugin)
             .add_plugin(BattlePlugin)
-            .add_plugin(MapWanderPlugin);
+            .add_plugin(MapWanderPlugin)
+            .add_plugin(GameLogPlugin);
     }
 }

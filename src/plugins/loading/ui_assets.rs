@@ -4,7 +4,15 @@ use bevy_egui::{
     EguiContext,
 };
 
-pub fn setup_ui(egui_context: ResMut<EguiContext>) {
+pub struct UiFonts {
+    pub game_font: Handle<Font>,
+}
+
+pub fn setup_ui(
+    egui_context: ResMut<EguiContext>,
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+) {
     let mut fd = FontDefinitions {
         ..Default::default()
     };
@@ -21,4 +29,7 @@ pub fn setup_ui(egui_context: ResMut<EguiContext>) {
     ff.clear();
     ff.push("Olde".to_string());
     egui_context.ctx().set_fonts(fd);
+
+    let game_font = asset_server.load("fonts/SdThoseGoodTimesOfLife-B1An.ttf");
+    commands.insert_resource(UiFonts { game_font });
 }

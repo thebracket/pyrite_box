@@ -6,8 +6,6 @@ use bevy::{asset::LoadState, prelude::*};
 use bevy_egui::egui;
 use bevy_egui::{egui::Pos2, EguiContext};
 
-use super::game_log::GameLog;
-
 pub struct MaterialLoader {
     total: usize,
     remaining: Vec<HandleUntyped>,
@@ -25,7 +23,6 @@ pub fn start_asset_loader(
     // Create an empty ScriptState to hold the current scripting engine state.
     // Create an empty GameLog
     commands.insert_resource(ScriptState::new());
-    commands.insert_resource(GameLog::new());
 
     // Select the module
     let module = startup.module.as_ref().unwrap().clone();

@@ -4,12 +4,10 @@ use crate::{
 };
 use bevy::prelude::{Plugin, SystemSet};
 mod asset_loader;
-mod game_log;
 mod map_wander;
 mod player_movement;
 mod sprites;
 use asset_loader::*;
-pub use game_log::*;
 pub use map_wander::*;
 pub use player_movement::*;
 pub use sprites::*;
@@ -32,12 +30,13 @@ impl Plugin for MapWanderPlugin {
                 SystemSet::on_exit(AppState::ModuleAssetLoader).with_system(finish_asset_loader),
             )
             // Map Wander
-            .add_system_set(SystemSet::on_enter(AppState::PlayRegion).with_system(resume_play_region))
+            .add_system_set(
+                SystemSet::on_enter(AppState::PlayRegion).with_system(resume_play_region),
+            )
             .add_system_set(SystemSet::on_update(AppState::PlayRegion).with_system(play_region))
             .add_system_set(
                 SystemSet::on_update(AppState::PlayRegion).with_system(rebuild_region_map),
             )
-            .add_system_set(SystemSet::on_update(AppState::PlayRegion).with_system(display_game_log))
             .add_system_set(SystemSet::on_update(AppState::PlayRegion).with_system(event_triggers))
             .add_system_set(SystemSet::on_update(AppState::PlayRegion).with_system(event_runner))
             .add_system_set(SystemSet::on_update(AppState::PlayRegion).with_system(player_move))

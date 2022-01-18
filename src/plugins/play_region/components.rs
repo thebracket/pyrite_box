@@ -1,5 +1,5 @@
-use bevy::prelude::Component;
 use crate::utils::Direction;
+use bevy::prelude::Component;
 
 #[derive(Component)]
 pub struct MapWander {}

@@ -6,8 +6,6 @@ pub struct ChargenResource {
 
 impl ChargenResource {
     pub fn with_character(chr: CharacterHeader) -> Self {
-        Self {
-            character: chr
-        }
+        Self { character: chr }
     }
 }

@@ -9,6 +9,9 @@ use std::time::Duration;
 const MS_DELAY_LOG: u64 = 10;
 pub const DEFAULT_TEXT_COLOR: Color32 = Color32::from_rgb(64, 255, 64);
 
+#[derive(Component)]
+pub struct GameLogPanel;
+
 pub struct GameLog {
     buffer: Vec<GameLogEntry>,
     pub blocking: bool,
@@ -49,8 +52,13 @@ pub fn display_game_log(
     mut log: ResMut<GameLog>,
     egui_context: ResMut<EguiContext>,
     time: Res<Time>,
+    mut log_finder: Query<(&GameLogPanel, &mut Text)>,
 ) {
-    let white = Color32::WHITE;
+    log_finder.iter_mut().for_each(|(_, mut txt)| {
+        txt.sections[0].value = "Hello World\nAnother Line\nGoing up??".to_string();
+    });
+
+    /*let white = Color32::WHITE;
 
     Window::new("Log")
         .title_bar(false)
@@ -128,5 +136,5 @@ pub fn display_game_log(
             painter.add(Shape::galley(response.rect.min, galley));
 
             log.blocking = blocking;
-        });
+        });*/
 }

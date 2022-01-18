@@ -1,11 +1,10 @@
 use super::GameEventStep;
 use crate::{
-    plugins::{GameLog, PlayerMoveRequest, SpriteRequest, DEFAULT_TEXT_COLOR},
+    plugins::{GameLog, LogMessage, PlayerMoveRequest, SpriteRequest},
     state::{WanderInput, WanderResource},
     AppState,
 };
 use bevy::prelude::*;
-use bevy_egui::egui::Color32;
 use std::{collections::VecDeque, time::Duration};
 
 #[derive(Clone)]
@@ -19,12 +18,13 @@ pub fn event_triggers(mut events: EventReader<TriggerEvent>, mut state: ResMut<S
 
 pub fn event_runner(
     mut wander: ResMut<WanderResource>,
+    log: Res<GameLog>,
     mut state: ResMut<ScriptState>,
-    mut log: ResMut<GameLog>,
     time: Res<Time>,
     mut move_request: EventWriter<PlayerMoveRequest>,
     mut sprite_request: EventWriter<SpriteRequest>,
     mut app_state: ResMut<State<AppState>>,
+    mut log_request: EventWriter<LogMessage>,
 ) {
     wander.allow_movement = false;
 
@@ -80,13 +80,19 @@ pub fn event_runner(
                 match &event.steps[stack_entry.line] {
                     GameEventStep::LogText { text, color } => {
                         if let Some(color) = color {
-                            log.add_line(text, Color32::from_rgb(color.0, color.1, color.2));
+                            log_request.send(LogMessage::AddLine {
+                                line: text.to_string(),
+                                color: Color::rgb_u8(color.0, color.1, color.2),
+                            });
                         } else {
-                            log.add_line(text, DEFAULT_TEXT_COLOR);
+                            log_request.send(LogMessage::AddLine {
+                                line: text.to_string(),
+                                color: Color::LIME_GREEN,
+                            });
                         }
                     }
                     GameEventStep::ClearLog => {
-                        log.clear();
+                        log_request.send(LogMessage::Clear);
                     }
                     GameEventStep::PauseMs(ms) => {
                         new_timer = Some(Timer::new(Duration::from_millis(*ms), false));

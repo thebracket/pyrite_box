@@ -5,7 +5,7 @@ use crate::{
 use bevy::prelude::*;
 use serde::{Deserialize, Serialize};
 
-use super::{WanderingPlayer, WanderLight, WanderCamera};
+use super::{WanderCamera, WanderLight, WanderingPlayer};
 
 pub struct MoveOccurred;
 

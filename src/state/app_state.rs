@@ -4,7 +4,7 @@ pub enum AppState {
     MainMenu,
     ModuleEditor,
     ModuleAssetLoader, // Loading screen for the map module
-    PlayRegion,       // Test mode for the map
+    PlayRegion,        // Test mode for the map
     Battle,
     CharacterGeneration,
 }
