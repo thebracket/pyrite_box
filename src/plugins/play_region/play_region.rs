@@ -2,6 +2,7 @@ use super::player_movement::PlayerMoveRequest;
 use super::{MapWander, WanderCamera, WanderGeometry, WanderLight, WanderingPlayer};
 use crate::modules::game_events::TriggerEvent;
 use crate::modules::Module;
+use crate::plugins::UiFonts;
 use crate::region::region_map::map_editor::MapEditor;
 use crate::region::{region_assets::RegionAssets, region_map::geometry::GEOMETRY_SIZE};
 use crate::state::MapEditorSettings;
@@ -110,14 +111,10 @@ pub fn resume_play_region(
     mut triggers: EventWriter<TriggerEvent>,
     assets: Res<RegionAssets>,
     wander: Option<ResMut<WanderResource>>,
+    font: Res<UiFonts>,
 ) {
     let module = startup.module.as_ref().unwrap().clone();
     let map_idx = module.starting_map_idx;
-
-    // Spawn Bevy UI nodes for the regions of the screen
-    commands
-        .spawn_bundle(UiCameraBundle::default())
-        .insert(MapWander {});
 
     // main viewport
     // Not rendered because the camera viewport isn't
@@ -136,8 +133,37 @@ pub fn resume_play_region(
             },
             ..Default::default()
         },
-        color: Color::rgb(0.65, 0.65, 0.95).into(),
+        color: Color::rgb(0.6, 0.1, 0.1).into(),
         ..Default::default()
+    }).with_children(|parent| {
+        parent.spawn_bundle(NodeBundle {
+            style: Style {
+                size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
+                border: Rect::all(Val::Percent(2.0)),
+                flex_wrap: FlexWrap::Wrap,
+                ..Default::default()
+            },
+            color: Color::rgb(0.1, 0.1, 0.1).into(),
+            ..Default::default()
+        }).with_children(|parent| {
+        parent
+            .spawn_bundle(TextBundle {
+                style: Style {
+                    margin: Rect::all(Val::Px(5.0)),
+                    ..Default::default()
+                },
+                text: Text::with_section(
+                    "Party Panel!",
+                    TextStyle {
+                        font: font.game_font.clone(),
+                        font_size: 20.0,
+                        color: Color::WHITE,
+                    },
+                    Default::default(),
+                ),
+                ..Default::default()
+            });
+        });
     });
 
     // Spawn the meshes for the map
@@ -215,6 +241,7 @@ pub fn resume_play_region(
             near: perspective.near,
             far: perspective.far,
             viewport: Some(bevy::render::camera::Viewport {
+                x: 0.0,
                 w: 0.75,
                 h: 0.75,
                 ..Default::default()

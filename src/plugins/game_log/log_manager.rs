@@ -95,30 +95,44 @@ pub fn create_log_panel(mut commands: Commands, font: Res<UiFonts>) {
                     bottom: Val::Percent(0.0),
                     ..Default::default()
                 },
+                align_items: AlignItems::Center,
                 ..Default::default()
             },
-            color: Color::rgb(0.1, 0.1, 0.1).into(),
+            color: Color::rgb(0.6, 0.1, 0.1).into(),
             ..Default::default()
         })
         .with_children(|parent| {
-            // text
-            parent
-                .spawn_bundle(TextBundle {
-                    style: Style {
-                        margin: Rect::all(Val::Px(5.0)),
-                        ..Default::default()
-                    },
-                    text: Text::with_section(
-                        "",
-                        TextStyle {
-                            font: font.game_font.clone(),
-                            font_size: 20.0,
-                            color: Color::WHITE,
-                        },
-                        Default::default(),
-                    ),
+            // Border
+            parent.spawn_bundle(NodeBundle {
+                style: Style {
+                    size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
+                    border: Rect::all(Val::Percent(2.0)),
+                    flex_wrap: FlexWrap::Wrap,
                     ..Default::default()
-                })
-                .insert(GameLogPanel {});
-        });
+                },
+                color: Color::rgb(0.1, 0.1, 0.1).into(),
+                ..Default::default()
+            }).with_children(|parent| {
+
+                // text
+                parent
+                    .spawn_bundle(TextBundle {
+                        style: Style {
+                            margin: Rect::all(Val::Px(5.0)),
+                            ..Default::default()
+                        },
+                        text: Text::with_section(
+                            "",
+                            TextStyle {
+                                font: font.game_font.clone(),
+                                font_size: 20.0,
+                                color: Color::WHITE,
+                            },
+                            Default::default(),
+                        ),
+                        ..Default::default()
+                    })
+                    .insert(GameLogPanel {});
+                });
+            });
 }

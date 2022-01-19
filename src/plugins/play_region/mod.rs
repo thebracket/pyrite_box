@@ -4,11 +4,11 @@ use crate::{
 };
 use bevy::prelude::{Plugin, SystemSet};
 mod asset_loader;
-mod map_wander;
+mod play_region;
 mod player_movement;
 mod sprites;
 use asset_loader::*;
-pub use map_wander::*;
+pub use play_region::*;
 pub use player_movement::*;
 pub use sprites::*;
 mod components;
