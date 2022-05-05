@@ -6,11 +6,11 @@ use crate::plugins::PlayerMoveRequest;
 use bevy_egui::egui;
 use bevy_egui::EguiContext;
 
-pub fn events(egui_context: &EguiContext, module_res: &mut ModuleResource) {
+pub fn events(egui_context: &mut EguiContext, module_res: &mut ModuleResource) {
     if module_res.show_events {
         egui::Window::new("Events")
             .title_bar(true)
-            .show(egui_context.ctx(), |ui| {
+            .show(egui_context.ctx_mut(), |ui| {
                 ui.label("New Event Tag");
                 ui.text_edit_singleline(&mut module_res.new_event_tag);
                 if ui.button("Add Event").clicked() {
@@ -34,7 +34,7 @@ pub fn events(egui_context: &EguiContext, module_res: &mut ModuleResource) {
     }
 }
 
-pub fn event_editor(egui_context: &EguiContext, module_res: &mut ModuleResource) {
+pub fn event_editor(egui_context: &mut EguiContext, module_res: &mut ModuleResource) {
     if module_res.editing_event.is_some() {
         let tag = module_res.editing_event.clone().unwrap();
         let mut next_step = module_res.new_event_step;
@@ -48,7 +48,7 @@ pub fn event_editor(egui_context: &EguiContext, module_res: &mut ModuleResource)
             egui::Window::new(format!("Event: {}", tag))
                 .title_bar(true)
                 .resizable(true)
-                .show(egui_context.ctx(), |ui| {
+                .show(egui_context.ctx_mut(), |ui| {
                     ui.text_edit_singleline(&mut event.tag);
 
                     egui::ComboBox::from_label("New Step").show_ui(ui, |ui| {

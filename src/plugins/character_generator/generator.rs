@@ -6,7 +6,7 @@ pub fn start_chargen() {}
 
 pub fn run_chargen(
     mut chargen: ResMut<ChargenResource>,
-    egui_context: ResMut<EguiContext>,
+    mut egui_context: ResMut<EguiContext>,
     mut state: ResMut<State<AppState>>,
 ) {
     egui::Window::new("Character Information")
@@ -14,7 +14,7 @@ pub fn run_chargen(
         .title_bar(true)
         .fixed_pos(Pos2::new(200.0, 100.0))
         .fixed_size(bevy_egui::egui::Vec2::new(800.0, 300.0))
-        .show(egui_context.ctx(), |ui| {
+        .show(egui_context.ctx_mut(), |ui| {
             ui.label("Character Name");
             ui.text_edit_singleline(&mut chargen.character.name);
             if ui.button("Save").clicked() {

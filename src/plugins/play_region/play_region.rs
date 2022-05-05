@@ -19,7 +19,7 @@ use bevy_egui::{
 pub fn play_region(
     keyboard_input: Res<Input<KeyCode>>,
     player_query: Query<&WanderingPlayer>,
-    egui_context: ResMut<EguiContext>,
+    mut egui_context: ResMut<EguiContext>,
     mut wander: ResMut<WanderResource>,
     mut move_request: EventWriter<PlayerMoveRequest>,
     assets: Res<RegionAssets>,
@@ -29,7 +29,7 @@ pub fn play_region(
             .title_bar(true)
             .fixed_pos(Pos2::new(200.0, 200.0))
             .auto_sized()
-            .show(egui_context.ctx(), |ui| {
+            .show(egui_context.ctx_mut(), |ui| {
                 if let Some(portrait_name) = &wi.portrait {
                     if let Some(id) = assets.ui_images.get(portrait_name) {
                         ui.image(*id, egui::Vec2::new(300.0, 300.0));
@@ -69,7 +69,7 @@ pub fn play_region(
             .resizable(false)
             .title_bar(false)
             .fixed_pos(Pos2::new(500.0, 25.0))
-            .show(egui_context.ctx(), |ui| {
+            .show(egui_context.ctx_mut(), |ui| {
                 let map_idx = wander.map_idx;
                 ui.label(format!(
                     "{}. X: {}, Y: {}, Facing: {:?}",
@@ -82,7 +82,7 @@ pub fn play_region(
             let mut settings = wander.editor_settings.clone();
             settings.highlight_player = Some((wp.x, wp.y, wp.facing));
             MapEditor::render_in_module(
-                egui_context.ctx(),
+                egui_context.ctx_mut(),
                 &mut settings,
                 &mut wander.module,
                 map_idx,
@@ -237,15 +237,15 @@ pub fn resume_play_region(
         };
 
         let camera = Camera {
-            name: Some("camera_3d".to_string()),
+            //name: Some("camera_3d".to_string()),
             near: perspective.near,
             far: perspective.far,
-            viewport: Some(bevy::render::camera::Viewport {
+            /*viewport: Some(bevy::render::camera::Viewport {
                 x: 0.0,
                 w: 0.75,
                 h: 0.75,
                 ..Default::default()
-            }),
+            })*/
             ..Default::default()
         };
 

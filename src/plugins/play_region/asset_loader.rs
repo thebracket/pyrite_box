@@ -56,7 +56,7 @@ pub fn start_asset_loader(
 }
 
 pub fn asset_loader(
-    egui_context: ResMut<EguiContext>,
+    mut egui_context: ResMut<EguiContext>,
     server: Res<AssetServer>,
     mut materials: ResMut<MaterialLoader>,
     mut state: ResMut<State<AppState>>,
@@ -71,7 +71,7 @@ pub fn asset_loader(
         .title_bar(true)
         .fixed_pos(Pos2::new(200.0, 100.0))
         .fixed_size(bevy_egui::egui::Vec2::new(800.0, 500.0))
-        .show(egui_context.ctx(), |ui| {
+        .show(egui_context.ctx_mut(), |ui| {
             ui.label("Loading Module Assets, Please Wait...");
             ui.label(format!(
                 "Remaining: {} of {}",

@@ -13,7 +13,7 @@ fn main() {
             title: "Pyrite Box".to_string(),
             width: 1280.0,
             height: 1024.0,
-            vsync: false,
+            //vsync: false,
             resizable: false,
             ..Default::default()
         })

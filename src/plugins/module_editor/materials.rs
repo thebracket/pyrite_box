@@ -6,11 +6,11 @@ use bevy_egui::egui::Color32;
 use bevy_egui::egui::Widget;
 use bevy_egui::EguiContext;
 
-pub fn material_editor(egui_context: &EguiContext, module_res: &mut ModuleResource) {
+pub fn material_editor(egui_context: &mut EguiContext, module_res: &mut ModuleResource) {
     if module_res.show_materials {
         egui::Window::new("Material Editor")
             .title_bar(true)
-            .show(egui_context.ctx(), |ui| {
+            .show(egui_context.ctx_mut(), |ui| {
                 ui.label("ADD NEW MATERIAL");
                 ui.text_edit_singleline(&mut module_res.new_material_name);
                 if ui.button("Add Material").clicked() {

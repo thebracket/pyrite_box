@@ -3,11 +3,11 @@ use bevy_egui::egui;
 use bevy_egui::egui::Widget;
 use bevy_egui::EguiContext;
 
-pub fn maps(egui_context: &EguiContext, module_res: &mut ModuleResource) {
+pub fn maps(egui_context: &mut EguiContext, module_res: &mut ModuleResource) {
     if module_res.show_maps {
         egui::Window::new("Maps in Module")
             .title_bar(true)
-            .show(egui_context.ctx(), |ui| {
+            .show(egui_context.ctx_mut(), |ui| {
                 ui.label("New Map Name");
                 ui.text_edit_singleline(&mut module_res.new_map.name);
                 ui.label("Width");

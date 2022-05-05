@@ -14,20 +14,20 @@ use crate::{
 use bevy::prelude::*;
 use bevy_egui::EguiContext;
 
-pub fn module_editor(egui_context: ResMut<EguiContext>, mut module_res: ResMut<ModuleResource>) {
-    editor_menu(&egui_context, &mut module_res);
-    module_info(&egui_context, &mut module_res);
-    material_editor(&egui_context, &mut module_res);
-    maps(&egui_context, &mut module_res);
+pub fn module_editor(mut egui_context: ResMut<EguiContext>, mut module_res: ResMut<ModuleResource>) {
+    editor_menu(&mut egui_context, &mut module_res);
+    module_info(&mut egui_context, &mut module_res);
+    material_editor(&mut egui_context, &mut module_res);
+    maps(&mut egui_context, &mut module_res);
 
     if let Some(map_id) = module_res.editing_map {
         let mut es = module_res.editor_settings.clone();
-        MapEditor::render_in_module(egui_context.ctx(), &mut es, &mut module_res.module, map_id);
+        MapEditor::render_in_module(egui_context.ctx_mut(), &mut es, &mut module_res.module, map_id);
         module_res.editor_settings = es;
     }
 
-    events(&egui_context, &mut module_res);
-    event_editor(&egui_context, &mut module_res);
+    events(&mut egui_context, &mut module_res);
+    event_editor(&mut egui_context, &mut module_res);
 }
 
 pub fn resume_module_editor(mut commands: Commands, startup: Res<ModuleSelector>) {

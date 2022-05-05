@@ -2,12 +2,12 @@ use super::module_resource::ModuleResource;
 use bevy_egui::egui;
 use bevy_egui::EguiContext;
 
-pub fn module_info(egui_context: &EguiContext, module_res: &mut ModuleResource) {
+pub fn module_info(egui_context: &mut EguiContext, module_res: &mut ModuleResource) {
     if module_res.show_info {
         egui::Window::new("Module Editor")
             .auto_sized()
             .title_bar(true)
-            .show(egui_context.ctx(), |ui| {
+            .show(egui_context.ctx_mut(), |ui| {
                 ui.label("Module Name");
                 ui.text_edit_singleline(&mut module_res.module.name);
                 ui.label("Module Description");

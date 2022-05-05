@@ -22,13 +22,13 @@ pub fn setup_ui(
             "../../../assets/fonts/SdThoseGoodTimesOfLife-B1An.ttf"
         )),
     );
-    let ff = fd
+    /*let ff = fd
         .fonts_for_family
         .get_mut(&FontFamily::Proportional)
         .unwrap();
     ff.clear();
     ff.push("Olde".to_string());
-    egui_context.ctx().set_fonts(fd);
+    egui_context.ctx().set_fonts(fd);*/
 
     let game_font = asset_server.load("fonts/SdThoseGoodTimesOfLife-B1An.ttf");
     commands.insert_resource(UiFonts { game_font });

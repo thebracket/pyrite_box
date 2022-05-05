@@ -4,13 +4,13 @@ use bevy_egui::{egui, egui::Pos2, EguiContext};
 
 pub struct LoadingResource {}
 
-pub fn loading_screen(egui_context: ResMut<EguiContext>, mut state: ResMut<State<AppState>>) {
+pub fn loading_screen(mut egui_context: ResMut<EguiContext>, mut state: ResMut<State<AppState>>) {
     egui::Window::new("Loading - Please Wait")
         .auto_sized()
         .resizable(false)
         .title_bar(true)
         .fixed_pos(Pos2::new(500.0, 200.0))
-        .show(egui_context.ctx(), |ui| {
+        .show(egui_context.ctx_mut(), |ui| {
             ui.label("Please wait");
         });
     state

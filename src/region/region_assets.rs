@@ -101,8 +101,9 @@ impl RegionAssets {
         let mut ui_images = HashMap::new();
         for (i, (key, file)) in module.ui_images.iter().enumerate() {
             let image_id = asset_server.load(file.as_str());
-            egui.set_egui_texture(i as u64, image_id);
-            ui_images.insert(key.clone(), bevy_egui::egui::TextureId::User(i as u64));
+            //egui.set_egui_texture(i as u64, image_id);
+            let i = egui.add_image(image_id);
+            ui_images.insert(key.clone(), i);
         }
 
         // Load sprites
@@ -127,7 +128,7 @@ impl RegionAssets {
         let y1 = HALF;
         let z0 = -HALF;
         let z1 = HALF;
-        mesh.set_attribute(
+        mesh.insert_attribute(
             Mesh::ATTRIBUTE_POSITION,
             VertexAttributeValues::Float32x3(vec![
                 [x1, y1, z1],
@@ -138,7 +139,7 @@ impl RegionAssets {
                 [x1, y1, z1],
             ]),
         );
-        mesh.set_attribute(
+        mesh.insert_attribute(
             Mesh::ATTRIBUTE_NORMAL,
             VertexAttributeValues::Float32x3(vec![
                 [-1.0, 0.0, 0.0],
@@ -149,7 +150,7 @@ impl RegionAssets {
                 [-1.0, 0.0, 0.0],
             ]),
         );
-        mesh.set_attribute(
+        mesh.insert_attribute(
             Mesh::ATTRIBUTE_UV_0,
             VertexAttributeValues::Float32x2(vec![
                 [0.0, 0.0],

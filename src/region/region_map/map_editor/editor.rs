@@ -12,7 +12,7 @@ use crate::{
     utils::Direction,
 };
 use bevy_egui::egui::{
-    Color32, CtxRef, Frame, Painter, PointerButton, Pos2, Response, Sense, Stroke, Ui, Window,
+    Color32, Frame, Painter, PointerButton, Pos2, Response, Sense, Stroke, Ui, Window, Context,
 };
 use std::collections::HashMap;
 
@@ -23,7 +23,7 @@ pub struct MapEditor<'a> {
 
 impl<'a> MapEditor<'a> {
     pub fn render_in_module(
-        ctx: &CtxRef,
+        ctx: &Context,
         editor_settings: &mut MapEditorSettings,
         module: &mut Module,
         map_id: usize,

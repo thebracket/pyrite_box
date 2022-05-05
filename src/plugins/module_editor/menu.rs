@@ -3,8 +3,8 @@ use bevy_egui::EguiContext;
 
 use super::module_resource::ModuleResource;
 
-pub fn editor_menu(egui_context: &EguiContext, module_res: &mut ModuleResource) {
-    egui::TopBottomPanel::top("menu_bar").show(egui_context.ctx(), |ui| {
+pub fn editor_menu(egui_context: &mut EguiContext, module_res: &mut ModuleResource) {
+    egui::TopBottomPanel::top("menu_bar").show(egui_context.ctx_mut(), |ui| {
         egui::menu::bar(ui, |ui| {
             ui.menu_button("Module Editor", |ui| {
                 if ui.button("Module Info").clicked() {

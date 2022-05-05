@@ -224,20 +224,20 @@ impl RegionMap {
         for (material_id, bucket) in bucket.materials.drain() {
             let mut mesh =
                 Mesh::new(bevy::render::render_resource::PrimitiveTopology::TriangleList);
-            mesh.set_attribute(
+            mesh.insert_attribute(
                 Mesh::ATTRIBUTE_POSITION,
                 VertexAttributeValues::Float32x3(bucket.vertices),
             );
-            mesh.set_attribute(
+            mesh.insert_attribute(
                 Mesh::ATTRIBUTE_NORMAL,
                 VertexAttributeValues::Float32x3(bucket.normals),
             );
-            mesh.set_attribute(
+            mesh.insert_attribute(
                 Mesh::ATTRIBUTE_UV_0,
                 VertexAttributeValues::Float32x2(bucket.uv),
             );
             // Bevy 0.6 tangent support is horribly broken right now
-            /*mesh.set_attribute(
+            /*mesh.insert_attribute(
                 Mesh::ATTRIBUTE_TANGENT,
                 VertexAttributeValues::Float32x3(bucket.tangents),
             );*/

@@ -6,7 +6,7 @@ use crate::{
     state::{AvailableModules, ModuleSelector},
     AppState,
 };
-use bevy::{app::Events, prelude::*};
+use bevy::{prelude::*, ecs::event::Events};
 use bevy_egui::{
     egui::Pos2,
     egui::{self, Color32},
@@ -14,7 +14,7 @@ use bevy_egui::{
 };
 
 pub fn main_menu(
-    egui_context: ResMut<EguiContext>,
+    mut egui_context: ResMut<EguiContext>,
     mut app_exit_events: ResMut<Events<bevy::app::AppExit>>,
     mut state: ResMut<State<AppState>>,
     available_modules: Res<AvailableModules>,
@@ -26,7 +26,7 @@ pub fn main_menu(
         .title_bar(true)
         .fixed_pos(Pos2::new(200.0, 100.0))
         .fixed_size(bevy_egui::egui::Vec2::new(800.0, 300.0))
-        .show(egui_context.ctx(), |ui| {
+        .show(egui_context.ctx_mut(), |ui| {
             ui.separator();
 
             show_modules(&available_modules, ui, &mut selected_module, &mut state);
@@ -51,7 +51,7 @@ pub fn main_menu(
         .title_bar(true)
         .fixed_pos(Pos2::new(200.0, 400.0))
         .fixed_size(bevy_egui::egui::Vec2::new(800.0, 200.0))
-        .show(egui_context.ctx(), |ui| {
+        .show(egui_context.ctx_mut(), |ui| {
             ui.horizontal_top(|ui| {
                 show_party(ui, &mut selected_module);
                 show_characters(
